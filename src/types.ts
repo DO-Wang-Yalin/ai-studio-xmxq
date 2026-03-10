@@ -64,16 +64,16 @@ export interface FormData {
   fengshui: string;
   // Q2-18
   smartHome: string;
-  smartHomeOptions: string;
+  smartHomeOptions: string[];
   // Q2-19
-  comfortSystems: string;
+  comfortSystems: string[];
   // Q2-20
-  devices: string;
+  devices: string[];
   // Q2-21
   accessibility: string;
   oldFurniture: string;
   otherNeeds: string;
-  otherNeedsOptions: string;
+  otherNeedsOptions: string[];
   // Contract
   contractAccepted?: boolean;
   contractSignatureData?: string;
@@ -127,13 +127,13 @@ export const initialFormData: FormData = {
   bottomLine: [],
   fengshui: '',
   smartHome: '',
-  smartHomeOptions: '',
-  comfortSystems: '',
-  devices: '',
+  smartHomeOptions: [],
+  comfortSystems: [],
+  devices: [],
   accessibility: '',
   oldFurniture: '',
   otherNeeds: '',
-  otherNeedsOptions: '',
+  otherNeedsOptions: [],
   contractAccepted: false,
   contractSignatureData: '',
   contractCustomText: '',

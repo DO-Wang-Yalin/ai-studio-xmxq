@@ -148,7 +148,7 @@ export const SquareRadioCard = ({ label, description, selected, onClick, icon: I
   </button>
 );
 
-export const SquareCheckboxCard = ({ label, description, selected, onClick }: any) => (
+export const SquareCheckboxCard = ({ label, description, selected, onClick, icon: Icon }: any) => (
   <button
     onClick={onClick}
     className={`aspect-square flex flex-col items-center justify-center text-center p-4 rounded-2xl transition-all duration-300 relative border ${
@@ -162,6 +162,15 @@ export const SquareCheckboxCard = ({ label, description, selected, onClick }: an
     }`}>
       {selected && <Check size={12} className="text-white" />}
     </div>
+    {Icon && (
+      <div
+        className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors duration-300 ${
+          selected ? 'bg-[#D84936]/10 text-[#D84936]' : 'bg-[#F4F3F0] text-gray-500'
+        }`}
+      >
+        <Icon size={20} strokeWidth={1.5} />
+      </div>
+    )}
     <h3 className={`font-bold transition-colors duration-300 ${
       selected ? 'text-[#D84936]' : 'text-gray-800'
     }`}>

@@ -6,6 +6,8 @@ import { WorkbenchPage } from './pages/WorkbenchPage'
 import {
   StepWelcome,
   StepRegister,
+  StepHomeStyleEval,
+  StepDesignFeedback,
   StepDeepEval1,
   StepDeepEval2,
   Step3,
@@ -31,6 +33,7 @@ import {
   Step21,
   StepContract,
   StepPayment,
+  StepBudgetConfirmPreview,
 } from './components/steps';
 import { DeepEvalFormProvider } from './components/DeepEvalFormContext';
 
@@ -81,40 +84,23 @@ export default function App() {
     setData((prev) => ({ ...prev, ...fields }));
   };
 
-  if (mode === 'workbench') {
-    const userDisplayName = `${data.userName || '用户'}${data.userTitle || ''}`.trim()
-    return (
-      <WorkbenchPage
-        userDisplayName={userDisplayName}
-        projectName={data.projectName || data.projectLocation || ''}
-        onExit={() => setMode('form')}
-        onGoToFirstPage={() => {
-          setMode('form')
-          setCurrentStepIndex(0)
-        }}
-      />
-    )
-  }
-
-  const isStepVisible = (step: StepConfig) => {
-    if (step.id in stepVisibility) return stepVisibility[step.id];
-    return !step.hiddenByDefault;
-  };
-
-  const toggleStepVisibility = (step: StepConfig, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const currentVisible = isStepVisible(step);
-    setStepVisibility((prev) => ({ ...prev, [step.id]: !currentVisible }));
-  };
-
   // Define the sequence of steps
   const getStepsSequence = (): StepConfig[] => {
     const sequence = [
       { id: 'welcome', title: '欢迎', qId: null, component: StepWelcome },
+      { id: 'home-style-eval', title: '家居风格测评', qId: null, component: StepHomeStyleEval, hiddenByDefault: true },
+      { id: 'design-feedback', title: '项目设计反馈', qId: null, component: StepDesignFeedback, hiddenByDefault: true },
       { id: 'register', title: '注册', qId: null, component: StepRegister },
       { id: 'deep-eval-2', title: '深度测评-2 您的信息', qId: 'DE-2', component: StepDeepEval2 },
       { id: 'deep-eval-1', title: '深度测评-1 项目概况', qId: 'DE-1', component: StepDeepEval1 },
       { id: 'q2-3', title: '预算范围', qId: 'Q2-3', component: Step3, hiddenByDefault: true },
+      {
+        id: 'budget-confirm-preview',
+        title: '预算确认页预览',
+        qId: null,
+        component: StepBudgetConfirmPreview,
+        hiddenByDefault: true,
+      },
       { id: 'q3', title: '实效投入标准', qId: 'Q2-3-2', component: Step3Sub, hiddenByDefault: true },
       { id: 'contract', title: '意向金合同', qId: null, component: StepContract },
       { id: 'payment', title: '支付账号', qId: null, component: StepPayment },
@@ -144,13 +130,50 @@ export default function App() {
       if (!o) return s;
       return {
         ...s,
-        title: (o.title ?? s.title),
-        qId: (o.qId ?? s.qId),
+        title: o.title ?? s.title,
+        qId: o.qId ?? s.qId,
       };
     });
   };
 
   const steps = getStepsSequence();
+  const designFeedbackStepIndex = steps.findIndex((s) => s.id === 'design-feedback');
+
+  if (mode === 'workbench') {
+    const userDisplayName = `${data.userName || '用户'}${data.userTitle || ''}`.trim()
+    return (
+      <WorkbenchPage
+        userDisplayName={userDisplayName}
+        projectName={data.projectName || data.projectLocation || ''}
+        contractAccepted={data.contractAccepted}
+        contractSignatureData={data.contractSignatureData}
+        contractCustomText={data.contractCustomText}
+        onExit={() => setMode('form')}
+        onGoToFirstPage={() => {
+          setMode('form')
+          setCurrentStepIndex(0)
+        }}
+        onGoToDesignFeedback={() => {
+          setMode('form')
+          if (designFeedbackStepIndex >= 0) {
+            setCurrentStepIndex(designFeedbackStepIndex)
+          }
+        }}
+      />
+    )
+  }
+
+  const isStepVisible = (step: StepConfig) => {
+    if (step.id in stepVisibility) return stepVisibility[step.id];
+    return !step.hiddenByDefault;
+  };
+
+  const toggleStepVisibility = (step: StepConfig, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const currentVisible = isStepVisible(step);
+    setStepVisibility((prev) => ({ ...prev, [step.id]: !currentVisible }));
+  };
+
   const CurrentStepComponent = steps[currentStepIndex].component as React.FC<any>;
   const paymentStepIndex = steps.findIndex((s) => s.id === 'payment');
   const headerTitle =
@@ -191,13 +214,15 @@ export default function App() {
   const isWelcomeStep = steps[currentStepIndex].id === 'welcome';
   const isRegisterStep = steps[currentStepIndex].id === 'register';
   const isDeepEvalStep = steps[currentStepIndex].id.startsWith('deep-eval');
+  const isHomeStyleEvalStep = steps[currentStepIndex].id === 'home-style-eval';
+  const isDesignFeedbackStep = steps[currentStepIndex].id === 'design-feedback';
   const progress = ((currentStepIndex) / (steps.length - 1)) * 100;
 
   return (
     <DeepEvalFormProvider>
     <div className="min-h-screen bg-[#FDFCF8] text-gray-900 font-sans flex flex-col relative">
-      {/* Header（仅欢迎页隐藏；注册页、DE 页面均显示目录） */}
-      {!isWelcomeStep && (
+      {/* Header（欢迎页/风格测评/设计反馈隐藏；注册页、DE 页面均显示目录） */}
+      {!isWelcomeStep && !isHomeStyleEvalStep && !isDesignFeedbackStep && (
         <header className="w-full pt-8 pb-4 px-6 flex flex-col items-center relative z-50">
           <div className="w-full max-w-[800px] flex items-center justify-center relative">
             <button
@@ -227,7 +252,7 @@ export default function App() {
 
       {/* Navigation Menu Modal */}
       <AnimatePresence>
-        {showMenu && (
+        {showMenu && !isDesignFeedbackStep && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
@@ -422,8 +447,14 @@ export default function App() {
         </AnimatePresence>
       </main>
 
-      {/* Bottom Navigation（欢迎页、注册页、深度测评页隐藏，深度测评有自带底部按钮） */}
-      {!isLastStep && !isContractStep && !isWelcomeStep && !isRegisterStep && !isDeepEvalStep && (
+      {/* Bottom Navigation（欢迎页、风格测评、注册页、深度测评页隐藏，深度测评有自带底部按钮） */}
+      {!isLastStep &&
+        !isContractStep &&
+        !isWelcomeStep &&
+        !isHomeStyleEvalStep &&
+        !isDesignFeedbackStep &&
+        !isRegisterStep &&
+        !isDeepEvalStep && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 z-50">
           <div className="max-w-[800px] mx-auto">
             <button
