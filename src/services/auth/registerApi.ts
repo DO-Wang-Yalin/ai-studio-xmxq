@@ -40,16 +40,21 @@ export interface SendSmsResult {
 }
 
 export async function sendSmsCode(phone: string): Promise<SendSmsResult> {
-  const res = await fetch(`${AUTH_BASE}/auth/sms/send`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ phone }),
-  })
-  const body = await res.json().catch(() => ({}))
-  if (!res.ok) {
-    return { success: false, message: getMessageFromErrorBody(body) || `发送失败: ${res.status}` }
+  try {
+    const res = await fetch(`${AUTH_BASE}/auth/sms/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone }),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (!res.ok) {
+      return { success: false, message: getMessageFromErrorBody(body) || `发送失败: ${res.status}` }
+    }
+    return { success: true }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e)
+    return { success: false, message: `网络异常：${msg}` }
   }
-  return { success: true }
 }
 
 export interface RegisterResult {
@@ -58,14 +63,19 @@ export interface RegisterResult {
 }
 
 export async function registerWithCode(phone: string, code: string): Promise<RegisterResult> {
-  const res = await fetch(`${AUTH_BASE}/auth/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ phone, code }),
-  })
-  const body = await res.json().catch(() => ({}))
-  if (!res.ok) {
-    return { success: false, message: getMessageFromErrorBody(body) || `注册失败: ${res.status}` }
+  try {
+    const res = await fetch(`${AUTH_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, code }),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (!res.ok) {
+      return { success: false, message: getMessageFromErrorBody(body) || `注册失败: ${res.status}` }
+    }
+    return { success: true }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e)
+    return { success: false, message: `网络异常：${msg}` }
   }
-  return { success: true }
 }

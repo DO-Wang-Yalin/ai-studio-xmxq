@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ChevronLeft, ChevronRight, X, List } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, List, Eye, EyeOff, Pencil } from 'lucide-react';
 import { FormData, initialFormData } from './types';
+import { WorkbenchPage } from './pages/WorkbenchPage'
 import {
   StepWelcome,
   StepRegister,
   StepDeepEval1,
   StepDeepEval2,
-  Step1,
   Step3,
   Step3Sub,
   Step4,
@@ -34,25 +34,88 @@ import {
 } from './components/steps';
 import { DeepEvalFormProvider } from './components/DeepEvalFormContext';
 
+type StepConfig = {
+  id: string;
+  title: string;
+  qId: string | null;
+  component: React.ComponentType<any>;
+  hiddenByDefault?: boolean;
+};
+
 export default function App() {
   const [data, setData] = useState<FormData>(initialFormData);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [mode, setMode] = useState<'form' | 'workbench'>('form')
   const [showMenu, setShowMenu] = useState(false);
+  /** 步骤显示/隐藏：key 为 step.id，true=显示 false=隐藏；未设置的步骤按 hiddenByDefault 取反 */
+  const [stepVisibility, setStepVisibility] = useState<Record<string, boolean>>({});
+  /** 目录里的标题/编码（qId）可编辑覆盖 */
+  const [stepMetaOverrides, setStepMetaOverrides] = useState<Record<string, { title?: string; qId?: string | null }>>({});
+  const [editingStepId, setEditingStepId] = useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = useState('');
+  const [editingQId, setEditingQId] = useState('');
+  const STEP_META_STORAGE_KEY = 'ai-studio:stepMetaOverrides:v1';
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STEP_META_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return;
+      setStepMetaOverrides(parsed);
+    } catch {
+      // ignore corrupted storage
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STEP_META_STORAGE_KEY, JSON.stringify(stepMetaOverrides));
+    } catch {
+      // ignore quota / private mode failures
+    }
+  }, [stepMetaOverrides]);
 
   const updateData = (fields: Partial<FormData>) => {
     setData((prev) => ({ ...prev, ...fields }));
   };
 
+  if (mode === 'workbench') {
+    const userDisplayName = `${data.userName || '用户'}${data.userTitle || ''}`.trim()
+    return (
+      <WorkbenchPage
+        userDisplayName={userDisplayName}
+        projectName={data.projectName || data.projectLocation || ''}
+        onExit={() => setMode('form')}
+        onGoToFirstPage={() => {
+          setMode('form')
+          setCurrentStepIndex(0)
+        }}
+      />
+    )
+  }
+
+  const isStepVisible = (step: StepConfig) => {
+    if (step.id in stepVisibility) return stepVisibility[step.id];
+    return !step.hiddenByDefault;
+  };
+
+  const toggleStepVisibility = (step: StepConfig, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const currentVisible = isStepVisible(step);
+    setStepVisibility((prev) => ({ ...prev, [step.id]: !currentVisible }));
+  };
+
   // Define the sequence of steps
-  const getStepsSequence = () => {
+  const getStepsSequence = (): StepConfig[] => {
     const sequence = [
       { id: 'welcome', title: '欢迎', qId: null, component: StepWelcome },
       { id: 'register', title: '注册', qId: null, component: StepRegister },
       { id: 'deep-eval-2', title: '深度测评-2 您的信息', qId: 'DE-2', component: StepDeepEval2 },
       { id: 'deep-eval-1', title: '深度测评-1 项目概况', qId: 'DE-1', component: StepDeepEval1 },
-      { id: 'q2-1', title: '项目信息-城市/小区', qId: 'Q2-1', component: Step1 },
-      { id: 'q2-3', title: '预算范围', qId: 'Q2-3', component: Step3 },
-      { id: 'q3', title: '实效投入标准', qId: 'Q2-3-2', component: Step3Sub },
+      { id: 'q2-3', title: '预算范围', qId: 'Q2-3', component: Step3, hiddenByDefault: true },
+      { id: 'q3', title: '实效投入标准', qId: 'Q2-3-2', component: Step3Sub, hiddenByDefault: true },
       { id: 'contract', title: '意向金合同', qId: null, component: StepContract },
       { id: 'payment', title: '支付账号', qId: null, component: StepPayment },
       { id: 'q2-4', title: '房型资料同步', qId: 'Q2-4', component: Step4 },
@@ -76,24 +139,52 @@ export default function App() {
       { id: 'q2-21', title: '其他需求', qId: 'Q2-21', component: Step21 },
     ];
 
-    return sequence;
+    return sequence.map((s) => {
+      const o = stepMetaOverrides[s.id];
+      if (!o) return s;
+      return {
+        ...s,
+        title: (o.title ?? s.title),
+        qId: (o.qId ?? s.qId),
+      };
+    });
   };
 
   const steps = getStepsSequence();
   const CurrentStepComponent = steps[currentStepIndex].component as React.FC<any>;
+  const paymentStepIndex = steps.findIndex((s) => s.id === 'payment');
+  const headerTitle =
+    paymentStepIndex >= 0 && currentStepIndex <= paymentStepIndex
+      ? '用户信息注册'
+      : '项目深度需求测评';
+
+  const goToStep = (stepId: string) => {
+    const index = steps.findIndex((s) => s.id === stepId);
+    if (index >= 0) setCurrentStepIndex(index);
+  };
 
   const nextStep = () => {
-    if (currentStepIndex < steps.length - 1) {
-      setCurrentStepIndex((prev) => prev + 1);
+    for (let i = currentStepIndex + 1; i < steps.length; i++) {
+      if (isStepVisible(steps[i])) {
+        setCurrentStepIndex(i);
+        return;
+      }
     }
   };
 
   const prevStep = () => {
-    if (currentStepIndex > 0) {
-      setCurrentStepIndex((prev) => prev - 1);
+    for (let i = currentStepIndex - 1; i >= 0; i--) {
+      if (isStepVisible(steps[i])) {
+        setCurrentStepIndex(i);
+        return;
+      }
     }
   };
 
+  const visibleStepsCount = steps.filter((s) => isStepVisible(s)).length;
+  const currentVisibleIndex = steps
+    .slice(0, currentStepIndex + 1)
+    .filter((s) => isStepVisible(s)).length;
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
   const isContractStep = steps[currentStepIndex].id === 'contract';
@@ -116,7 +207,7 @@ export default function App() {
             >
               <ChevronLeft size={20} />
             </button>
-            <h1 className="text-2xl font-medium text-gray-900">深度定制测评</h1>
+            <h1 className="text-2xl font-medium text-gray-900">{headerTitle}</h1>
 
             {/* Progress Indicator */}
             {!isFirstStep && !isLastStep && (
@@ -126,7 +217,7 @@ export default function App() {
               >
                 <List size={14} className="text-gray-400" />
                 <span className="text-sm font-medium text-gray-500">
-                  <span className="text-[#D84936]">{currentStepIndex}</span> / {steps.length - 1}
+                  <span className="text-[#D84936]">{currentVisibleIndex}</span> / {visibleStepsCount}
                 </span>
               </button>
             )}
@@ -159,42 +250,157 @@ export default function App() {
               </div>
               <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
                 <div className="grid grid-cols-1 gap-2">
-                  {steps.map((step, index) => (
-                    <button
-                      key={step.id}
-                      onClick={() => {
-                        setCurrentStepIndex(index);
-                        setShowMenu(false);
-                      }}
-                      className={`flex items-center justify-between p-4 rounded-xl transition-all ${
-                        currentStepIndex === index 
-                          ? 'bg-[#D84936]/5 border border-[#D84936]/20' 
-                          : 'hover:bg-gray-50 border border-transparent'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                          currentStepIndex === index ? 'bg-[#D84936] text-white' : 'bg-gray-100 text-gray-400'
-                        }`}>
-                          {index}
-                        </span>
-                        <div className="flex flex-col items-start">
-                          {step.qId && (
-                            <span className="text-[10px] font-bold text-[#D84936] uppercase tracking-wider mb-0.5">
-                              {step.qId}
-                            </span>
-                          )}
-                          <span className={`font-medium ${currentStepIndex === index ? 'text-[#D84936]' : 'text-gray-700'}`}>
-                            {step.title}
+                  {steps.map((step, index) => {
+                    const visible = isStepVisible(step);
+                    return (
+                      <div
+                        key={step.id}
+                        className={`flex items-center justify-between p-4 rounded-xl transition-all border ${
+                          currentStepIndex === index
+                            ? 'bg-[#D84936]/5 border-[#D84936]/20'
+                            : visible ? 'hover:bg-gray-50 border-transparent' : 'bg-gray-50/80 border-gray-100 opacity-80'
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCurrentStepIndex(index);
+                            setShowMenu(false);
+                          }}
+                          className="flex items-center gap-3 flex-1 min-w-0 text-left"
+                        >
+                          <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                            currentStepIndex === index ? 'bg-[#D84936] text-white' : 'bg-gray-100 text-gray-400'
+                          }`}>
+                            {index}
                           </span>
+                          <div className="flex flex-col items-start min-w-0">
+                            {step.qId && (
+                              <span className="text-[10px] font-bold text-[#D84936] uppercase tracking-wider mb-0.5">
+                                {step.qId}
+                              </span>
+                            )}
+                            <span className={`font-medium truncate ${currentStepIndex === index ? 'text-[#D84936]' : visible ? 'text-gray-700' : 'text-gray-500'}`}>
+                              {step.title}
+                            </span>
+                          </div>
+                          {currentStepIndex === index && (
+                            <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#D84936]" />
+                          )}
+                        </button>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingStepId(step.id);
+                              setEditingTitle(step.title);
+                              setEditingQId(step.qId ?? '');
+                            }}
+                            className="p-2 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+                            title="编辑标题和编码"
+                          >
+                            <Pencil size={18} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => toggleStepVisibility(step, e)}
+                            className="p-2 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+                            title={visible ? '当前显示，点击隐藏' : '当前隐藏，点击显示'}
+                          >
+                            {visible ? <Eye size={18} /> : <EyeOff size={18} />}
+                          </button>
                         </div>
                       </div>
-                      {currentStepIndex === index && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#D84936]" />
-                      )}
-                    </button>
-                  ))}
+                    );
+                  })}
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Edit Step Meta Modal */}
+      <AnimatePresence>
+        {editingStepId && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setEditingStepId(null)}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden"
+            >
+              <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 className="text-base font-bold text-gray-900">编辑目录项</h3>
+                <button
+                  type="button"
+                  onClick={() => setEditingStepId(null)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X size={18} className="text-gray-500" />
+                </button>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-800">标题</label>
+                  <input
+                    value={editingTitle}
+                    onChange={(e) => setEditingTitle(e.target.value)}
+                    placeholder="例如：房屋现状"
+                    className="w-full py-3.5 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none px-4 text-gray-800 placeholder-gray-400"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-800">编码（可选）</label>
+                  <input
+                    value={editingQId}
+                    onChange={(e) => setEditingQId(e.target.value)}
+                    placeholder="例如：Q2-5（留空则不显示）"
+                    className="w-full py-3.5 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none px-4 text-gray-800 placeholder-gray-400"
+                  />
+                  <p className="text-[11px] text-gray-500">
+                    仅影响目录展示，不改变步骤跳转 id。
+                  </p>
+                </div>
+              </div>
+              <div className="px-6 pb-6 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingStepId(null)}
+                  className="px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  取消
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const stepId = editingStepId;
+                    if (!stepId) return;
+                    const nextTitle = editingTitle.trim() || editingTitle;
+                    const nextQId = editingQId.trim();
+                    setStepMetaOverrides((prev) => ({
+                      ...prev,
+                      [stepId]: {
+                        ...prev[stepId],
+                        title: nextTitle,
+                        qId: nextQId ? nextQId : null,
+                      },
+                    }));
+                    setEditingStepId(null);
+                  }}
+                  disabled={!editingTitle.trim()}
+                  className="px-4 py-2.5 rounded-xl bg-[#302E2B] text-sm font-medium text-white hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.99]"
+                >
+                  保存
+                </button>
               </div>
             </motion.div>
           </div>
@@ -210,6 +416,8 @@ export default function App() {
             updateData={updateData} 
             nextStep={nextStep} 
             prevStep={prevStep}
+            goToStep={goToStep}
+            goToWorkbench={() => setMode('workbench')}
           />
         </AnimatePresence>
       </main>
@@ -222,8 +430,12 @@ export default function App() {
               onClick={nextStep}
               className="w-full bg-[#302E2B] text-white py-4 rounded-xl font-medium text-lg flex items-center justify-center gap-2 hover:bg-black transition-colors active:scale-[0.99]"
             >
-              {isFirstStep ? '开启深度定制之旅' : '下一步'}
-              {!isFirstStep && <ChevronRight size={18} />}
+              {steps[currentStepIndex].id === 'payment'
+                ? '完成支付并开始项目深度需求测评'
+                : isFirstStep
+                  ? '开启深度定制之旅'
+                  : '下一步'}
+              {steps[currentStepIndex].id !== 'payment' && !isFirstStep && <ChevronRight size={18} />}
             </button>
           </div>
         </div>

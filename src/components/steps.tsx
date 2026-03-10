@@ -9,7 +9,7 @@ import {
   Check, MapPin, Target, FileText, Sun, CloudSun, Cloud, Moon, Maximize, Square, Minimize,
   Wind, Fan, CloudRain, VolumeX, Volume1, Volume2, VolumeX as VolumeMute,
   Wifi, Zap, Lightbulb, Music, ShieldCheck, Cpu, AirVent, Droplets, Thermometer,
-  Lock, Waves, Trash2, Bath, Flame, Bot, Palette, Archive, Pencil,
+  Lock, Waves, Trash2, Bath, Flame, Bot, Palette, Archive,
   Phone, Briefcase, ChevronDown, Copy, LocateFixed, Loader2, ChevronRight, Wallet
 } from 'lucide-react';
 // @ts-ignore: static image asset import
@@ -19,9 +19,30 @@ interface StepProps {
   data: FormData;
   updateData: (fields: Partial<FormData>) => void;
   nextStep: () => void;
+  goToStep?: (stepId: string) => void;
+  goToWorkbench?: () => void;
 }
 
-export const StepWelcome = ({ nextStep }: StepProps) => (
+type HouseType = '新房' | '二手房' | '老房翻新' | string;
+
+const getHouseConditionOptions = (houseType: HouseType): string[] => {
+  if (houseType === '新房') return ['毛坯', '精装'];
+  if (houseType === '老房翻新') return ['精装', '老旧装修'];
+  // 二手房（以及未选择时的默认兜底）
+  return ['毛坯', '精装', '老旧装修'];
+};
+
+const updateHouseTypeWithConditionGuard = (
+  updateData: (fields: Partial<FormData>) => void,
+  nextHouseType: HouseType,
+  currentHouseCondition: string | undefined
+) => {
+  const allowed = getHouseConditionOptions(nextHouseType);
+  const nextCondition = currentHouseCondition && allowed.includes(currentHouseCondition) ? currentHouseCondition : '';
+  updateData({ houseType: nextHouseType, houseCondition: nextCondition });
+};
+
+export const StepWelcome = ({ nextStep, goToStep, goToWorkbench }: StepProps) => (
   <StepWrapper noCard>
     <div className="flex flex-col items-center justify-center py-10 min-h-[70vh]">
       <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
@@ -72,12 +93,22 @@ export const StepWelcome = ({ nextStep }: StepProps) => (
           </div>
           <button
             type="button"
-            onClick={nextStep}
+            onClick={() => goToStep?.('q2-4')}
             className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
           >
             开启深度定制之旅
           </button>
         </div>
+      </div>
+
+      <div className="mt-6">
+        <button
+          type="button"
+          onClick={() => goToWorkbench?.()}
+          className="text-sm font-medium text-gray-600 hover:text-gray-900 underline underline-offset-4 decoration-gray-300 hover:decoration-gray-900 transition-colors"
+        >
+          进入我的首页
+        </button>
       </div>
     </div>
   </StepWrapper>
@@ -93,6 +124,8 @@ export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
 
   const phoneValid = /^1\d{10}$/.test(phone);
   const codeValid = /^\d{6}$/.test(code);
+  // 测试模式：先允许流程跑通，后续接上真实验证码/注册接口后可关闭
+  const mockRegisterEnabled = !!import.meta.env.DEV;
 
   const handleSendCode = async () => {
     if (!phoneValid) {
@@ -104,8 +137,12 @@ export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
     try {
       const result = await sendSmsCode(phone);
       if (!result.success) {
-        setError(result.message || '发送验证码失败');
-        return;
+        if (!mockRegisterEnabled) {
+          setError(result.message || '发送验证码失败');
+          return;
+        }
+        // mock 模式下允许继续倒计时（不阻断流程）
+        setError(result.message || '发送验证码失败（测试模式可继续）');
       }
       setCountdown(60);
       const timer = setInterval(() => {
@@ -129,16 +166,26 @@ export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
       setError('请输入正确的 11 位手机号');
       return;
     }
-    if (!codeValid) {
+    if (!codeValid && !mockRegisterEnabled) {
       setError('请输入 6 位验证码');
+      return;
+    }
+    if (!codeValid && mockRegisterEnabled) {
+      // mock 模式下不校验验证码，先放行
+      updateData({ userPhone: phone });
+      nextStep();
       return;
     }
     setSubmitting(true);
     try {
       const result = await registerWithCode(phone, code);
       if (!result.success) {
-        setError(result.message || '验证失败，请检查验证码');
-        return;
+        if (!mockRegisterEnabled) {
+          setError(result.message || '验证失败，请检查验证码');
+          return;
+        }
+        // mock 模式：接口失败也放行，避免阻塞演示流程
+        setError(result.message || '验证失败（测试模式已放行）');
       }
       updateData({ userPhone: phone });
       nextStep();
@@ -202,7 +249,7 @@ export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={!phoneValid || !codeValid || submitting}
+            disabled={!phoneValid || (!mockRegisterEnabled && !codeValid) || submitting}
             className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-4 text-sm font-medium text-white hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.99]"
           >
             {submitting ? '验证中…' : '完成注册并继续'}
@@ -214,11 +261,15 @@ export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
 };
 
 /** 深度测评-1：项目概况（独立步骤，目录显示「深度测评-1 项目概况」）— 设计对齐 Q2-1 */
-export const StepDeepEval1 = ({ nextStep, prevStep }: StepProps & { prevStep?: () => void }) => {
+export const StepDeepEval1 = ({ data, updateData, nextStep, prevStep }: StepProps & { prevStep?: () => void }) => {
   const ctx = useDeepEvalForm();
   const { formData, handleChange, errors, validateStep1, projectTypeOptions, budgetOptions, budgetDisplayLabel, isLocating, handleGetLocation } = ctx;
 
   const handleNext = () => {
+    if (!String(data.projectName ?? '').trim()) {
+      ctx.setErrors((prev) => ({ ...prev, projectName: '请填写项目名称/小区' }));
+      return;
+    }
     if (!validateStep1()) return;
     nextStep();
   };
@@ -228,6 +279,17 @@ export const StepDeepEval1 = ({ nextStep, prevStep }: StepProps & { prevStep?: (
   return (
     <StepWrapper title="项目概况" subtitle="作为种子用户，你的档案会被我们保存，上线后直接同步到产品里。我们不会用它打扰你；">
       <div className="space-y-6">
+        <TextInput
+          label="项目名称/小区"
+          value={data.projectName}
+          onChange={(v: string) => {
+            updateData({ projectName: v });
+            if (errors.projectName) ctx.setErrors((prev) => ({ ...prev, projectName: '' }));
+          }}
+          placeholder="例如: 汤臣一品"
+        />
+        {errors.projectName && <p className="text-red-500 text-xs mt-1 -mt-2">{errors.projectName}</p>}
+
         <SegmentedRadio
           label="项目类型"
           value={formData.projectType}
@@ -469,14 +531,14 @@ export const Step2 = ({ data, updateData }: StepProps) => (
       <SegmentedRadio 
         label="房屋类型" 
         value={data.houseType} 
-        onChange={(v: string) => updateData({ houseType: v })}
+        onChange={(v: string) => updateHouseTypeWithConditionGuard(updateData, v, data.houseCondition)}
         options={['新房', '二手房', '老房翻新']} 
       />
       <SegmentedRadio 
         label="房屋现状" 
         value={data.houseCondition} 
         onChange={(v: string) => updateData({ houseCondition: v })}
-        options={['毛坯', '精装', '老旧装修']} 
+        options={getHouseConditionOptions(data.houseType)} 
       />
     </div>
   </StepWrapper>
@@ -542,18 +604,17 @@ export const Step4 = ({ data, updateData }: StepProps) => (
   <StepWrapper title="房型资料同步" subtitle="房屋类型与现状 · 开启深度分析">
     <div className="space-y-6">
       {/* Q2-2：房屋类型与现状 */}
-      <TextInput label="项目名称/小区" value={data.projectName} onChange={(v: string) => updateData({ projectName: v })} placeholder="例如: 汤臣一品" />
       <SegmentedRadio 
         label="房屋类型" 
         value={data.houseType} 
-        onChange={(v: string) => updateData({ houseType: v })}
+        onChange={(v: string) => updateHouseTypeWithConditionGuard(updateData, v, data.houseCondition)}
         options={['新房', '二手房', '老房翻新']} 
       />
       <SegmentedRadio 
         label="房屋现状" 
         value={data.houseCondition} 
         onChange={(v: string) => updateData({ houseCondition: v })}
-        options={['毛坯', '精装', '老旧装修']} 
+        options={getHouseConditionOptions(data.houseType)} 
       />
 
       <div className="space-y-3">
@@ -1444,8 +1505,9 @@ export const Step20 = ({ data, updateData }: StepProps) => {
   );
 };
 
-export const Step21 = ({ data, updateData }: StepProps) => {
+export const Step21 = ({ data, updateData, goToWorkbench }: StepProps) => {
   const [showModal, setShowModal] = React.useState(false);
+  const MY_HOME_URL = import.meta.env.VITE_MY_HOME_URL || import.meta.env.VITE_APP_HOME_URL || '/';
   const options = [
     '无障碍需求',
     '旧家具留存',
@@ -1507,13 +1569,24 @@ export const Step21 = ({ data, updateData }: StepProps) => {
             <p className="text-sm text-gray-700 leading-relaxed">
               如果您想更改信息，可进入您的首页查看项目需求书并编辑。
             </p>
-            <div className="pt-2 flex justify-end">
+            <div className="pt-2 flex gap-3">
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="px-5 py-2 rounded-xl bg-[#302E2B] text-white text-sm font-medium hover:bg-black transition-colors"
+                className="flex-1 px-5 py-2 rounded-xl border border-gray-200 bg-white text-gray-800 text-sm font-medium hover:bg-gray-50 transition-colors"
               >
-                我知道了
+                了解并关闭
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowModal(false);
+                  if (goToWorkbench) goToWorkbench();
+                  else window.location.assign(MY_HOME_URL);
+                }}
+                className="flex-1 px-5 py-2 rounded-xl bg-[#302E2B] text-white text-sm font-medium hover:bg-black transition-colors"
+              >
+                进入我的首页
               </button>
             </div>
           </div>
@@ -1528,8 +1601,6 @@ export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
   const [hasDrawn, setHasDrawn] = React.useState(false);
   const [showFullscreen, setShowFullscreen] = React.useState(false);
   const [canSign, setCanSign] = React.useState(false);
-  const [showEditor, setShowEditor] = React.useState(false);
-  const [draftText, setDraftText] = React.useState('');
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const isDrawingRef = React.useRef(false);
   const lastPointRef = React.useRef<{ x: number; y: number } | null>(null);
@@ -1669,10 +1740,6 @@ export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
     '                                 ',
   ].join('\n');
 
-  const DISPLAY_TEXT = (data as any).contractCustomText && (data as any).contractCustomText.trim()
-    ? (data as any).contractCustomText
-    : CONTRACT_TEXT;
-
   const handleScroll = () => {
     const el = scrollRef.current;
     if (!el) return;
@@ -1774,19 +1841,6 @@ export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
     nextStep();
   };
 
-  const handleOpenEditor = () => {
-    const currentText = (data as any).contractCustomText && (data as any).contractCustomText.trim()
-      ? (data as any).contractCustomText
-      : CONTRACT_TEXT;
-    setDraftText(currentText);
-    setShowEditor(true);
-  };
-
-  const handleSaveEditor = () => {
-    updateData({ contractCustomText: draftText } as any);
-    setShowEditor(false);
-  };
-
   return (
     <>
       <StepWrapper
@@ -1794,20 +1848,11 @@ export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
         subtitle="请仔细阅读以下《项目服务框架协议》，确认后完成电子签署"
       >
         <div className="space-y-5">
-          <div className="flex justify-between items-center">
-            <button
-              type="button"
-              onClick={handleOpenEditor}
-              className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium text-gray-700 hover:bg-gray-50"
-            >
-              <Pencil size={12} />
-              编辑合同内容
-            </button>
-          </div>
+          
 
           <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5 md:p-6 text-xs leading-relaxed text-gray-700 max-h-64 overflow-y-auto custom-scrollbar">
             <div className="whitespace-pre-line font-serif text-[11px] leading-7 text-gray-900 tracking-wide pr-2 space-y-1.5">
-              {DISPLAY_TEXT.split('\n').map((line, idx) => {
+              {CONTRACT_TEXT.split('\n').map((line, idx) => {
                 if (line.trim() === '[图片]') {
                   return (
                     <div key={idx} className="my-4 flex justify-center">
@@ -1879,7 +1924,7 @@ export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
             >
               <div className="mx-auto max-w-4xl bg-white rounded-2xl border border-gray-100 px-8 py-7 shadow-sm">
                 <div className="whitespace-pre-line font-serif text-[12px] leading-7 text-gray-900 tracking-wide space-y-2">
-                  {DISPLAY_TEXT.split('\n').map((line, idx) => {
+                  {CONTRACT_TEXT.split('\n').map((line, idx) => {
                     if (line.trim() === '[图片]') {
                       return (
                         <div key={idx} className="my-6 flex justify-center">
@@ -1924,59 +1969,7 @@ export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
         </div>
       )}
 
-      {showEditor && (
-        <div className="fixed inset-0 z-[140] flex items-center justify-center px-3">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setShowEditor(false)}
-          />
-          <div className="relative w-full max-w-5xl h-[90vh] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-              <div>
-                <h3 className="text-base font-semibold text-gray-900">编辑项目服务框架协议</h3>
-                <p className="text-[11px] text-gray-500 mt-0.5">
-                  您可以在此页面自由修改合同文本，点击保存后，将在合同阅读与签署页面实时生效。
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowEditor(false)}
-                className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium text-gray-700 hover:bg-gray-50"
-              >
-                关闭
-              </button>
-            </div>
-            <div className="flex-1 p-4 bg-[#FDFCF8]">
-              <textarea
-                className="w-full h-full text-[12px] leading-6 font-mono bg-white rounded-2xl border border-gray-200 p-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#D84936]/30"
-                value={draftText}
-                onChange={(e) => setDraftText(e.target.value)}
-              />
-            </div>
-            <div className="px-5 py-4 border-t border-gray-100 flex items-center justify-between">
-              <p className="text-[11px] text-gray-500">
-                取消不会保存本次修改；保存后可在合同页随时再次编辑。
-              </p>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowEditor(false)}
-                  className="px-4 py-2 rounded-xl border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  取消
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSaveEditor}
-                  className="px-4 py-2 rounded-xl bg-[#302E2B] text-xs font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
-                >
-                  保存修改
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* editor removed */}
 
       {showSignature && (
         <div className="fixed inset-0 z-[130] flex items-center justify-center px-4">
