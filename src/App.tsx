@@ -4,9 +4,10 @@ import { ChevronLeft, ChevronRight, X, List } from 'lucide-react';
 import { FormData, initialFormData } from './types';
 import {
   StepWelcome,
-  Step0,
+  StepRegister,
+  StepDeepEval1,
+  StepDeepEval2,
   Step1,
-  Step2,
   Step3,
   Step3Sub,
   Step4,
@@ -31,6 +32,7 @@ import {
   StepContract,
   StepPayment,
 } from './components/steps';
+import { DeepEvalFormProvider } from './components/DeepEvalFormContext';
 
 export default function App() {
   const [data, setData] = useState<FormData>(initialFormData);
@@ -45,9 +47,10 @@ export default function App() {
   const getStepsSequence = () => {
     const sequence = [
       { id: 'welcome', title: '欢迎', qId: null, component: StepWelcome },
-      { id: 'q2-0', title: '客户信息', qId: 'Q2-0', component: Step0 },
+      { id: 'register', title: '注册', qId: null, component: StepRegister },
+      { id: 'deep-eval-2', title: '深度测评-2 您的信息', qId: 'DE-2', component: StepDeepEval2 },
+      { id: 'deep-eval-1', title: '深度测评-1 项目概况', qId: 'DE-1', component: StepDeepEval1 },
       { id: 'q2-1', title: '项目信息-城市/小区', qId: 'Q2-1', component: Step1 },
-      { id: 'q2-2', title: '房屋类型与现状', qId: 'Q2-2', component: Step2 },
       { id: 'q2-3', title: '预算范围', qId: 'Q2-3', component: Step3 },
       { id: 'q3', title: '实效投入标准', qId: 'Q2-3-2', component: Step3Sub },
       { id: 'contract', title: '意向金合同', qId: null, component: StepContract },
@@ -94,36 +97,42 @@ export default function App() {
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
   const isContractStep = steps[currentStepIndex].id === 'contract';
+  const isWelcomeStep = steps[currentStepIndex].id === 'welcome';
+  const isRegisterStep = steps[currentStepIndex].id === 'register';
+  const isDeepEvalStep = steps[currentStepIndex].id.startsWith('deep-eval');
   const progress = ((currentStepIndex) / (steps.length - 1)) * 100;
 
   return (
+    <DeepEvalFormProvider>
     <div className="min-h-screen bg-[#FDFCF8] text-gray-900 font-sans flex flex-col relative">
-      {/* Header */}
-      <header className="w-full pt-8 pb-4 px-6 flex flex-col items-center relative z-50">
-        <div className="w-full max-w-[800px] flex items-center justify-center relative">
-          <button
-            onClick={prevStep}
-            disabled={isFirstStep}
-            className={`absolute left-0 w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center transition-colors ${isFirstStep ? 'opacity-0 pointer-events-none' : 'text-gray-600 hover:bg-gray-50'}`}
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <h1 className="text-2xl font-medium text-gray-900">深度定制测评</h1>
-
-          {/* Progress Indicator */}
-          {!isFirstStep && !isLastStep && (
+      {/* Header（仅欢迎页隐藏；注册页、DE 页面均显示目录） */}
+      {!isWelcomeStep && (
+        <header className="w-full pt-8 pb-4 px-6 flex flex-col items-center relative z-50">
+          <div className="w-full max-w-[800px] flex items-center justify-center relative">
             <button
-              onClick={() => setShowMenu(true)}
-              className="absolute right-0 bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-100 flex items-center gap-2 hover:bg-gray-50 transition-colors"
+              onClick={prevStep}
+              disabled={isFirstStep}
+              className={`absolute left-0 w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center transition-colors ${isFirstStep ? 'opacity-0 pointer-events-none' : 'text-gray-600 hover:bg-gray-50'}`}
             >
-              <List size={14} className="text-gray-400" />
-              <span className="text-sm font-medium text-gray-500">
-                <span className="text-[#D84936]">{currentStepIndex}</span> / {steps.length - 1}
-              </span>
+              <ChevronLeft size={20} />
             </button>
-          )}
-        </div>
-      </header>
+            <h1 className="text-2xl font-medium text-gray-900">深度定制测评</h1>
+
+            {/* Progress Indicator */}
+            {!isFirstStep && !isLastStep && (
+              <button
+                onClick={() => setShowMenu(true)}
+                className="absolute right-0 bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-100 flex items-center gap-2 hover:bg-gray-50 transition-colors"
+              >
+                <List size={14} className="text-gray-400" />
+                <span className="text-sm font-medium text-gray-500">
+                  <span className="text-[#D84936]">{currentStepIndex}</span> / {steps.length - 1}
+                </span>
+              </button>
+            )}
+          </div>
+        </header>
+      )}
 
       {/* Navigation Menu Modal */}
       <AnimatePresence>
@@ -200,12 +209,13 @@ export default function App() {
             data={data} 
             updateData={updateData} 
             nextStep={nextStep} 
+            prevStep={prevStep}
           />
         </AnimatePresence>
       </main>
 
-      {/* Bottom Navigation */}
-      {!isLastStep && !isContractStep && (
+      {/* Bottom Navigation（欢迎页、注册页、深度测评页隐藏，深度测评有自带底部按钮） */}
+      {!isLastStep && !isContractStep && !isWelcomeStep && !isRegisterStep && !isDeepEvalStep && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 z-50">
           <div className="max-w-[800px] mx-auto">
             <button
@@ -219,5 +229,6 @@ export default function App() {
         </div>
       )}
     </div>
+    </DeepEvalFormProvider>
   );
 }

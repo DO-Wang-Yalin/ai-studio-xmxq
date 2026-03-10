@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Check, ChevronDown } from 'lucide-react';
 
-export const StepWrapper = ({ children, title, subtitle }: { children: React.ReactNode, title?: string, subtitle?: string }) => (
+export const StepWrapper = ({ children, title, subtitle, noCard }: { children: React.ReactNode, title?: string, subtitle?: string, noCard?: boolean }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
@@ -16,11 +16,15 @@ export const StepWrapper = ({ children, title, subtitle }: { children: React.Rea
         {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
       </div>
     )}
-    <div className="bg-white rounded-3xl p-5 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
-      <div className="space-y-8">
-        {children}
+    {noCard ? (
+      children
+    ) : (
+      <div className="bg-white rounded-3xl p-5 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
+        <div className="space-y-8">
+          {children}
+        </div>
       </div>
-    </div>
+    )}
   </motion.div>
 );
 
@@ -109,28 +113,34 @@ export const IconRadioCard = ({ icon: Icon, label, description, selected, onClic
   </button>
 );
 
-export const SquareRadioCard = ({ label, description, selected, onClick, icon: Icon }: any) => (
+export const SquareRadioCard = ({ label, description, selected, onClick, icon: Icon, compact }: any) => (
   <button
     onClick={onClick}
-    className={`aspect-square flex flex-col items-center justify-center text-center p-4 rounded-2xl transition-all duration-300 border ${
-      selected 
-        ? 'bg-white border-[#D84936] ring-1 ring-[#D84936] shadow-[0_4px_15px_rgba(216,73,54,0.12)] transform scale-[1.02]' 
-        : 'bg-[#FEFDFB] border-dashed border-gray-200 hover:border-gray-300 hover:bg-[#F4F3F0]'
-    }`}
+    className={compact
+      ? `flex flex-col items-center justify-center text-center py-2 px-3 rounded-xl transition-all duration-300 border min-h-0 ${
+          selected
+            ? 'bg-white border-[#D84936] ring-1 ring-[#D84936] shadow-[0_2px_8px_rgba(216,73,54,0.12)]'
+            : 'bg-[#FEFDFB] border-dashed border-gray-200 hover:border-gray-300 hover:bg-[#F4F3F0]'
+        }`
+      : `aspect-square flex flex-col items-center justify-center text-center p-4 rounded-2xl transition-all duration-300 border ${
+          selected
+            ? 'bg-white border-[#D84936] ring-1 ring-[#D84936] shadow-[0_4px_15px_rgba(216,73,54,0.12)] transform scale-[1.02]'
+            : 'bg-[#FEFDFB] border-dashed border-gray-200 hover:border-gray-300 hover:bg-[#F4F3F0]'
+        }`}
   >
-    {Icon && (
+    {Icon && !compact && (
       <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors duration-300 ${
         selected ? 'bg-[#D84936]/10 text-[#D84936]' : 'bg-[#F4F3F0] text-gray-500'
       }`}>
         <Icon size={20} strokeWidth={1.5} />
       </div>
     )}
-    <h3 className={`font-bold transition-colors duration-300 ${
+    <h3 className={`font-bold transition-colors duration-300 ${compact ? 'text-sm' : ''} ${
       selected ? 'text-[#D84936]' : 'text-gray-800'
     }`}>
       {label}
     </h3>
-    {description && (
+    {description && !compact && (
       <p className="text-[11px] text-gray-400 mt-2 leading-tight">
         {description}
       </p>

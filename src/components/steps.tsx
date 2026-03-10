@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormData } from '../types';
 import { StepWrapper, TextInput, RadioCard, CheckboxCard, SegmentedRadio, IconRadioCard, SquareRadioCard, SquareCheckboxCard, Counter, SubQuestion } from './ui';
-import { 
-  Check, MapPin, Target, FileText, Sun, CloudSun, Cloud, Moon, Maximize, Square, Minimize, 
+import { useDeepEvalForm } from './DeepEvalFormContext';
+import { PROJECT_TYPES } from './DeepEvalConstants';
+import { sendSmsCode, registerWithCode } from '../services/auth';
+import { motion } from 'motion/react';
+import {
+  Check, MapPin, Target, FileText, Sun, CloudSun, Cloud, Moon, Maximize, Square, Minimize,
   Wind, Fan, CloudRain, VolumeX, Volume1, Volume2, VolumeX as VolumeMute,
-  Wifi, Zap, Lightbulb, Music, ShieldCheck, Cpu, AirVent, Droplets, Thermometer, 
-  Lock, Waves, Trash2, Bath, Flame, Bot, Palette, Archive, Pencil
+  Wifi, Zap, Lightbulb, Music, ShieldCheck, Cpu, AirVent, Droplets, Thermometer,
+  Lock, Waves, Trash2, Bath, Flame, Bot, Palette, Archive, Pencil,
+  Phone, Briefcase, ChevronDown, Copy, LocateFixed, Loader2, ChevronRight, Wallet
 } from 'lucide-react';
 // @ts-ignore: static image asset import
 import contractFlowImg from '../assets/contract-flow.png';
@@ -17,66 +22,58 @@ interface StepProps {
 }
 
 export const StepWelcome = ({ nextStep }: StepProps) => (
-  <StepWrapper
-    title="欢迎来到深度定制"
-    subtitle="请选择你的起点：可以先完成注册，也可以直接体验深度定制之旅。"
-  >
-    <div className="flex flex-col items-center justify-center py-10 space-y-10">
-      <div className="flex flex-col items-center">
-        <div className="w-24 h-24 bg-[#302E2B] text-white rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-lg">
-          D.O
-        </div>
-        <p className="text-gray-500 text-center max-w-md leading-relaxed">
-          为了生成针对您房型的深度分析报告（如：精确的预算分配树、完整的布局方案等），请您认真填写真实项目需求相关信息。
-        </p>
-      </div>
-
-      <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-4">
+  <StepWrapper noCard>
+    <div className="flex flex-col items-center justify-center py-10 min-h-[70vh]">
+      <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {/* 注册卡片 */}
-        <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#D84936]/5 px-3 py-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D84936]" />
-            <span className="text-xs font-semibold text-[#D84936] tracking-wide">
-              用户注册
-            </span>
-          </div>
-          <div className="space-y-1.5">
-            <h2 className="text-base font-semibold text-gray-900">
-              注册 / 登录
-            </h2>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              先完成基础信息注册，方便后续为你生成专属项目档案，并同步到正式产品中。
-            </p>
+        <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 flex flex-col">
+          <div className="space-y-4 flex-1">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#D84936]/5 px-3 py-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D84936]" />
+              <span className="text-xs font-semibold text-[#D84936] tracking-wide">
+                用户注册
+              </span>
+            </div>
+            <div className="space-y-1.5">
+              <h2 className="text-base font-semibold text-gray-900">
+                注册 / 登录
+              </h2>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                先完成基础信息注册，方便后续为你生成专属项目档案，并同步到正式产品中。
+              </p>
+            </div>
           </div>
           <button
             type="button"
             onClick={nextStep}
-            className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
           >
             去注册并填写信息
           </button>
         </div>
 
         {/* 深度定制之旅卡片 */}
-        <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#302E2B]/5 px-3 py-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#302E2B]" />
-            <span className="text-xs font-semibold text-[#302E2B] tracking-wide">
-              深度定制之旅
-            </span>
-          </div>
-          <div className="space-y-1.5">
-            <h2 className="text-base font-semibold text-gray-900">
-              一键开启深度定制
-            </h2>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              直接进入深度定制测评流程，逐步回答关于生活方式与空间需求的问题，体验完整定制旅程。
-            </p>
+        <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 flex flex-col">
+          <div className="space-y-4 flex-1">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#302E2B]/5 px-3 py-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#302E2B]" />
+              <span className="text-xs font-semibold text-[#302E2B] tracking-wide">
+                深度定制之旅
+              </span>
+            </div>
+            <div className="space-y-1.5">
+              <h2 className="text-base font-semibold text-gray-900">
+                一键开启深度定制
+              </h2>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                直接进入深度定制测评流程，逐步回答关于生活方式与空间需求的问题，体验完整定制旅程。
+              </p>
+            </div>
           </div>
           <button
             type="button"
             onClick={nextStep}
-            className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
           >
             开启深度定制之旅
           </button>
@@ -86,39 +83,333 @@ export const StepWelcome = ({ nextStep }: StepProps) => (
   </StepWrapper>
 );
 
-export const Step0 = ({ data, updateData }: StepProps) => (
-  <StepWrapper title="基础信息" subtitle="请完善您的个人信息，以便我们提供专属服务">
-    <div className="space-y-6">
-      <TextInput label="姓名" value={data.userName} onChange={(v: string) => updateData({ userName: v })} placeholder="请输入您的姓名" />
-      <SegmentedRadio 
-        label="称呼" 
-        value={data.userTitle} 
-        onChange={(v: string) => updateData({ userTitle: v })}
-        options={['先生', '女士', '保密']} 
-      />
-      <div className="space-y-3">
-        <SubQuestion className="flex items-center gap-2">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
-          年龄段
-        </SubQuestion>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {['20-30岁', '31-40岁', '41-50岁', '50岁以上'].map(opt => (
-            <SquareRadioCard
-              key={opt}
-              label={opt}
-              selected={data.userAgeRange === opt}
-              onClick={() => updateData({ userAgeRange: opt })}
-            />
-          ))}
+/** 注册页：手机号 + 验证码，放在欢迎页之后、DE-2 之前 */
+export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
+  const [phone, setPhone] = useState(data.userPhone || '');
+  const [code, setCode] = useState('');
+  const [countdown, setCountdown] = useState(0);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
+
+  const phoneValid = /^1\d{10}$/.test(phone);
+  const codeValid = /^\d{6}$/.test(code);
+
+  const handleSendCode = async () => {
+    if (!phoneValid) {
+      setError('请输入正确的 11 位手机号');
+      return;
+    }
+    setError('');
+    setSending(true);
+    try {
+      const result = await sendSmsCode(phone);
+      if (!result.success) {
+        setError(result.message || '发送验证码失败');
+        return;
+      }
+      setCountdown(60);
+      const timer = setInterval(() => {
+        setCountdown((c) => {
+          if (c <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return c - 1;
+        });
+      }, 1000);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const [submitting, setSubmitting] = useState(false);
+  const handleSubmit = async () => {
+    setError('');
+    if (!phoneValid) {
+      setError('请输入正确的 11 位手机号');
+      return;
+    }
+    if (!codeValid) {
+      setError('请输入 6 位验证码');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const result = await registerWithCode(phone, code);
+      if (!result.success) {
+        setError(result.message || '验证失败，请检查验证码');
+        return;
+      }
+      updateData({ userPhone: phone });
+      nextStep();
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <StepWrapper noCard>
+      <div className="flex flex-col items-center py-8 min-h-[60vh]">
+        <div className="w-full max-w-md rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-6 space-y-5">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#D84936]/5 px-3 py-1 mb-2">
+            <Phone className="w-3.5 h-3.5 text-[#D84936]" />
+            <span className="text-xs font-semibold text-[#D84936] tracking-wide">手机号注册</span>
+          </div>
+          <h2 className="text-lg font-semibold text-gray-900">填写手机号并完成验证</h2>
+          <p className="text-sm text-gray-500">我们将向该手机号发送验证码，用于完成注册。</p>
+
+          <div className="space-y-3">
+            <label className="block text-sm font-bold text-gray-800">手机号</label>
+            <div className="relative flex items-center">
+              <Phone size={18} className="absolute left-4 text-gray-400" />
+              <input
+                type="tel"
+                inputMode="numeric"
+                maxLength={11}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                placeholder="请输入 11 位手机号"
+                className="w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none pl-11 pr-5 text-gray-800 placeholder-gray-400"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <label className="block text-sm font-bold text-gray-800">验证码</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+                placeholder="请输入 6 位验证码"
+                className="flex-1 py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none px-5 text-gray-800 placeholder-gray-400"
+              />
+              <button
+                type="button"
+                onClick={handleSendCode}
+                disabled={sending || countdown > 0 || !phoneValid}
+                className="shrink-0 px-4 py-4 rounded-xl bg-[#F4F3F0] text-gray-700 text-sm font-medium hover:bg-[#E8E6E0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+              >
+                {countdown > 0 ? `${countdown}s 后重发` : sending ? '发送中…' : '获取验证码'}
+              </button>
+            </div>
+          </div>
+
+          {error && <p className="text-sm text-red-500">{error}</p>}
+
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!phoneValid || !codeValid || submitting}
+            className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-4 text-sm font-medium text-white hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.99]"
+          >
+            {submitting ? '验证中…' : '完成注册并继续'}
+          </button>
         </div>
       </div>
-      <TextInput label="身高" type="number" value={data.userHeight} onChange={(v: string) => updateData({ userHeight: v })} placeholder="例如: 175" suffix="cm" />
-      <TextInput label="行业/工作特质" value={data.userIndustry} onChange={(v: string) => updateData({ userIndustry: v })} placeholder="例如: IT/互联网、金融、自由职业" />
-      <TextInput label="所在城市" value={data.userCity} onChange={(v: string) => updateData({ userCity: v })} placeholder="例如: 上海市" icon={MapPin} />
-      <TextInput label="联系电话" type="tel" value={data.userPhone} onChange={(v: string) => updateData({ userPhone: v })} placeholder="请输入手机号码" />
-    </div>
-  </StepWrapper>
-);
+    </StepWrapper>
+  );
+};
+
+/** 深度测评-1：项目概况（独立步骤，目录显示「深度测评-1 项目概况」）— 设计对齐 Q2-1 */
+export const StepDeepEval1 = ({ nextStep, prevStep }: StepProps & { prevStep?: () => void }) => {
+  const ctx = useDeepEvalForm();
+  const { formData, handleChange, errors, validateStep1, projectTypeOptions, budgetOptions, budgetDisplayLabel, isLocating, handleGetLocation } = ctx;
+
+  const handleNext = () => {
+    if (!validateStep1()) return;
+    nextStep();
+  };
+
+  const projectTypeOpts = projectTypeOptions.length ? projectTypeOptions : PROJECT_TYPES.map((t) => ({ value: t, label: t }));
+
+  return (
+    <StepWrapper title="项目概况" subtitle="作为种子用户，你的档案会被我们保存，上线后直接同步到产品里。我们不会用它打扰你；">
+      <div className="space-y-6">
+        <SegmentedRadio
+          label="项目类型"
+          value={formData.projectType}
+          onChange={(v: string) => handleChange('projectType', v)}
+          options={projectTypeOpts}
+        />
+        {errors.projectType && <p className="text-red-500 text-xs mt-1 -mt-2">{errors.projectType}</p>}
+
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-bold text-gray-800">项目城市</label>
+          <div className="relative flex items-center">
+            <MapPin size={18} className="absolute left-4 text-gray-400" />
+            <input
+              type="text"
+              value={formData.projectPosition}
+              onChange={(e) => handleChange('projectPosition', e.target.value)}
+              placeholder="点击右侧按钮获取定位或手动输入..."
+              className="w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none transition-all text-gray-800 pl-11 pr-12 placeholder-gray-400"
+            />
+            <button
+              type="button"
+              onClick={handleGetLocation}
+              disabled={isLocating}
+              className="absolute right-4 p-1 hover:bg-gray-200 rounded-md transition-colors disabled:opacity-50"
+              title="获取当前位置"
+            >
+              {isLocating ? <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}><Loader2 size={18} className="text-gray-600" /></motion.div> : <Target size={18} className="text-gray-600" />}
+            </button>
+          </div>
+          {errors.projectPosition && <p className="text-red-500 text-xs mt-1">{errors.projectPosition}</p>}
+        </div>
+
+        <TextInput
+          label="实际面积"
+          type="number"
+          value={formData.area}
+          onChange={(v: string) => handleChange('area', v)}
+          placeholder="请输入..."
+          suffix="m²"
+        />
+        {errors.area && <p className="text-red-500 text-xs mt-1 -mt-2">{errors.area}</p>}
+
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-bold text-gray-800">每平方米项目造价</label>
+          <div className="relative flex items-center">
+            <Wallet size={18} className="absolute left-4 text-gray-400" />
+            <select
+              value={formData.budget}
+              onChange={(e) => handleChange('budget', e.target.value)}
+              className={`w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none transition-all text-gray-800 pl-11 pr-10 appearance-none cursor-pointer ${formData.budget ? '' : 'text-gray-400'}`}
+            >
+              <option value="" disabled>请选择每平方米项目造价</option>
+              {budgetOptions.map((range) => (
+                <option key={range} value={range}>{budgetDisplayLabel(range)}</option>
+              ))}
+            </select>
+            <ChevronDown size={18} className="absolute right-5 text-gray-500 pointer-events-none" />
+          </div>
+          {errors.budget && <p className="text-red-500 text-xs mt-1">{errors.budget}</p>}
+        </div>
+
+        <button
+          type="button"
+          onClick={handleNext}
+          className="w-full bg-[#302E2B] text-white py-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-black transition-colors active:scale-[0.99] mt-2"
+        >
+          下一步
+          <ChevronRight size={18} />
+        </button>
+      </div>
+    </StepWrapper>
+  );
+};
+
+/** 深度测评-2：您的信息（独立步骤，目录显示「深度测评-2 您的信息」）— 页面设计对齐 Q2-0 */
+export const StepDeepEval2 = ({ nextStep, prevStep }: StepProps & { prevStep?: () => void }) => {
+  const ctx = useDeepEvalForm();
+  const { formData, handleChange, errors, validateStep2, titleOptions, ageOptions, industryOptions, isLocating, handleGetCityLocation } = ctx;
+
+  const handleNext = () => {
+    if (!validateStep2()) return;
+    nextStep();
+  };
+
+  return (
+    <StepWrapper title="您的信息" subtitle="这是一份「画像校准」。填完后，你的喜好与档案会一起被保存，后续在产品里自动续上。">
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-3 sm:items-end">
+          <div className="flex-1 min-w-0">
+            <TextInput
+              label="姓名"
+              value={formData.name}
+              onChange={(v: string) => handleChange('name', v)}
+              placeholder="怎么称呼您"
+            />
+            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+          </div>
+          <div className="sm:w-28 flex-shrink-0">
+            <label className="text-sm font-bold text-gray-800 block mb-3">称呼</label>
+            <div className="flex rounded-xl overflow-hidden border border-gray-200 bg-[#FEFDFB] p-0.5">
+              {(titleOptions.length ? titleOptions : ['先生', '女士']).map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => handleChange('salutation', t)}
+                  className={`flex-1 min-w-0 py-3.5 px-2 text-sm font-medium transition-all rounded-lg ${
+                    formData.salutation === t
+                      ? 'bg-[#FEFDFB] border-[#D84936] text-[#D84936] border shadow-sm'
+                      : 'text-gray-600 hover:bg-[#F4F3F0] border border-transparent'
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="space-y-3">
+          <SubQuestion className="flex items-center gap-2">
+            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            年龄段
+          </SubQuestion>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {(ageOptions.length ? ageOptions : ['20-30岁', '31-40岁', '41-50岁', '50岁以上']).map((opt) => (
+              <SquareRadioCard
+                key={opt}
+                label={opt}
+                selected={formData.ageGroup === opt}
+                onClick={() => handleChange('ageGroup', opt)}
+                compact
+              />
+            ))}
+          </div>
+          {errors.ageGroup && <p className="text-red-500 text-xs mt-1">{errors.ageGroup}</p>}
+        </div>
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-bold text-gray-800">所在城市</label>
+          <div className="relative flex items-center">
+            <MapPin size={18} className="absolute left-4 text-gray-400" />
+            <input
+              type="text"
+              value={formData.city}
+              onChange={(e) => handleChange('city', e.target.value)}
+              placeholder="点击右侧按钮获取定位或手动输入"
+              className="w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none transition-all text-gray-800 pl-11 pr-12 placeholder:text-gray-400"
+            />
+            <button type="button" onClick={handleGetCityLocation} disabled={isLocating} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white rounded-lg text-[#D84936] shadow-sm hover:shadow-md active:scale-95 disabled:opacity-50 border border-[#D84936]/20" title="获取当前位置">
+              {isLocating ? <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}><Loader2 size={16} /></motion.div> : <LocateFixed size={16} />}
+            </button>
+          </div>
+          {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
+        </div>
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-bold text-gray-800">所在行业</label>
+          <div className="relative flex items-center">
+            <Briefcase size={18} className="absolute left-4 text-gray-400" />
+            <select
+              value={formData.industry}
+              onChange={(e) => handleChange('industry', e.target.value)}
+              className={`w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none transition-all text-gray-800 pl-11 pr-10 appearance-none cursor-pointer ${formData.industry ? '' : 'text-gray-400'}`}
+            >
+              <option value="">请选择行业</option>
+              {industryOptions.map((ind) => (
+                <option key={ind} value={ind}>{ind}</option>
+              ))}
+            </select>
+            <ChevronDown size={18} className="absolute right-5 text-gray-500 pointer-events-none" />
+          </div>
+          {errors.industry && <p className="text-red-500 text-xs mt-1">{errors.industry}</p>}
+        </div>
+        <button
+          type="button"
+          onClick={handleNext}
+          className="w-full bg-[#302E2B] text-white py-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-black transition-colors active:scale-[0.99] mt-2"
+        >
+          下一步
+          <ChevronRight size={18} />
+        </button>
+      </div>
+    </StepWrapper>
+  );
+};
 
 export const Step1 = ({ data, updateData }: StepProps) => (
   <StepWrapper title="项目概况" subtitle="作为种子用户，你的档案会被我们保存，上线后直接同步到产品里。我们不会用它打扰你；">
@@ -248,8 +539,23 @@ export const Step3Sub = ({ data, updateData }: StepProps) => {
 };
 
 export const Step4 = ({ data, updateData }: StepProps) => (
-  <StepWrapper title="房型资料同步" subtitle="开启深度分析">
+  <StepWrapper title="房型资料同步" subtitle="房屋类型与现状 · 开启深度分析">
     <div className="space-y-6">
+      {/* Q2-2：房屋类型与现状 */}
+      <TextInput label="项目名称/小区" value={data.projectName} onChange={(v: string) => updateData({ projectName: v })} placeholder="例如: 汤臣一品" />
+      <SegmentedRadio 
+        label="房屋类型" 
+        value={data.houseType} 
+        onChange={(v: string) => updateData({ houseType: v })}
+        options={['新房', '二手房', '老房翻新']} 
+      />
+      <SegmentedRadio 
+        label="房屋现状" 
+        value={data.houseCondition} 
+        onChange={(v: string) => updateData({ houseCondition: v })}
+        options={['毛坯', '精装', '老旧装修']} 
+      />
+
       <div className="space-y-3">
         <SubQuestion className="flex items-center gap-2">
           <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
