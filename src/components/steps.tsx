@@ -5,8 +5,10 @@ import {
   Check, MapPin, Target, FileText, Sun, CloudSun, Cloud, Moon, Maximize, Square, Minimize, 
   Wind, Fan, CloudRain, VolumeX, Volume1, Volume2, VolumeX as VolumeMute,
   Wifi, Zap, Lightbulb, Music, ShieldCheck, Cpu, AirVent, Droplets, Thermometer, 
-  Lock, Waves, Trash2, Bath, Flame, Bot, Palette, Archive
+  Lock, Waves, Trash2, Bath, Flame, Bot, Palette, Archive, Pencil
 } from 'lucide-react';
+// @ts-ignore: static image asset import
+import contractFlowImg from '../assets/contract-flow.png';
 
 interface StepProps {
   data: FormData;
@@ -16,16 +18,70 @@ interface StepProps {
 
 export const StepWelcome = ({ nextStep }: StepProps) => (
   <StepWrapper
-    title="开启深度定制之旅"
-    subtitle="作为种子用户，你的档案会被我们保存，上线后直接同步到产品里。我们不会用它打扰你；"
+    title="欢迎来到深度定制"
+    subtitle="请选择你的起点：可以先完成注册，也可以直接体验深度定制之旅。"
   >
-    <div className="flex flex-col items-center justify-center py-12">
-      <div className="w-24 h-24 bg-[#302E2B] text-white rounded-full flex items-center justify-center text-2xl font-bold mb-8 shadow-lg">
-        D.O
+    <div className="flex flex-col items-center justify-center py-10 space-y-10">
+      <div className="flex flex-col items-center">
+        <div className="w-24 h-24 bg-[#302E2B] text-white rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-lg">
+          D.O
+        </div>
+        <p className="text-gray-500 text-center max-w-md leading-relaxed">
+          为了生成针对您房型的深度分析报告（如：精确的预算分配树、完整的布局方案等），请您认真填写真实项目需求相关信息。
+        </p>
       </div>
-      <p className="text-gray-500 text-center max-w-md leading-relaxed">
-        为了生成针对您房型的深度分析报告（如：精确的预算分配树、完整的布局方案等），请您认真填写真实项目需求相关信息。
-      </p>
+
+      <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* 注册卡片 */}
+        <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 space-y-4">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#D84936]/5 px-3 py-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#D84936]" />
+            <span className="text-xs font-semibold text-[#D84936] tracking-wide">
+              用户注册
+            </span>
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-base font-semibold text-gray-900">
+              注册 / 登录
+            </h2>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              先完成基础信息注册，方便后续为你生成专属项目档案，并同步到正式产品中。
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={nextStep}
+            className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+          >
+            去注册并填写信息
+          </button>
+        </div>
+
+        {/* 深度定制之旅卡片 */}
+        <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 space-y-4">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#302E2B]/5 px-3 py-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#302E2B]" />
+            <span className="text-xs font-semibold text-[#302E2B] tracking-wide">
+              深度定制之旅
+            </span>
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-base font-semibold text-gray-900">
+              一键开启深度定制
+            </h2>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              直接进入深度定制测评流程，逐步回答关于生活方式与空间需求的问题，体验完整定制旅程。
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={nextStep}
+            className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+          >
+            开启深度定制之旅
+          </button>
+        </div>
+      </div>
     </div>
   </StepWrapper>
 );
@@ -175,7 +231,7 @@ export const Step3Sub = ({ data, updateData }: StepProps) => {
   ];
 
   return (
-    <StepWrapper title="Q3：实效投入标准" subtitle="根据您的居住规划，以下哪种“实效投入标准”更符合您的预期？">
+    <StepWrapper title="Q2-3-2：实效投入标准" subtitle="根据您的居住规划，以下哪种“实效投入标准”更符合您的预期？">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {options.map(opt => (
           <RadioCard
@@ -816,14 +872,27 @@ export const Step14 = ({ data, updateData }: StepProps) => {
   return (
     <StepWrapper title="Q2-14：收纳重点" subtitle="请选择您最关注的收纳区域（可多选）">
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {options.map(opt => (
-          <SquareRadioCard
-            key={opt}
-            label={opt}
-            selected={(data.storageFocus || []).includes(opt)}
-            onClick={() => toggleOption(opt)}
-          />
-        ))}
+        {options.map(opt => {
+          const label =
+            opt === '展示性收纳（书籍、收藏品）'
+              ? (
+                <>
+                  展示性收纳
+                  <br />
+                  <span className="font-normal">（书籍、收藏品）</span>
+                </>
+                )
+              : opt;
+
+          return (
+            <SquareRadioCard
+              key={opt}
+              label={label}
+              selected={(data.storageFocus || []).includes(opt)}
+              onClick={() => toggleOption(opt)}
+            />
+          );
+        })}
       </div>
     </StepWrapper>
   );
@@ -990,20 +1059,8 @@ export const Step18 = ({ data, updateData }: StepProps) => {
   return (
     <StepWrapper title="Q2-18：智能需求" subtitle="您对新家的“智能程度”有什么期待？">
       <div className="space-y-3">
-        <div className="grid grid-cols-3 gap-3">
-          {options.slice(0, 3).map(opt => (
-            <SquareRadioCard
-              key={opt.label}
-              label={opt.label}
-              icon={opt.icon}
-              description={opt.desc}
-              selected={data.smartHomeOptions === opt.label}
-              onClick={() => toggleOption(opt.label)}
-            />
-          ))}
-        </div>
-        <div className="grid grid-cols-4 gap-3">
-          {options.slice(3).map(opt => (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {options.map(opt => (
             <SquareRadioCard
               key={opt.label}
               label={opt.label}
@@ -1066,35 +1123,23 @@ export const Step20 = ({ data, updateData }: StepProps) => {
 
   return (
     <StepWrapper title="Q2-20：设备需求" subtitle="计划购入的家电设备">
-      <div className="space-y-3">
-        <div className="grid grid-cols-3 gap-3">
-          {options.slice(0, 3).map(opt => (
-            <SquareRadioCard
-              key={opt.label}
-              label={opt.label}
-              icon={opt.icon}
-              selected={data.devices === opt.label}
-              onClick={() => toggleOption(opt.label)}
-            />
-          ))}
-        </div>
-        <div className="grid grid-cols-4 gap-3">
-          {options.slice(3).map(opt => (
-            <SquareRadioCard
-              key={opt.label}
-              label={opt.label}
-              icon={opt.icon}
-              selected={data.devices === opt.label}
-              onClick={() => toggleOption(opt.label)}
-            />
-          ))}
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {options.map(opt => (
+          <SquareRadioCard
+            key={opt.label}
+            label={opt.label}
+            icon={opt.icon}
+            selected={data.devices === opt.label}
+            onClick={() => toggleOption(opt.label)}
+          />
+        ))}
       </div>
     </StepWrapper>
   );
 };
 
 export const Step21 = ({ data, updateData }: StepProps) => {
+  const [showModal, setShowModal] = React.useState(false);
   const options = [
     '无障碍需求',
     '旧家具留存',
@@ -1108,63 +1153,629 @@ export const Step21 = ({ data, updateData }: StepProps) => {
   };
 
   return (
-    <StepWrapper title="Q2-21：个性需求" subtitle="其他特殊需求">
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {options.map(opt => (
-            <SquareRadioCard
-              key={opt}
-              label={opt}
-              selected={data.otherNeedsOptions === opt}
-              onClick={() => toggleOption(opt)}
+    <>
+      <StepWrapper title="Q2-21：个性需求" subtitle="其他特殊需求">
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {options.map(opt => (
+              <SquareRadioCard
+                key={opt}
+                label={opt}
+                selected={data.otherNeedsOptions === opt}
+                onClick={() => toggleOption(opt)}
+              />
+            ))}
+          </div>
+          
+          <div className="pt-6 border-t border-gray-100 space-y-4">
+            <TextInput
+              label="其他补充需求"
+              value={data.otherNeeds}
+              onChange={(v: string) => updateData({ otherNeeds: v })}
+              placeholder="任何其他想告诉我们的"
             />
-          ))}
+          </div>
+
+          <div className="pt-4 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setShowModal(true)}
+              className="px-8 py-3 rounded-xl bg-[#302E2B] text-white text-base font-medium hover:bg-black transition-colors"
+            >
+              完成测试并提交
+            </button>
+          </div>
         </div>
-        
-        <div className="pt-6 border-t border-gray-100 space-y-4">
-          <TextInput label="其他补充需求" value={data.otherNeeds} onChange={(v: string) => updateData({ otherNeeds: v })} placeholder="任何其他想告诉我们的" />
+      </StepWrapper>
+
+      {showModal && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center px-4">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowModal(false)}
+          />
+          <div className="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6 space-y-4">
+            <p className="text-sm text-gray-700 leading-relaxed">
+              感谢您的耐心，您填写的信息我们会生成一份专属项目需求书，并安排专业顾问认真阅读并分析。
+            </p>
+            <p className="text-sm text-gray-700 leading-relaxed">
+              如果您想更改信息，可进入您的首页查看项目需求书并编辑。
+            </p>
+            <div className="pt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="px-5 py-2 rounded-xl bg-[#302E2B] text-white text-sm font-medium hover:bg-black transition-colors"
+              >
+                我知道了
+              </button>
+            </div>
+          </div>
         </div>
+      )}
+    </>
+  );
+};
+
+export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
+  const [showSignature, setShowSignature] = React.useState(false);
+  const [hasDrawn, setHasDrawn] = React.useState(false);
+  const [showFullscreen, setShowFullscreen] = React.useState(false);
+  const [canSign, setCanSign] = React.useState(false);
+  const [showEditor, setShowEditor] = React.useState(false);
+  const [draftText, setDraftText] = React.useState('');
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+  const isDrawingRef = React.useRef(false);
+  const lastPointRef = React.useRef<{ x: number; y: number } | null>(null);
+  const scrollRef = React.useRef<HTMLDivElement | null>(null);
+
+  const CONTRACT_TEXT = [
+    '                           项目服务框架协议  ',
+    ' 合同编号： LG-EPC-C_【项目简称 AMI】-【集团项目唯一 ID 唯一编号】',
+    '合同编号： LG-EPC-B_【项目简称 AMI】-【集团项目唯一 ID 唯一编号】',
+    '',
+    '委托方（甲方）：【】',
+    '身份证 / 社会统一信用代码：【】',
+    '联系人：【】',
+    '联系电话：【】',
+    '联系邮件：【】',
+    '联系地址：【】',
+    ' ',
+    '受托方（乙方）：【上海居梦唯伊建筑设计工程有限公司】',
+    '统一社会信用代码：【91310114MAD8QKXR5K】',
+    '联系人：【】',
+    '联系电话：【】',
+    '联系邮件：【】',
+    '联系地址：【】',
+    ' ',
+    '1. 合同背景',
+    '1.1 签约背景',
+    '  根据相关法律法规，甲乙双方方在平等自愿、协商一致的基础上，甲方拟将其位于【项目地址 AMI】的【项目名称 AMI】（下称“项目”）委托给乙方，由乙方提供 EPC 一体化智造服务，涵盖工程设计（Engineering）、选品采购（Procurement）、建造施工（Construction）全流程服务。',
+    '1.2 项目概况',
+    '  项目代码：【集团项目唯一 ID AMI】',
+    '  项目国家：【】',
+    '  项目城市：【】',
+    '  项目面积：【】',
+    '  项目简介：【一段话陈述项目概况，基于销售团队与客户前期沟通的文字总结】',
+    '  ',
+    '2. 订单管理',
+    '2.1 服务介绍',
+    '  1. 乙方将为甲方项目提供订单式的一体化智造服务，服务内容、验收标准和售后约定以对应 EPC 订单约定为准。',
+    '  2. 为甲方提供订单服务的主体，可由乙方或与乙方属同一集团控制的公司（本协议统称“乙方”）单独或共同提供，不影响本协议效力且无须另行约定。乙方将指定甲方向前述唯一公司账户完成款项支付。',
+    '  3. 所有EPC 订单服务期限按照双方约定，从【xxxx年xx月xx日】至【xxxx年xx月xx日】，共计【自然日】天。具体约定：',
+    '    - 【xxxx年xx月xx日】开始进入本项目第一个订单的意向期；',
+    '    - 【xxxx年xx月xx日】之前完成本项目的最后一个订单验收。',
+    '2.2 服务流程',
+    '  1. 状态图解:',
+    '[图片]',
+    '  2. 意向期：收集甲方需求后，乙方生成意向报价单供甲方决策。',
+    '  3. 订购期：甲乙双方明确订单服务事项与详细报价，乙方发送订购报价单与甲方成交订单。',
+    '  4. 交付期：',
+    '    - 甲方确保用于支付订单的资金充足，乙方按甲方最后确认的订购报价单约定，交付成果；',
+    '    - 若甲方在订单交付中提出终止订单，乙方将根据实际发生费用向甲方发送终止结算单。',
+    '  5. 验收期：',
+    '    - 验收标准详见订购报价单，甲方需在收到验收邀约后的当月完成验收；',
+    '    - 甲方验收通过后，乙方将发送并确认交付结算单，逾期未答复视为验收合格；',
+    '    - 如验收后订单成果涉及整改，乙方将在整改完成后，再次邀约甲方验收，直至验收通过；',
+    '    - 乙方整改通过甲方验收后，乙方将发送并确认整改结算单，逾期未答复视为验收合格。',
+    '  6. 维保期： ',
+    '    - 维保期详见交付结算单或整改结算单，具体范围及时效以结算单中约定为准；',
+    '    - 甲方可就订单交付成果提出维保需求，乙方根据维保期约定可提供免费或付费维保服务；',
+    '    - 乙方维保服务完成后将与甲方现场确认维保结算单，甲方确保用于支付订单的资金充足；',
+    '    - 维保期结束后，乙方不再对该订单提供服务。甲方若有新需求，可新建EPC订单另行委托。',
+    '2.3 支付结算',
+    '  1. 支付方式：',
+    '    - 甲方使用不同于签约主体的一个或多个付款主体时，应在支付前签署补充协议；',
+    '    - 甲方依据订购报价单，足额支付费用，乙方依据订购报价单扣款；',
+    '    - 甲方也可依据项目预算树一次性支付，乙方依据多个订购报价单整体扣款。',
+    '  2. 验收结算：',
+    '    - 订单验收通过后，双方依据交付结算单或整改结算单或进行结算，超出订购报价单金额的部分，甲方应补充支付；',
+    '    - 若订单在交付中甲方提出终止订单，乙方将依据终止结算单进行结算，超出订购报价单金额的部分，甲方应补充支付；',
+    '    - 订单维保服务完成后，乙方与甲方现场确认维保结算单，超出订购报价单金额的部分，甲方应补充支付。',
+    '  3. 发票开具：',
+    '    - 乙方根据国家税务总局政策法规，可向甲方开具小规模纳税人增值税发票；',
+    '    - 收到甲方开票请求后，乙方于验收完成后的次月15日完成发票开具；',
+    '    - 甲方对发票种类或时效有特别要求的，应于支付订购报价单前告知乙方。',
+    '2.4 账号信息',
+    '  1. 甲方付款账号',
+    '    - 银行户名：【】',
+    '    - 开户行：【】',
+    '    - 银行账号：【】',
+    '  2. 甲方开票信息',
+    '    - 发票抬头:【】',
+    '    - 税号:【】',
+    '    - 开户行:【】',
+    '    - 账号:【】',
+    '    - 地址:【】',
+    '    - 电话:【】',
+    '  3. 乙方收款账号',
+    '    - 银行户名：居梦科技（深圳）有限公司',
+    '    - 开户行：招商银行深圳分行滨海支行',
+    '    - 银行账号：7559 5346 5810 902',
+    '    - 付款备注：【项目名称 AMI】',
+    '',
+    '3. 保密条款',
+    '3.1 保密信息范围',
+    '  甲方提供给乙方的包括但不限于个人身份信息、家庭住址、家庭成员信息、联系方式、联系地址、银行账户信息、预算金额、设计需求等全部信息；乙方及其供应商通过自研软件平台展示的项目方案、设计图、施工图、供应商信息、产品与服务信息、价格等不为公众所知，并经乙方采取了保密措施的信息为本合同约定的保密信息。',
+    '3.2 保密义务',
+    '  双方均应妥善保管和使用涉及对方保密信息，防止在任何地点、任何时间使这些信息处于失控状态。除法律规定必须公开外，一方未经对方许可，不得向任何第三方展示或披露任何对方的保密信息及有损于对方的信息。',
+    '3.3 违约责任',
+    '  除本合同另有约定外，一方违约则承担违约责任，并赔偿由此给对方造成的损失；此外，违约方还应承担守约方为此而支付的各项费用，包括但不限于诉讼费、保全费、保全保险费、律师费、评估费、鉴定费等必要费用。',
+    '3.4 保密期限',
+    '  本保密条款不因本协议解除、终止而失效。',
+    '  ',
+    '4.  协议变更',
+    '4.1 协议解除',
+    '  1. 若在协议解除或终止时无项目订单推进中，在双方协商一致后可以解除或终止协议。',
+    '  2. 若在合同解除或终止时尚有推进中的项目销售订单，则由双方协商约定对应销售订单的结算方式，双方另行结算处理。',
+    '4.2 协议终止',
+    '  1. 本合同解除或终止后，乙方应当于7日内将项目的钥匙、资料等全部归还甲方，甲方应当及时接收，否则，由此产生的后果由甲方自行承担。',
+    '  2. 本协议及附属沟通单据的解释、签订、生效、效力、履行和解决争议适用于中华人民共和国法律。因本协议引起的或与本协议有关的任何争议，双方应通过友好协商解决。协商不成的，任何一方均有权向乙方所在地有管辖权的司法机构提起诉讼或仲裁。',
+    '4.3 不可抗力',
+    '  因不可抗力导致合同无法履行的，受影响方应立即通知对方并提供证明。双方可协商延期履行或终止协议，终止时按已完工作量结算费用。',
+    '  ',
+    '5. 争议解决',
+    '5.1 协议构成及补充',
+    '  双方往来单据、邮件、传真、会议纪要、线上沟通等均为本协议组成部分，本协议未尽事宜由双方另行协商约定或参照后续或已经签署的协议及或单据内容执行。',
+    '5.2 争议管辖',
+    '  因本协议事项产生争议，【城市】所在地法院拥有专属管辖权。',
+    '5.3 送达地址确认',
+    '  本协议记载的联系方式为各方确认的重要文件、法律文书的送达地址，若发生变化的，变化方有义务书面通知对方。',
+    '  ',
+    '  ',
+    '本协议自双方签字或盖章之日起生效。电子签署享有同等法律效力。本协议未尽事宜，由双方另行协商，并签订补充协议，补充协议与本合同具有同等法律效力。本协议一式两份，甲乙双方各执一份，具有同等法律效力。',
+    '',
+    '',
+    '（以下无正文）          ',
+    '',
+    '甲方签字（盖章）： ',
+    '   ',
+    '                                                            ',
+    '签署日期：    ',
+    '',
+    '',
+    '',
+    '乙方签字（盖章）：',
+    '    ',
+    '',
+    '签署日期：                                                                                 ',
+    '                                                            ',
+    '                                 ',
+  ].join('\n');
+
+  const DISPLAY_TEXT = (data as any).contractCustomText && (data as any).contractCustomText.trim()
+    ? (data as any).contractCustomText
+    : CONTRACT_TEXT;
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 16) {
+      setCanSign(true);
+    }
+  };
+
+  const getCanvasContext = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return null;
+    const rect = canvas.getBoundingClientRect();
+    // 保证高分屏下清晰
+    if (canvas.width !== rect.width * 2 || canvas.height !== rect.height * 2) {
+      canvas.width = rect.width * 2;
+      canvas.height = rect.height * 2;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+      ctx.scale(2, 2);
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#111827';
+      return ctx;
+    }
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#111827';
+    return ctx;
+  };
+
+  const getPoint = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    };
+  };
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    const ctx = getCanvasContext();
+    if (!ctx) return;
+    const point = getPoint(e);
+    isDrawingRef.current = true;
+    lastPointRef.current = point;
+    ctx.beginPath();
+    ctx.moveTo(point.x, point.y);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isDrawingRef.current) return;
+    e.preventDefault();
+    const ctx = getCanvasContext();
+    if (!ctx || !lastPointRef.current) return;
+    const point = getPoint(e);
+    ctx.lineTo(point.x, point.y);
+    ctx.stroke();
+    lastPointRef.current = point;
+    setHasDrawn(true);
+  };
+
+  const stopDrawing = () => {
+    isDrawingRef.current = false;
+    lastPointRef.current = null;
+  };
+
+  const handleClear = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    setHasDrawn(false);
+  };
+
+  const handleOpenSignature = () => {
+    setShowFullscreen(false);
+    setShowSignature(true);
+    setHasDrawn(false);
+    // 打开时清空画布
+    setTimeout(() => {
+      handleClear();
+    }, 0);
+  };
+
+  const handleSubmitSignature = () => {
+    const canvas = canvasRef.current;
+    if (!canvas || !hasDrawn) return;
+    const dataUrl = canvas.toDataURL('image/png');
+    updateData({ contractSignatureData: dataUrl as any, contractAccepted: true as any });
+    setShowSignature(false);
+    setShowFullscreen(false);
+    nextStep();
+  };
+
+  const handleOpenEditor = () => {
+    const currentText = (data as any).contractCustomText && (data as any).contractCustomText.trim()
+      ? (data as any).contractCustomText
+      : CONTRACT_TEXT;
+    setDraftText(currentText);
+    setShowEditor(true);
+  };
+
+  const handleSaveEditor = () => {
+    updateData({ contractCustomText: draftText } as any);
+    setShowEditor(false);
+  };
+
+  return (
+    <>
+      <StepWrapper
+        title="意向金支付合同"
+        subtitle="请仔细阅读以下《项目服务框架协议》，确认后完成电子签署"
+      >
+        <div className="space-y-5">
+          <div className="flex justify-between items-center">
+            <button
+              type="button"
+              onClick={handleOpenEditor}
+              className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium text-gray-700 hover:bg-gray-50"
+            >
+              <Pencil size={12} />
+              编辑合同内容
+            </button>
+          </div>
+
+          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5 md:p-6 text-xs leading-relaxed text-gray-700 max-h-64 overflow-y-auto custom-scrollbar">
+            <div className="whitespace-pre-line font-serif text-[11px] leading-7 text-gray-900 tracking-wide pr-2 space-y-1.5">
+              {DISPLAY_TEXT.split('\n').map((line, idx) => {
+                if (line.trim() === '[图片]') {
+                  return (
+                    <div key={idx} className="my-4 flex justify-center">
+                      <img
+                        src={contractFlowImg}
+                        alt="订单管理服务流程状态图解"
+                        className="max-w-full rounded-lg border border-gray-200 shadow-sm"
+                      />
+                    </div>
+                  );
+                }
+                return (
+                  <p
+                    key={idx}
+                    className={idx === 0 ? 'text-center font-semibold text-[12px]' : ''}
+                  >
+                    {line || '\u00A0'}
+                  </p>
+                );
+              })}
+            </div>
+          </div>
+
+          <p className="text-[11px] text-gray-500">
+            为保证阅读体验，建议先预览下方摘要内容，再点击按钮放大查看全文并完成合同签署。
+          </p>
+
+          <button
+            type="button"
+            onClick={() => {
+              setShowFullscreen(true);
+              setCanSign(false);
+            }}
+            className="w-full mt-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+          >
+            <Maximize size={14} />
+            放大查看并签署合同
+          </button>
+        </div>
+      </StepWrapper>
+
+      {showFullscreen && (
+        <div className="fixed inset-0 z-[135] flex items-center justify-center px-3">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowFullscreen(false)}
+          />
+          <div className="relative w-full max-w-5xl h-[90vh] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+              <div>
+                <h3 className="text-base font-semibold text-gray-900 text-center">项目服务框架协议</h3>
+                <p className="text-[11px] text-gray-500 mt-0.5 text-center">
+                  请完整阅读下方合同正文，滚动至底部后即可进行电子签署。
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowFullscreen(false)}
+                className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium text-gray-700 hover:bg-gray-50"
+              >
+                <Minimize size={12} />
+                退出全屏
+              </button>
+            </div>
+            <div
+              ref={scrollRef}
+              onScroll={handleScroll}
+              className="flex-1 overflow-y-auto px-6 py-5 custom-scrollbar bg-[#FDFCF8]"
+            >
+              <div className="mx-auto max-w-4xl bg-white rounded-2xl border border-gray-100 px-8 py-7 shadow-sm">
+                <div className="whitespace-pre-line font-serif text-[12px] leading-7 text-gray-900 tracking-wide space-y-2">
+                  {DISPLAY_TEXT.split('\n').map((line, idx) => {
+                    if (line.trim() === '[图片]') {
+                      return (
+                        <div key={idx} className="my-6 flex justify-center">
+                          <img
+                            src={contractFlowImg}
+                            alt="订单管理服务流程状态图解"
+                            className="max-w-full rounded-xl border border-gray-200 shadow-md"
+                          />
+                        </div>
+                      );
+                    }
+                    return (
+                      <p
+                        key={idx}
+                        className={idx === 0 ? 'text-center font-semibold text-[13px]' : ''}
+                      >
+                        {line || '\u00A0'}
+                      </p>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="px-5 py-4 border-t border-gray-100 space-y-3">
+              <button
+                type="button"
+                disabled={!canSign}
+                onClick={handleOpenSignature}
+                className={`w-full rounded-xl px-4 py-3 text-sm font-medium text-white transition-colors active:scale-[0.99] ${
+                  canSign ? 'bg-[#302E2B] hover:bg-black' : 'bg-gray-300 cursor-not-allowed'
+                }`}
+              >
+                {data.contractSignatureData ? '重新签署并继续' : '已阅读至底部，前往签署'}
+              </button>
+              <p className="text-[11px] text-gray-500 text-center">
+                {!canSign
+                  ? '请先滚动阅读至合同最底部后，再进行签署。'
+                  : '您已阅读至合同底部，可点击上方按钮完成签署。'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEditor && (
+        <div className="fixed inset-0 z-[140] flex items-center justify-center px-3">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowEditor(false)}
+          />
+          <div className="relative w-full max-w-5xl h-[90vh] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+              <div>
+                <h3 className="text-base font-semibold text-gray-900">编辑项目服务框架协议</h3>
+                <p className="text-[11px] text-gray-500 mt-0.5">
+                  您可以在此页面自由修改合同文本，点击保存后，将在合同阅读与签署页面实时生效。
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowEditor(false)}
+                className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-medium text-gray-700 hover:bg-gray-50"
+              >
+                关闭
+              </button>
+            </div>
+            <div className="flex-1 p-4 bg-[#FDFCF8]">
+              <textarea
+                className="w-full h-full text-[12px] leading-6 font-mono bg-white rounded-2xl border border-gray-200 p-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#D84936]/30"
+                value={draftText}
+                onChange={(e) => setDraftText(e.target.value)}
+              />
+            </div>
+            <div className="px-5 py-4 border-t border-gray-100 flex items-center justify-between">
+              <p className="text-[11px] text-gray-500">
+                取消不会保存本次修改；保存后可在合同页随时再次编辑。
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowEditor(false)}
+                  className="px-4 py-2 rounded-xl border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  取消
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveEditor}
+                  className="px-4 py-2 rounded-xl bg-[#302E2B] text-xs font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+                >
+                  保存修改
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSignature && (
+        <div className="fixed inset-0 z-[130] flex items-center justify-center px-4">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowSignature(false)}
+          />
+          <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-base font-semibold text-gray-900">请在下方签名确认</h3>
+              <p className="text-xs text-gray-500">
+                请使用鼠标或触控板在签名框内手写签名，此签名将作为您确认本合同的电子签章记录。
+              </p>
+            </div>
+            <div className="border border-gray-200 rounded-2xl bg-[#F9FAFB] overflow-hidden">
+              <canvas
+                ref={canvasRef}
+                className="w-full h-40 touch-none cursor-crosshair"
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={stopDrawing}
+                onPointerLeave={stopDrawing}
+              />
+            </div>
+            <div className="flex items-center justify-between pt-1">
+              <button
+                type="button"
+                onClick={handleClear}
+                className="text-xs text-gray-500 hover:text-gray-700 underline-offset-2 hover:underline"
+              >
+                清除重签
+              </button>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowSignature(false)}
+                  className="px-4 py-2 rounded-xl border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  取消
+                </button>
+                <button
+                  type="button"
+                  disabled={!hasDrawn}
+                  onClick={handleSubmitSignature}
+                  className={`px-4 py-2 rounded-xl text-xs font-medium text-white transition-colors ${
+                    hasDrawn ? 'bg-[#302E2B] hover:bg-black' : 'bg-gray-300 cursor-not-allowed'
+                  }`}
+                >
+                  确认签名并提交
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export const StepPayment = () => {
+  const [copied, setCopied] = React.useState(false);
+  const accountName = '上海某某空间设计有限公司';
+  const bankName = '中国工商银行 上海某某支行';
+  const bankAccount = '6222 0000 1234 5678 888';
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(`${accountName} ${bankName} ${bankAccount}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <StepWrapper
+      title="意向金支付账号信息"
+      subtitle="合同已确认，请根据以下信息进行转账支付"
+    >
+      <div className="space-y-5">
+        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5 space-y-3">
+          <div className="flex items-center gap-2">
+            <FileText size={18} className="text-[#D84936]" />
+            <span className="text-sm font-semibold text-gray-900">对公转账信息</span>
+          </div>
+          <div className="space-y-1.5 text-sm text-gray-800">
+            <p>账户名称：{accountName}</p>
+            <p>开户银行：{bankName}</p>
+            <p>银行账号：{bankAccount}</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="mt-2 w-full rounded-xl bg-[#302E2B] px-4 py-2.5 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+          >
+            {copied ? '已复制账号信息' : '一键复制全部信息'}
+          </button>
+        </div>
+
+        <p className="text-xs text-gray-500 leading-relaxed">
+          请您在备注中标注：项目城市 + 项目名称 + 姓名，方便我们快速匹配您的项目档案。
+          转账完成后，顾问将尽快与您确认到账情况并安排后续服务。
+        </p>
       </div>
     </StepWrapper>
   );
 };
-
-export const StepSubmit = ({ data }: StepProps) => (
-  <StepWrapper title="用户注册与签约" subtitle="如您对我们的服务感兴趣，请您注册并填写真实信息，我们将开启您的专属服务">
-    <div className="space-y-8">
-      <div className="bg-[#F4F3F0] p-8 rounded-3xl">
-        <h3 className="font-medium text-gray-900 mb-6 flex items-center gap-3">
-          <div className="w-1.5 h-5 bg-[#D84936] rounded-full"></div>
-          确认您的联系信息
-        </h3>
-        <div className="space-y-4 text-sm text-gray-600">
-          <div className="flex justify-between border-b border-gray-200 pb-3">
-            <span>姓名</span>
-            <span className="font-medium text-gray-900">{data.userName || '未填写'}</span>
-          </div>
-          <div className="flex justify-between border-b border-gray-200 pb-3">
-            <span>电话</span>
-            <span className="font-medium text-gray-900">{data.userPhone || '未填写'}</span>
-          </div>
-          <div className="flex justify-between pb-2">
-            <span>城市</span>
-            <span className="font-medium text-gray-900">{data.userCity || '未填写'}</span>
-          </div>
-        </div>
-      </div>
-      
-      <div className="space-y-4 pt-4">
-        <button className="w-full bg-white border-2 border-[#302E2B] text-[#302E2B] py-4 rounded-xl font-medium text-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-          意向金支付合同确认
-        </button>
-        <button className="w-full bg-[#D84936] text-white py-4 rounded-xl font-medium text-lg hover:bg-[#c2412f] transition-colors shadow-lg shadow-red-500/20">
-          提交需求并注册
-        </button>
-      </div>
-      
-      <p className="text-xs text-gray-400 text-center mt-4 flex items-center justify-center gap-1">
-        <Check size={12} /> 点击提交即表示您同意我们的隐私政策与服务条款
-      </p>
-    </div>
-  </StepWrapper>
-);

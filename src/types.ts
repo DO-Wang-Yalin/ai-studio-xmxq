@@ -74,6 +74,10 @@ export interface FormData {
   oldFurniture: string;
   otherNeeds: string;
   otherNeedsOptions: string;
+  // Contract
+  contractAccepted?: boolean;
+  contractSignatureData?: string;
+  contractCustomText?: string;
 }
 
 export const initialFormData: FormData = {
@@ -130,4 +134,7 @@ export const initialFormData: FormData = {
   oldFurniture: '',
   otherNeeds: '',
   otherNeedsOptions: '',
+  contractAccepted: false,
+  contractSignatureData: '',
+  contractCustomText: '',
 };

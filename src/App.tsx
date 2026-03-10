@@ -3,8 +3,33 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ChevronLeft, ChevronRight, X, List } from 'lucide-react';
 import { FormData, initialFormData } from './types';
 import {
-  StepWelcome, Step4, Step5, Step6, Step6_1, Step7, Step8, Step9,
-  Step10, Step11, Step12, Step13, Step14, Step15, Step16, Step17, Step18, Step19, Step20, Step21, StepSubmit
+  StepWelcome,
+  Step0,
+  Step1,
+  Step2,
+  Step3,
+  Step3Sub,
+  Step4,
+  Step5,
+  Step6,
+  Step6_1,
+  Step7,
+  Step8,
+  Step9,
+  Step10,
+  Step11,
+  Step12,
+  Step13,
+  Step14,
+  Step15,
+  Step16,
+  Step17,
+  Step18,
+  Step19,
+  Step20,
+  Step21,
+  StepContract,
+  StepPayment,
 } from './components/steps';
 
 export default function App() {
@@ -20,7 +45,14 @@ export default function App() {
   const getStepsSequence = () => {
     const sequence = [
       { id: 'welcome', title: '欢迎', qId: null, component: StepWelcome },
-      { id: 'q2-4', title: '基础信息', qId: 'Q2-4', component: Step4 },
+      { id: 'q2-0', title: '客户信息', qId: 'Q2-0', component: Step0 },
+      { id: 'q2-1', title: '项目信息-城市/小区', qId: 'Q2-1', component: Step1 },
+      { id: 'q2-2', title: '房屋类型与现状', qId: 'Q2-2', component: Step2 },
+      { id: 'q2-3', title: '预算范围', qId: 'Q2-3', component: Step3 },
+      { id: 'q3', title: '实效投入标准', qId: 'Q2-3-2', component: Step3Sub },
+      { id: 'contract', title: '意向金合同', qId: null, component: StepContract },
+      { id: 'payment', title: '支付账号', qId: null, component: StepPayment },
+      { id: 'q2-4', title: '房型资料同步', qId: 'Q2-4', component: Step4 },
       { id: 'q2-5', title: '房屋现状', qId: 'Q2-5', component: Step5 },
       { id: 'q2-6', title: '核心成员', qId: 'Q2-6', component: Step6 },
       { id: 'q2-6-1', title: '家庭成员', qId: 'Q2-6-1', component: Step6_1 },
@@ -39,7 +71,6 @@ export default function App() {
       { id: 'q2-19', title: '适老/无障碍', qId: 'Q2-19', component: Step19 },
       { id: 'q2-20', title: '旧物处理', qId: 'Q2-20', component: Step20 },
       { id: 'q2-21', title: '其他需求', qId: 'Q2-21', component: Step21 },
-      { id: 'submit', title: '提交', qId: null, component: StepSubmit }
     ];
 
     return sequence;
@@ -62,6 +93,7 @@ export default function App() {
 
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
+  const isContractStep = steps[currentStepIndex].id === 'contract';
   const progress = ((currentStepIndex) / (steps.length - 1)) * 100;
 
   return (
@@ -86,7 +118,7 @@ export default function App() {
             >
               <List size={14} className="text-gray-400" />
               <span className="text-sm font-medium text-gray-500">
-                <span className="text-[#D84936]">{currentStepIndex}</span> / {steps.length - 2}
+                <span className="text-[#D84936]">{currentStepIndex}</span> / {steps.length - 1}
               </span>
             </button>
           )}
@@ -173,7 +205,7 @@ export default function App() {
       </main>
 
       {/* Bottom Navigation */}
-      {!isLastStep && (
+      {!isLastStep && !isContractStep && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 z-50">
           <div className="max-w-[800px] mx-auto">
             <button

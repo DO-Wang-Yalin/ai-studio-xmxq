@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Check, ChevronDown } from 'lucide-react';
 
-export const StepWrapper = ({ children, title, subtitle }: { children: React.ReactNode, title: string, subtitle?: string }) => (
+export const StepWrapper = ({ children, title, subtitle }: { children: React.ReactNode, title?: string, subtitle?: string }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
@@ -10,10 +10,12 @@ export const StepWrapper = ({ children, title, subtitle }: { children: React.Rea
     transition={{ duration: 0.3 }}
     className="flex flex-col w-full max-w-[800px] mx-auto px-4 pb-32"
   >
-    <div className="text-center mb-8 mt-4">
-      <h2 className="text-2xl font-medium text-gray-900 mb-3">{title}</h2>
-      {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
-    </div>
+    {(title || subtitle) && (
+      <div className="text-center mb-8 mt-4">
+        {title && <h2 className="text-2xl font-medium text-gray-900 mb-3">{title}</h2>}
+        {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
+      </div>
+    )}
     <div className="bg-white rounded-3xl p-5 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
       <div className="space-y-8">
         {children}
@@ -83,7 +85,7 @@ export const RadioCard = ({ label, description, selected, onClick }: any) => (
 export const IconRadioCard = ({ icon: Icon, label, description, selected, onClick }: any) => (
   <button
     onClick={onClick}
-    className={`w-full aspect-square flex flex-col items-center justify-center text-center p-2 rounded-xl transition-all duration-300 border ${
+    className={`w-full flex flex-col items-center justify-center text-center py-2 px-1 rounded-xl transition-all duration-300 border ${
       selected 
         ? 'bg-white border-[#D84936] ring-1 ring-[#D84936] shadow-[0_2px_10px_rgba(216,73,54,0.12)] transform scale-[1.02]' 
         : 'bg-[#FEFDFB] border-dashed border-gray-200 hover:border-gray-300 hover:bg-[#F4F3F0]'
