@@ -362,7 +362,7 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
             key={`line-${comment.id}`}
             d={path}
             fill="none"
-            stroke="#6366f1"
+            stroke="#4887FF"
             strokeWidth={isHovered ? '2' : '1'}
             opacity={isHovered ? 0.8 : 0.2}
             style={{ transition: 'opacity 0.2s ease' }}
@@ -483,7 +483,7 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
                   onMouseLeave={() => setHoveredId(null)}
                   className={cn(
                     'absolute w-4 h-4 rounded-full border border-white shadow-md -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-transform cursor-pointer z-50',
-                    hoveredId === comment.id ? 'bg-[#D84936] scale-125' : 'bg-[#F39A25]',
+                    hoveredId === comment.id ? 'bg-[#EF6B00] scale-125' : 'bg-[#FFCE42]',
                   )}
                   style={{ left: `${comment.point?.x}%`, top: `${comment.point?.y}%` }}
                 >
@@ -496,7 +496,7 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
 
       {/* Right Column: Customer Comments */}
       <div className="w-1/5 flex flex-col gap-4 z-20 relative">
-        <div className="flex-none bg-[#F39A25] text-white rounded-xl p-3 text-center shadow-sm flex items-center justify-between px-4 z-40 relative">
+        <div className="flex-none bg-[#FFCE42] text-white rounded-xl p-3 text-center shadow-sm flex items-center justify-between px-4 z-40 relative">
           <span className="text-xs font-bold tracking-wide">客户反馈</span>
           {snapshot.comments.length === 0 && <span className="text-[10px] opacity-80">无反馈</span>}
         </div>
@@ -512,10 +512,10 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
               onMouseLeave={() => setHoveredId(null)}
               className={cn(
                 'bg-white border shadow-sm rounded-xl p-3 relative transition-all mx-1',
-                hoveredId === comment.id ? 'border-[#F39A25]/60 ring-1 ring-[#F39A25]/15' : 'border-white',
+                hoveredId === comment.id ? 'border-[#FFCE42]/60 ring-1 ring-[#FFCE42]/15' : 'border-white',
               )}
             >
-              <div className="absolute -right-2 -top-2 w-5 h-5 bg-[#F39A25] text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md border border白 z-50">
+              <div className="absolute -right-2 -top-2 w-5 h-5 bg-[#FFCE42] text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md border border白 z-50">
                 {comment.targetType === 'text_description' ? (
                   <TextQuote className="w-2.5 h-2.5" />
                 ) : (
@@ -833,7 +833,7 @@ function PageViewer({
             key={`line-${comment.id}`}
             d={path}
             fill="none"
-            stroke="#6366f1"
+            stroke="#4887FF"
             strokeWidth={isHoveredComment ? '3' : '1.5'}
             opacity={isHoveredComment ? 1 : 0.15}
             style={{ transition: 'opacity 0.2s ease, stroke-width 0.2s ease' }}
@@ -848,7 +848,7 @@ function PageViewer({
   return (
     <div
       ref={containerRef}
-      className="h-[calc(100vh-120px)] w-full overflow-hidden bg-[#fbfbfd] font-sans flex flex-col relative rounded-3xl border border-gray-100 shadow-[0_12px_40px_rgba(15,23,42,0.08)]"
+      className="h-[calc(100vh-120px)] w-full overflow-hidden bg-[#FFFDF3] font-sans flex flex-col relative rounded-3xl border border-gray-100 shadow-[0_12px_40px_rgba(15,23,42,0.08)]"
     >
       {/* 背景渐变 */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-200/40 blur-[120px] pointer-events-none" />
@@ -957,7 +957,7 @@ function PageViewer({
               {!isPageLocked && (
                 <button
                   onClick={handleAddTextComment}
-                  className="absolute top-3 right-3 p-2 bg-[#FDEBD3] text-[#B16D12] rounded-xl opacity-0 group-hover:opacity-100 transition-all hover:bg-[#FAD7A0] border border-[#F5C27A]/60 shadow-sm hover:shadow"
+                  className="absolute top-3 right-3 p-2 bg-[#FFF4E0] text-[#C87800] rounded-xl opacity-0 group-hover:opacity-100 transition-all hover:bg-[#FFE4B5] border border-[#FFD699]/60 shadow-sm hover:shadow"
                   title="对这段文字发表意见"
                 >
                   <MessageSquarePlus className="w-4 h-4" />
@@ -973,12 +973,12 @@ function PageViewer({
               <div
                 className={cn(
                   'absolute inset-0 bg-white/60 backdrop-blur-2xl rounded-3xl border shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 -z-10',
-                  isAddingCommentToImage && !isPageLocked ? 'border-[#F39A25]/70 ring-4 ring-[#F39A25]/20' : 'border-white/80',
+                  isAddingCommentToImage && !isPageLocked ? 'border-[#FFCE42]/70 ring-4 ring-[#FFCE42]/20' : 'border-white/80',
                 )}
               />
 
               {isAddingCommentToImage && !isPageLocked && (
-                <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-[#D84936]/90 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-lg z-[60] pointer-events-none">
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-[#EF6B00]/90 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-lg z-[60] pointer-events-none">
                   请点击图纸上的具体位置进行标注
                 </div>
               )}
@@ -1028,8 +1028,8 @@ function PageViewer({
                     className={cn(
                       'marker-dot absolute w-5 h-5 rounded-full border-[2.5px] border-white shadow-md -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-transform cursor-pointer',
                       hoveredId === comment.id
-                        ? 'bg-gradient-to-br from-[#D84936] to-[#F39A25] scale-125 z-[60]'
-                        : 'bg-gradient-to-br from-[#F39A25] to-[#D84936] z-50',
+                        ? 'bg-gradient-to-br from-[#EF6B00] to-[#FFCE42] scale-125 z-[60]'
+                        : 'bg-gradient-to-br from-[#FFCE42] to-[#EF6B00] z-50',
                     )}
                     style={{ left: `${comment.point?.x}%`, top: `${comment.point?.y}%` }}
                   >

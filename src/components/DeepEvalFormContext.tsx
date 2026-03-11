@@ -339,7 +339,7 @@ export function DeepEvalSuccessModal({ onClose }: { onClose: () => void }) {
         </div>
         <h3 className="text-2xl font-sans text-dark mb-2">已建档 ✅</h3>
         <p className="text-sub text-sm mb-8 leading-relaxed">你的喜好会在产品上线后自动带入，直接登录就能继续。</p>
-        <button type="button" onClick={onClose} className="w-full bg-black text-white py-3 rounded-xl font-bold tracking-wider hover:bg-[#EF6B00] active:bg-[#CC5B00] transition-colors">
+        <button type="button" onClick={onClose} className="w-full bg-[#FF9C3E] text-white py-3 rounded-xl font-bold tracking-wider hover:bg-[#EF6B00] active:bg-[#CC5B00] transition-colors">
           继续
         </button>
       </div>

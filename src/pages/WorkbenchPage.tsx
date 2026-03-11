@@ -149,7 +149,7 @@ export function WorkbenchPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] text-gray-900 font-sans flex">
+    <div className="min-h-screen bg-[#FFFDF3] text-gray-900 font-sans flex">
       {/* Sidebar */}
       <aside
         className="hidden md:flex shrink-0 flex-col bg-white border-r border-gray-100 py-6 relative"
@@ -188,11 +188,11 @@ export function WorkbenchPage({
                 type="button"
                 onClick={() => setActive(item.key)}
                 className={`w-full flex items-center gap-3 px-3 py-3 rounded-2xl text-sm transition-colors ${
-                  isActive ? 'bg-[#F39A25]/10 text-gray-900' : 'text-gray-600 hover:bg-black/5'
+                  isActive ? 'bg-[#FFCE42]/10 text-gray-900' : 'text-gray-600 hover:bg-black/5'
                 }`}
                 title={sidebarCollapsed ? item.label : undefined}
               >
-                <Icon size={18} className={isActive ? 'text-[#F39A25]' : 'text-gray-400'} />
+                <Icon size={18} className={isActive ? 'text-[#FFCE42]' : 'text-gray-400'} />
                 {!sidebarCollapsed && <span className="font-medium">{item.label}</span>}
               </button>
             )
@@ -215,7 +215,7 @@ export function WorkbenchPage({
         {!sidebarCollapsed && (
           <div
             onMouseDown={startResize}
-            className="absolute top-0 right-0 h-full w-2 cursor-col-resize hover:bg-[#F39A25]/10 transition-colors"
+            className="absolute top-0 right-0 h-full w-2 cursor-col-resize hover:bg-[#FFCE42]/10 transition-colors"
             title="拖拽调整宽度"
           />
         )}
@@ -230,7 +230,7 @@ export function WorkbenchPage({
               <button
                 type="button"
                 onClick={onGoToFirstPage}
-                className="w-9 h-9 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center shrink-0 hover:bg-[#F39A25]/15 transition"
+                className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center shrink-0 hover:bg-[#FFCE42]/15 transition"
                 title="返回第一页"
               >
                 <Home size={18} />
@@ -258,7 +258,7 @@ export function WorkbenchPage({
                 type="button"
                 className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                <span className="w-8 h-8 rounded-full bg-[#F39A25]/10 flex items-center justify-center text-[#B16D12] font-semibold">
+                <span className="w-8 h-8 rounded-full bg-[#FFCE42]/10 flex items-center justify-center text-[#C87800] font-semibold">
                   {displayName.slice(0, 1)}
                 </span>
                 <span className="font-medium">{displayName}</span>
@@ -275,7 +275,7 @@ export function WorkbenchPage({
                 <section>
                   <div className="flex items-center justify-between gap-4 mb-4">
                     <div className="flex items-center gap-2">
-                      <span className="w-1 h-4 rounded-full bg-[#D84936]" />
+                      <span className="w-1 h-4 rounded-full bg-[#EF6B00]" />
                       <h2 className="text-lg font-semibold">当前待办</h2>
                     </div>
                     <button
@@ -289,12 +289,12 @@ export function WorkbenchPage({
                   <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
                       <div className="flex items-start gap-4 min-w-0">
-                        <div className="w-12 h-12 rounded-2xl bg-[#F39A25]/10 flex items-center justify-center text-[#F39A25] shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-[#FFCE42]/10 flex items-center justify-center text-[#FFCE42] shrink-0">
                           <Wrench size={20} />
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-xs font-semibold text-[#B16D12] bg-[#F39A25]/10 px-2 py-0.5 rounded-full">
+                            <span className="text-xs font-semibold text-[#C87800] bg-[#FFCE42]/10 px-2 py-0.5 rounded-full">
                               待确认
                             </span>
                           </div>
@@ -308,7 +308,7 @@ export function WorkbenchPage({
                       <button
                         type="button"
                         onClick={() => setActive('designFeedback')}
-                        className="md:w-[220px] w-full inline-flex items-center justify-center rounded-2xl bg-[#F39A25] text-white font-semibold py-3 hover:brightness-95 active:scale-[0.99] transition"
+                        className="md:w-[220px] w-full inline-flex items-center justify-center rounded-2xl bg-[#FFCE42] text-white font-semibold py-3 hover:brightness-95 active:scale-[0.99] transition"
                       >
                         立即处理
                         <ChevronRight size={18} className="ml-1" />
@@ -320,7 +320,7 @@ export function WorkbenchPage({
                 {/* Feature entry */}
                 <section>
                   <div className="flex items-center gap-2 mb-4">
-                    <span className="w-1 h-4 rounded-full bg-[#D84936]" />
+                    <span className="w-1 h-4 rounded-full bg-[#EF6B00]" />
                     <h2 className="text-lg font-semibold">功能入口</h2>
                   </div>
 
@@ -500,7 +500,7 @@ function OrderManagementSection({ onGoToDesignFeedback }: { onGoToDesignFeedback
                         e.stopPropagation()
                         onGoToDesignFeedback()
                       }}
-                      className="mt-2 inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#F39A25] text-white hover:bg-[#E08820] transition-colors"
+                      className="mt-2 inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#FFCE42] text-white hover:bg-[#EF6B00] transition-colors"
                     >
                       查看设计反馈
                       <ChevronRight size={14} />
@@ -564,7 +564,7 @@ function BudgetConfirmPanel() {
           <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <div className="text-xs font-semibold text-[#2F2D97] mb-1">预算区间</div>
+                <div className="text-xs font-semibold text-[#EF6B00] mb-1">预算区间</div>
                 <p className="text-sm text-gray-500">
                   结合同类项目经验与当前配置，为你估算的合理预算区间；区间内可灵活调优子项配置。
                 </p>
@@ -608,7 +608,7 @@ function BudgetConfirmPanel() {
             </p>
             <button
               type="button"
-              className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#2F2D97] text-white text-sm font-medium px-4 py-3 hover:bg-[#252378] transition-colors"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#EF6B00] text-white text-sm font-medium px-4 py-3 hover:bg-[#D85F00] transition-colors"
             >
               确认当前预算方案（示意）
             </button>
@@ -660,7 +660,7 @@ function FeatureCard({
 }) {
   return (
     <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 flex flex-col">
-      <div className="w-12 h-12 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center">
+      <div className="w-12 h-12 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
         {icon}
       </div>
       <h3 className="mt-4 text-base font-semibold">{title}</h3>
@@ -668,7 +668,7 @@ function FeatureCard({
       <button
         type="button"
         onClick={onClick}
-        className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#F39A25] hover:underline underline-offset-4"
+        className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#FFCE42] hover:underline underline-offset-4"
       >
         {action}
         <ChevronRight size={16} />
@@ -681,7 +681,7 @@ function ComingSoon({ title, onBackHome }: { title: string; onBackHome: () => vo
   return (
     <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-10 md:p-14">
       <div className="max-w-md mx-auto text-center">
-        <div className="mx-auto w-14 h-14 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center">
+        <div className="mx-auto w-14 h-14 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
           <Construction size={22} />
         </div>
         <h2 className="mt-5 text-xl font-semibold">{title}</h2>
@@ -689,7 +689,7 @@ function ComingSoon({ title, onBackHome }: { title: string; onBackHome: () => vo
         <button
           type="button"
           onClick={onBackHome}
-          className="mt-6 inline-flex items-center justify-center rounded-2xl bg-[#F39A25] text-white font-semibold px-6 py-3 hover:brightness-95 active:scale-[0.99] transition"
+          className="mt-6 inline-flex items-center justify-center rounded-2xl bg-[#FFCE42] text-white font-semibold px-6 py-3 hover:brightness-95 active:scale-[0.99] transition"
         >
           返回项目首页
           <ChevronRight size={18} className="ml-1" />
@@ -716,16 +716,16 @@ function ContractsSection({
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <span className="w-1 h-4 rounded-full bg-[#D84936]" />
+          <span className="w-1 h-4 rounded-full bg-[#EF6B00]" />
           <h2 className="text-lg font-semibold">项目合同</h2>
         </div>
       </div>
 
       <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 md:p-7 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div className="min-w-0 space-y-2">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#F39A25]/10 px-3 py-1">
-            <ScrollText size={14} className="text-[#F39A25]" />
-            <span className="text-xs font-semibold text-[#B16D12]">项目服务框架协议</span>
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#FFCE42]/10 px-3 py-1">
+            <ScrollText size={14} className="text-[#FFCE42]" />
+            <span className="text-xs font-semibold text-[#C87800]">项目服务框架协议</span>
           </div>
           <div className="text-base md:text-lg font-semibold text-gray-900 truncate">
             {projectName || '当前项目'} · 意向金服务合同
@@ -751,13 +751,13 @@ function ContractsSection({
         </div>
 
         <div className="flex items-center gap-4 md:gap-6">
-          <div className="relative w-32 h-24 md:w-40 md:h-28 rounded-2xl border border-dashed border-gray-200 bg-[#FDFCF8] flex items-center justify-center overflow-hidden">
+          <div className="relative w-32 h-24 md:w-40 md:h-28 rounded-2xl border border-dashed border-gray-200 bg-[#FFFDF3] flex items-center justify-center overflow-hidden">
             <div className="w-[85%] h-[80%] border border-gray-200 rounded-xl bg-white shadow-[0_6px_18px_rgba(0,0,0,0.04)] flex items-center justify-center">
               <span className="text-[11px] text-gray-500">合同正文</span>
             </div>
             {hasSigned && signatureData && (
               <div className="absolute -bottom-3 -right-2">
-                <div className="w-16 h-16 rounded-full border-2 border-[#D84936]/80 bg-[#FDF2F2] flex items-center justify-center rotate-[-15deg] shadow-sm">
+                <div className="w-16 h-16 rounded-full border-2 border-[#EF6B00]/80 bg-[#FFF4E0] flex items-center justify-center rotate-[-15deg] shadow-sm">
                   <img
                     src={signatureData}
                     alt="签名印记"
@@ -1015,17 +1015,17 @@ function RequirementsDoc({
           </div>
           {!isEditing ? (
             <div className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-gray-100 bg-white px-3 py-2 text-xs text-gray-600">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F39A25]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FFCE42]" />
               当前为只读状态；如需修改，请点击底部「编辑」。
             </div>
           ) : (
-            <div className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-[#F39A25]/20 bg-[#F39A25]/10 px-3 py-2 text-xs font-semibold text-[#B16D12]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F39A25]" />
+            <div className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-[#FFCE42]/20 bg-[#FFCE42]/10 px-3 py-2 text-xs font-semibold text-[#C87800]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FFCE42]" />
               编辑模式已开启
             </div>
           )}
           {editHint ? (
-            <div className="mt-2 text-xs font-semibold text-[#B16D12]">{editHint}</div>
+            <div className="mt-2 text-xs font-semibold text-[#C87800]">{editHint}</div>
           ) : null}
         </div>
       </div>
@@ -1036,7 +1036,7 @@ function RequirementsDoc({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-9 h-9 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center">
+              <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
                 <FileText size={18} />
               </span>
               <div className="min-w-0">
@@ -1062,15 +1062,15 @@ function RequirementsDoc({
 
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-1 h-4 rounded-full bg-[#D84936]" />
+              <span className="w-1 h-4 rounded-full bg-[#EF6B00]" />
               <div className="font-semibold">项目现状（Q2-5）</div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {statusCards.map((c) => (
-                <div key={c.title} className="rounded-2xl border border-gray-100 bg-[#FDFCF8] p-5">
+                <div key={c.title} className="rounded-2xl border border-gray-100 bg-[#FFFDF3] p-5">
                   <div className="flex items-center gap-3">
-                    <span className="w-10 h-10 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#F39A25]">
+                    <span className="w-10 h-10 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#FFCE42]">
                       <c.icon size={18} />
                     </span>
                     <div className="min-w-0">
@@ -1092,7 +1092,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2 min-w-0">
-                <span className="w-10 h-10 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center shrink-0">
+                <span className="w-10 h-10 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center shrink-0">
                   <ImageIcon size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1122,7 +1122,7 @@ function RequirementsDoc({
             </div>
 
             {planImages.length === 0 ? (
-              <div className="mt-5 rounded-2xl border border-dashed border-gray-200 bg-[#FDFCF8] p-8 text-center">
+              <div className="mt-5 rounded-2xl border border-dashed border-gray-200 bg-[#FFFDF3] p-8 text-center">
                 <div className="mx-auto w-12 h-12 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-400">
                   <ImageIcon size={18} />
                 </div>
@@ -1153,7 +1153,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2 min-w-0">
-                <span className="w-10 h-10 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center shrink-0">
+                <span className="w-10 h-10 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center shrink-0">
                   <Video size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1183,7 +1183,7 @@ function RequirementsDoc({
             </div>
 
             {mediaFiles.length === 0 ? (
-              <div className="mt-5 rounded-2xl border border-dashed border-gray-200 bg-[#FDFCF8] p-8 text-center">
+              <div className="mt-5 rounded-2xl border border-dashed border-gray-200 bg-[#FFFDF3] p-8 text-center">
                 <div className="mx-auto w-12 h-12 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-400">
                   <Video size={18} />
                 </div>
@@ -1200,7 +1200,7 @@ function RequirementsDoc({
                     href={f.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-[#FDFCF8] px-4 py-3 hover:bg-white transition-colors"
+                    className="flex items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3 hover:bg-white transition-colors"
                     title={f.name}
                   >
                     <div className="flex items-center gap-3 min-w-0">
@@ -1238,7 +1238,7 @@ function RequirementsDoc({
               key={`${p.name}-${p.age}`}
               className="shrink-0 inline-flex items-center gap-2 rounded-full bg-white border border-gray-100 shadow-sm px-3 py-2 text-xs"
             >
-              <span className="w-6 h-6 rounded-full bg-[#F39A25]/10 text-[#B16D12] flex items-center justify-center font-bold">
+              <span className="w-6 h-6 rounded-full bg-[#FFCE42]/10 text-[#C87800] flex items-center justify-center font-bold">
                 {p.name.slice(0, 1)}
               </span>
               <span className="font-semibold text-gray-800">{p.name}</span>
@@ -1268,7 +1268,7 @@ function RequirementsDoc({
                     <div className="mt-2">
                       <span
                         className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                          p.accent === 'amber' ? 'bg-[#F39A25]/10 text-[#B16D12]' : 'bg-[#302E2B]/5 text-gray-700'
+                          p.accent === 'amber' ? 'bg-[#FFCE42]/10 text-[#C87800]' : 'bg-[#EF6B00]/5 text-gray-700'
                         }`}
                       >
                         风格人设：{p.stylePersona}
@@ -1276,12 +1276,12 @@ function RequirementsDoc({
                     </div>
                   ) : null}
                 </div>
-                <span className="w-10 h-10 rounded-2xl bg-[#FDFCF8] border border-gray-100 flex items-center justify-center text-gray-500 font-bold">
+                <span className="w-10 h-10 rounded-2xl bg-[#FFFDF3] border border-gray-100 flex items-center justify-center text-gray-500 font-bold">
                   {p.name.slice(0, 1)}
                 </span>
               </div>
 
-              <div className="mt-4 rounded-2xl border border-gray-100 bg-[#FDFCF8] p-4">
+              <div className="mt-4 rounded-2xl border border-gray-100 bg-[#FFFDF3] p-4">
                 <div className="text-xs font-semibold text-gray-700">主要活动及空间</div>
                 <ul className="mt-2 text-sm text-gray-600 leading-relaxed space-y-2">
                   {p.mainActivitiesAndSpaces.map((b) => (
@@ -1305,7 +1305,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
                   <Wrench size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1317,9 +1317,9 @@ function RequirementsDoc({
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {systemEquipments.map((x) => (
-                  <div key={x.key} className="rounded-2xl border border-gray-100 bg-[#FDFCF8] p-5">
+                  <div key={x.key} className="rounded-2xl border border-gray-100 bg-[#FFFDF3] p-5">
                     <div className="flex items-center gap-3">
-                      <span className="w-10 h-10 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#F39A25] shrink-0">
+                      <span className="w-10 h-10 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#FFCE42] shrink-0">
                         <x.icon size={18} />
                       </span>
                       <div className="min-w-0">
@@ -1337,7 +1337,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
                   <Sparkles size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1357,19 +1357,19 @@ function RequirementsDoc({
                         type="button"
                         onClick={() => setSmartHomeSelected((prev) => ({ ...prev, [o.key]: !prev[o.key] }))}
                         className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors ${
-                          checked ? 'border-[#F39A25]/30 bg-[#F39A25]/10' : 'border-gray-100 bg-[#FDFCF8] hover:bg-white'
+                          checked ? 'border-[#FFCE42]/30 bg-[#FFCE42]/10' : 'border-gray-100 bg-[#FFFDF3] hover:bg-white'
                         }`}
                       >
                         <span
                           className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${
-                            checked ? 'bg-[#F39A25] border-[#F39A25]' : 'bg-white border-gray-200'
+                            checked ? 'bg-[#FFCE42] border-[#FFCE42]' : 'bg-white border-gray-200'
                           }`}
                           aria-hidden="true"
                         >
                           {checked ? <span className="w-2.5 h-2.5 rounded-sm bg-white" /> : null}
                         </span>
                         <span className="w-9 h-9 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-600 shrink-0">
-                          <o.icon size={18} className={checked ? 'text-[#F39A25]' : 'text-gray-500'} />
+                          <o.icon size={18} className={checked ? 'text-[#FFCE42]' : 'text-gray-500'} />
                         </span>
                         <div className="text-sm font-semibold text-gray-800">{o.label}</div>
                       </button>
@@ -1379,16 +1379,16 @@ function RequirementsDoc({
               ) : selectedSmartHome.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {selectedSmartHome.map((o) => (
-                    <div key={o.key} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-[#FDFCF8] px-4 py-3">
+                    <div key={o.key} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3">
                       <span className="w-9 h-9 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-600 shrink-0">
-                        <o.icon size={18} className="text-[#F39A25]" />
+                        <o.icon size={18} className="text-[#FFCE42]" />
                       </span>
                       <div className="text-sm font-semibold text-gray-800">{o.label}</div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="rounded-2xl border border-dashed border-gray-200 bg-[#FDFCF8] p-6 text-center text-sm text-gray-600">
+                <div className="rounded-2xl border border-dashed border-gray-200 bg-[#FFFDF3] p-6 text-center text-sm text-gray-600">
                   暂无选择结果
                 </div>
               )}
@@ -1399,7 +1399,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
                   <Package size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1419,19 +1419,19 @@ function RequirementsDoc({
                         type="button"
                         onClick={() => setSpecialDeviceSelected((prev) => ({ ...prev, [o.key]: !prev[o.key] }))}
                         className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors ${
-                          checked ? 'border-[#F39A25]/30 bg-[#F39A25]/10' : 'border-gray-100 bg-[#FDFCF8] hover:bg-white'
+                          checked ? 'border-[#FFCE42]/30 bg-[#FFCE42]/10' : 'border-gray-100 bg-[#FFFDF3] hover:bg-white'
                         }`}
                       >
                         <span
                           className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${
-                            checked ? 'bg-[#F39A25] border-[#F39A25]' : 'bg-white border-gray-200'
+                            checked ? 'bg-[#FFCE42] border-[#FFCE42]' : 'bg-white border-gray-200'
                           }`}
                           aria-hidden="true"
                         >
                           {checked ? <span className="w-2.5 h-2.5 rounded-sm bg-white" /> : null}
                         </span>
                         <span className="w-9 h-9 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-600 shrink-0">
-                          <o.icon size={18} className={checked ? 'text-[#F39A25]' : 'text-gray-500'} />
+                          <o.icon size={18} className={checked ? 'text-[#FFCE42]' : 'text-gray-500'} />
                         </span>
                         <div className="text-sm font-semibold text-gray-800">{o.label}</div>
                       </button>
@@ -1441,16 +1441,16 @@ function RequirementsDoc({
               ) : selectedSpecialDevices.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                   {selectedSpecialDevices.map((o) => (
-                    <div key={o.key} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-[#FDFCF8] px-4 py-3">
+                    <div key={o.key} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3">
                       <span className="w-9 h-9 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-600 shrink-0">
-                        <o.icon size={18} className="text-[#F39A25]" />
+                        <o.icon size={18} className="text-[#FFCE42]" />
                       </span>
                       <div className="text-sm font-semibold text-gray-800">{o.label}</div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="rounded-2xl border border-dashed border-gray-200 bg-[#FDFCF8] p-6 text-center text-sm text-gray-600">
+                <div className="rounded-2xl border border-dashed border-gray-200 bg-[#FFFDF3] p-6 text-center text-sm text-gray-600">
                   暂无选择结果
                 </div>
               )}
@@ -1461,7 +1461,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
                   <Compass size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1471,7 +1471,7 @@ function RequirementsDoc({
               </div>
             </div>
             <div className="p-6">
-              <div className="rounded-2xl border border-gray-100 bg-[#FDFCF8] p-4 text-sm text-gray-700 leading-relaxed">
+              <div className="rounded-2xl border border-gray-100 bg-[#FFFDF3] p-4 text-sm text-gray-700 leading-relaxed">
                 {fengshuiResult}
               </div>
             </div>
@@ -1481,7 +1481,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#F39A25]/10 text-[#F39A25] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
                   <Archive size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1493,7 +1493,7 @@ function RequirementsDoc({
             <div className="p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {storageFocusResult.map((it) => (
-                  <div key={it} className="rounded-2xl border border-gray-100 bg-[#FDFCF8] px-4 py-3 text-sm font-semibold text-gray-800">
+                  <div key={it} className="rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3 text-sm font-semibold text-gray-800">
                     {it}
                   </div>
                 ))}
@@ -1512,14 +1512,14 @@ function RequirementsDoc({
                   value={customNeedsNote}
                   onChange={(e) => setCustomNeedsNote(e.target.value)}
                   placeholder="请输入其他补充需求..."
-                  className="w-full min-h-[140px] rounded-2xl border border-gray-100 bg-[#FDFCF8] px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#F39A25]/20"
+                  className="w-full min-h-[140px] rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#FFCE42]/20"
                 />
               ) : customNeedsNote.trim() ? (
-                <div className="rounded-2xl border border-gray-100 bg-[#FDFCF8] p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                <div className="rounded-2xl border border-gray-100 bg-[#FFFDF3] p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
                   {customNeedsNote}
                 </div>
               ) : (
-                <div className="rounded-2xl border border-dashed border-gray-200 bg-[#FDFCF8] p-6 text-center text-sm text-gray-600">
+                <div className="rounded-2xl border border-dashed border-gray-200 bg-[#FFFDF3] p-6 text-center text-sm text-gray-600">
                   暂无
                   <div className="mt-1 text-xs text-gray-500">进入编辑模式后可补充说明</div>
                 </div>
@@ -1535,13 +1535,13 @@ function RequirementsDoc({
         <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="w-1 h-4 rounded-full bg-[#D84936]" />
+              <span className="w-1 h-4 rounded-full bg-[#EF6B00]" />
               <div className="font-semibold">
                 {activeSpace.title}
                 <span className="ml-2 text-xs font-semibold text-gray-500">（{activeSpace.q}）</span>
               </div>
             </div>
-            <div className="flex items-center gap-2 rounded-2xl bg-[#FDFCF8] p-1 border border-gray-100">
+            <div className="flex items-center gap-2 rounded-2xl bg-[#FFFDF3] p-1 border border-gray-100">
               <TabPill active={spaceTab === 'living'} onClick={() => setSpaceTab('living')}>
                 客厅
               </TabPill>
@@ -1558,8 +1558,8 @@ function RequirementsDoc({
           </div>
 
           <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-1 rounded-2xl border border-gray-100 bg-[#FDFCF8] p-5">
-              <div className="w-11 h-11 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#F39A25]">
+            <div className="md:col-span-1 rounded-2xl border border-gray-100 bg-[#FFFDF3] p-5">
+              <div className="w-11 h-11 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#FFCE42]">
                 <activeSpace.icon size={18} />
               </div>
               <div className="mt-3 text-sm font-semibold text-gray-900">空间说明</div>
@@ -1570,7 +1570,7 @@ function RequirementsDoc({
             <div className="md:col-span-2 space-y-3">
               {activeSpace.items.map((it, idx) => (
                 <div key={it} className="flex items-start gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                  <span className="w-8 h-8 rounded-2xl bg-[#F39A25]/10 text-[#B16D12] flex items-center justify-center text-xs font-bold">
+                  <span className="w-8 h-8 rounded-2xl bg-[#FFCE42]/10 text-[#C87800] flex items-center justify-center text-xs font-bold">
                     {idx + 1}
                   </span>
                   <div className="text-sm text-gray-700 leading-relaxed">{it}</div>
@@ -1586,14 +1586,14 @@ function RequirementsDoc({
                 value={spaceOtherNote}
                 onChange={(e) => setSpaceOtherNote(e.target.value)}
                 placeholder="可补充该空间的其他偏好、禁忌或设备位要求..."
-                className="mt-3 w-full min-h-[110px] rounded-2xl border border-gray-100 bg-[#FDFCF8] px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#F39A25]/20"
+                className="mt-3 w-full min-h-[110px] rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#FFCE42]/20"
               />
             ) : spaceOtherNote.trim() ? (
-              <div className="mt-3 rounded-2xl border border-gray-100 bg-[#FDFCF8] p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+              <div className="mt-3 rounded-2xl border border-gray-100 bg-[#FFFDF3] p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
                 {spaceOtherNote}
               </div>
             ) : (
-              <div className="mt-3 rounded-2xl border border-dashed border-gray-200 bg-[#FDFCF8] p-6 text-center text-sm text-gray-600">
+              <div className="mt-3 rounded-2xl border border-dashed border-gray-200 bg-[#FFFDF3] p-6 text-center text-sm text-gray-600">
                 暂无
                 <div className="mt-1 text-xs text-gray-500">进入编辑模式后可补充说明</div>
               </div>
@@ -1619,7 +1619,7 @@ function RequirementsDoc({
               <button
                 type="button"
                 onClick={() => setShowSubmitModal(false)}
-                className="px-5 py-2.5 rounded-2xl bg-[#302E2B] text-white text-sm font-semibold hover:bg-black transition-colors"
+                className="px-5 py-2.5 rounded-2xl bg-[#EF6B00] text-white text-sm font-semibold hover:bg-[#D85F00] transition-colors"
               >
                 我知道了
               </button>
@@ -1645,7 +1645,7 @@ function RequirementsDoc({
               type="button"
               onClick={() => setIsEditing((v) => !v)}
               className={`flex-1 sm:flex-none inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition-colors ${
-                isEditing ? 'bg-[#302E2B] text-white hover:bg-black' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+                isEditing ? 'bg-[#EF6B00] text-white hover:bg-[#D85F00]' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
               }`}
               title={isEditing ? '完成编辑' : '编辑需求书'}
             >
@@ -1658,7 +1658,7 @@ function RequirementsDoc({
                   setHasSubmitted(true)
                   setShowSubmitModal(true)
                 }}
-                className="flex-1 sm:flex-none inline-flex items-center justify-center rounded-2xl bg-[#F39A25] px-5 py-3 text-sm font-semibold text-white hover:brightness-95 active:scale-[0.99] transition"
+                className="flex-1 sm:flex-none inline-flex items-center justify-center rounded-2xl bg-[#FFCE42] px-5 py-3 text-sm font-semibold text-white hover:brightness-95 active:scale-[0.99] transition"
               >
                 确认并提交
                 <ChevronRight size={18} className="ml-1" />
@@ -1674,7 +1674,7 @@ function RequirementsDoc({
 function SectionTitle({ title }: { title: string }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="w-1 h-4 rounded-full bg-[#D84936]" />
+      <span className="w-1 h-4 rounded-full bg-[#EF6B00]" />
       <h2 className="text-lg font-semibold">{title}</h2>
     </div>
   )

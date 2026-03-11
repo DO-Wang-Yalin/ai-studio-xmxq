@@ -284,7 +284,7 @@ export function ResultPage({ answers, textAnswers, onRestart, onGoDeepEval }: Re
           <button
             type="button"
             onClick={handleSave}
-            className="w-full flex items-center justify-between gap-3 rounded-2xl bg-[#2F2D2A] px-5 py-4 text-white shadow-[0_18px_40px_rgba(0,0,0,0.12)] hover:bg-black transition-colors"
+            className="w-full flex items-center justify-between gap-3 rounded-2xl bg-[#EF6B00] px-5 py-4 text-white shadow-[0_18px_40px_rgba(0,0,0,0.12)] hover:bg-[#D85F00] transition-colors"
           >
             <div className="flex flex-col items-start">
               <div className="text-[15px] font-semibold">保存我的风格</div>
@@ -299,7 +299,7 @@ export function ResultPage({ answers, textAnswers, onRestart, onGoDeepEval }: Re
             type="button"
             onClick={onGoDeepEval}
             disabled={!onGoDeepEval}
-            className="w-full mt-4 rounded-2xl bg-[#E56C0A] text-white py-4 font-semibold hover:bg-[#D86307] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full mt-4 rounded-2xl bg-[#FFCE42] text-white py-4 font-semibold hover:bg-[#EF6B00] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             注册继续
           </button>

@@ -149,7 +149,7 @@ export function HomeStyleEval({ onGoDeepEval, onGoHome }: HomeStyleEvalProps) {
                   className={`flex items-center gap-2 px-8 py-3 rounded-full font-medium transition-all ${
                     !canProceed()
                       ? 'bg-stone-200 text-stone-400 cursor-not-allowed'
-                      : 'bg-stone-800 text-white hover:bg-stone-700 shadow-md hover:shadow-lg'
+                      : 'bg-[#EF6B00] text-white hover:bg-[#D85F00] shadow-md hover:shadow-lg'
                   }`}
                 >
                   {currentIndex === questions.length - 1 ? '查看结果' : '下一题'}

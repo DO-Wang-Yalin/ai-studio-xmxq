@@ -85,9 +85,9 @@ export function LoginPage({ onSuccess, onBack }: LoginPageProps) {
     <StepWrapper noCard>
       <div className="flex flex-col items-center py-8 min-h-[60vh]">
         <div className="w-full max-w-md rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-6 space-y-5">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#F39A25]/10 px-3 py-1 mb-2">
-            <Phone className="w-3.5 h-3.5 text-[#F39A25]" />
-            <span className="text-xs font-semibold text-[#B16D12] tracking-wide">手机验证码登录</span>
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#FFCE42]/10 px-3 py-1 mb-2">
+            <Phone className="w-3.5 h-3.5 text-[#FFCE42]" />
+            <span className="text-xs font-semibold text-[#C87800] tracking-wide">手机验证码登录</span>
           </div>
           <h2 className="text-lg font-semibold text-gray-900">验证手机号并登录</h2>
           <p className="text-sm text-gray-500">我们将向该手机号发送验证码，用于完成登录。</p>
@@ -103,7 +103,7 @@ export function LoginPage({ onSuccess, onBack }: LoginPageProps) {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                 placeholder="请输入 11 位手机号"
-                className="w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#F39A25]/20 outline-none pl-11 pr-5 text-gray-800 placeholder-gray-400"
+                className="w-full py-4 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#FFCE42]/20 outline-none pl-11 pr-5 text-gray-800 placeholder-gray-400"
               />
             </div>
           </div>
@@ -118,13 +118,13 @@ export function LoginPage({ onSuccess, onBack }: LoginPageProps) {
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
                 placeholder="请输入 6 位验证码"
-                className="flex-1 py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#F39A25]/20 outline-none px-5 text-gray-800 placeholder-gray-400"
+                className="flex-1 py-4 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#FFCE42]/20 outline-none px-5 text-gray-800 placeholder-gray-400"
               />
               <button
                 type="button"
                 onClick={handleSendCode}
                 disabled={sending || countdown > 0 || !phoneValid}
-                className="shrink-0 px-4 py-4 rounded-xl bg-[#F4F3F0] text-gray-700 text-sm font-medium hover:bg-[#E8E6E0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+                className="shrink-0 px-4 py-4 rounded-xl bg-[#FFF9E8] text-gray-700 text-sm font-medium hover:bg-[#F5F0E0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
               >
                 {countdown > 0 ? `${countdown}s 后重发` : sending ? '发送中…' : '获取验证码'}
               </button>
@@ -137,7 +137,7 @@ export function LoginPage({ onSuccess, onBack }: LoginPageProps) {
             type="button"
             onClick={handleSubmit}
             disabled={!phoneValid || (!mockLoginEnabled && !codeValid) || submitting}
-            className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-4 text-sm font-medium text-white hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.99]"
+            className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#EF6B00] px-4 py-4 text-sm font-medium text-white hover:bg-[#D85F00] disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.99]"
           >
             {submitting ? '验证中…' : '登录并进入工作台'}
           </button>

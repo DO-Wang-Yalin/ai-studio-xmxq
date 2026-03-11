@@ -224,12 +224,12 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
       {[1, 2, 3].map(step => (
         <div key={step} className="flex items-center gap-1.5">
           <div
-            className={`rounded-full transition-all duration-300 ${currentStep >= step ? 'bg-[#C04838]' : 'bg-[#2C2825]/20'}`}
+            className={`rounded-full transition-all duration-300 ${currentStep >= step ? 'bg-[#FFCE42]' : 'bg-[#EF6B00]/20'}`}
             style={{ width: 10, height: 10 }}
           />
           {step < 3 && (
             <div
-              className={`flex-shrink-0 transition-colors duration-300 ${currentStep > step ? 'bg-[#C04838]/60' : 'bg-[#2C2825]/15'}`}
+              className={`flex-shrink-0 transition-colors duration-300 ${currentStep > step ? 'bg-[#FFCE42]/60' : 'bg-[#EF6B00]/15'}`}
               style={{ width: 32, height: 3, borderRadius: 2 }}
             />
           )}
@@ -239,8 +239,8 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
   )
 
   return (
-    <div className="w-full h-full bg-[#fffdf3] overflow-hidden relative font-sans text-dark flex flex-col pt-12 md:pt-20">
-      <header className="shrink-0 w-full max-w-5xl px-6 mb-4 md:mb-6 relative z-50 mx-auto bg-[#fffdf3]">
+    <div className="w-full h-full bg-[#FFFDF3] overflow-hidden relative font-sans text-dark flex flex-col pt-12 md:pt-20">
+      <header className="shrink-0 w-full max-w-5xl px-6 mb-4 md:mb-6 relative z-50 mx-auto bg-[#FFFDF3]">
         <div className="w-full flex items-center justify-between gap-4 min-h-[44px]">
           <div className="w-10 shrink-0 flex justify-start">
             <button onClick={handleBack} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 text-dark/60 hover:bg-white transition-all active:scale-95 shadow-sm">
@@ -267,7 +267,7 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                   <h1 className="text-2xl font-sans text-dark mb-2">项目概况</h1>
                   <p className="text-sm text-sub px-4 leading-relaxed">作为种子用户，你的档案会被我们保存，上线后直接同步到产品里。我们不会用它打扰你；</p>
                 </div>
-                <div className="bg-[#FDFBF7] p-6 md:p-10 rounded-[24px] shadow-sm border border-white space-y-6 md:space-y-8">
+                <div className="bg-[#FFFDF3] p-6 md:p-10 rounded-[24px] shadow-sm border border-white space-y-6 md:space-y-8">
                   <div>
                     <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-3">项目类型</label>
                     <div className="grid grid-cols-3 gap-3">
@@ -278,8 +278,8 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                           onClick={() => handleChange('projectType', value)}
                           className={`py-3 rounded-xl text-xs md:text-sm font-medium transition-all ${
                             formData.projectType === value
-                              ? 'bg-[#2C2825] text-[#F4F1EA] shadow-md shadow-[#2C2825]/30'
-                              : 'bg-[#F0EEE9] text-dark/70 hover:bg-[#E6E2DC]'
+                              ? 'bg-[#EF6B00] text-[#F8F7FF] shadow-md shadow-[#EF6B00]/30'
+                              : 'bg-[#FFF9E8] text-dark/70 hover:bg-[#E6E2DC]'
                           }`}
                         >
                           {label}
@@ -292,7 +292,7 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                     <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">项目城市</label>
                     <div className="relative">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-dark/30" size={16} />
-                      <input type="text" value={formData.projectPosition} onChange={(e) => handleChange('projectPosition', e.target.value)} placeholder="点击右侧按钮获取定位或手动输入" className="w-full bg-[#F0EEE9] rounded-xl pl-10 pr-12 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
+                      <input type="text" value={formData.projectPosition} onChange={(e) => handleChange('projectPosition', e.target.value)} placeholder="点击右侧按钮获取定位或手动输入" className="w-full bg-[#FFF9E8] rounded-xl pl-10 pr-12 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
                       <button type="button" onClick={handleGetLocation} disabled={isLocating} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white rounded-lg text-brand shadow-sm hover:shadow-md active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed" title="获取当前位置">
                         {isLocating ? <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}><Loader2 size={16} /></motion.div> : <LocateFixed size={16} />}
                       </button>
@@ -307,7 +307,7 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                         value={formData.area}
                         onChange={(e) => handleChange('area', e.target.value)}
                         placeholder="请输入"
-                        className="w-full bg-[#F0EEE9] rounded-xl px-4 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0"
+                        className="w-full bg-[#FFF9E8] rounded-xl px-4 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0"
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-dark/40 font-sans">m²</span>
                     </div>
@@ -317,7 +317,7 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                     <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">每平方米项目造价</label>
                     <div className="relative">
                       <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 text-dark/30" size={16} />
-                      <select value={formData.budget} onChange={(e) => handleChange('budget', e.target.value)} className={`w-full bg-[#F0EEE9] rounded-lg pl-10 pr-10 py-3 border border-[#d9d9d9] hover:border-brand/50 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-colors duration-200 appearance-none cursor-pointer ${formData.budget ? 'text-dark' : 'text-dark/30'}`}>
+                      <select value={formData.budget} onChange={(e) => handleChange('budget', e.target.value)} className={`w-full bg-[#FFF9E8] rounded-lg pl-10 pr-10 py-3 border border-[#d9d9d9] hover:border-brand/50 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-colors duration-200 appearance-none cursor-pointer ${formData.budget ? 'text-dark' : 'text-dark/30'}`}>
                         <option value="" disabled>请选择每平方米项目造价</option>
                         {budgetOptions.map((range) => (
                           <option key={range} value={range}>{budgetDisplayLabel(range)}</option>
@@ -336,23 +336,23 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                   <h1 className="text-2xl font-sans text-dark mb-2">您的信息</h1>
                   <p className="text-sm text-sub px-4 leading-relaxed">这是一份"画像校准"。填完后，你的喜好与档案会一起被保存，后续在产品里自动续上。</p>
                 </div>
-                <div className="bg-[#FDFBF7] p-6 md:p-10 rounded-[24px] shadow-sm border border-white space-y-6 md:space-y-8">
+                <div className="bg-[#FFFDF3] p-6 md:p-10 rounded-[24px] shadow-sm border border-white space-y-6 md:space-y-8">
                   <div className="flex gap-4">
                     <div className="flex-1">
                       <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">姓名</label>
-                      <input type="text" value={formData.name} onChange={(e) => handleChange('name', e.target.value)} placeholder="怎么称呼您" className="w-full bg-[#F0EEE9] rounded-xl px-4 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
+                      <input type="text" value={formData.name} onChange={(e) => handleChange('name', e.target.value)} placeholder="怎么称呼您" className="w-full bg-[#FFF9E8] rounded-xl px-4 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
                       {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                     </div>
                     <div className={titleOptions.length <= 2 ? 'w-28' : 'flex-1'}>
                       <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">称呼</label>
                       {titleOptions.length <= 2 ? (
-                        <div className="flex rounded-xl overflow-hidden border border-[#EAE5DE] bg-[#F0EEE9] p-0.5">
+                        <div className="flex rounded-xl overflow-hidden border border-[#EAE5DE] bg-[#FFF9E8] p-0.5">
                           {titleOptions.map((t) => (
-                            <button key={t} type="button" onClick={() => handleChange('salutation', t)} className={`flex-1 py-2.5 text-sm font-medium transition-all ${formData.salutation === t ? 'bg-[#2C2825] text-[#F4F1EA] shadow-sm' : 'text-dark/70 hover:bg-[#E6E2DC]'}`}>{t}</button>
+                            <button key={t} type="button" onClick={() => handleChange('salutation', t)} className={`flex-1 py-2.5 text-sm font-medium transition-all ${formData.salutation === t ? 'bg-[#EF6B00] text-[#F8F7FF] shadow-sm' : 'text-dark/70 hover:bg-[#E6E2DC]'}`}>{t}</button>
                           ))}
                         </div>
                       ) : (
-                        <select value={formData.salutation} onChange={(e) => handleChange('salutation', e.target.value)} className={`w-full bg-[#F0EEE9] rounded-lg px-4 py-3 border border-[#d9d9d9] hover:border-brand/50 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-colors duration-200 appearance-none cursor-pointer ${formData.salutation ? 'text-dark' : 'text-dark/30'}`}>
+                        <select value={formData.salutation} onChange={(e) => handleChange('salutation', e.target.value)} className={`w-full bg-[#FFF9E8] rounded-lg px-4 py-3 border border-[#d9d9d9] hover:border-brand/50 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-colors duration-200 appearance-none cursor-pointer ${formData.salutation ? 'text-dark' : 'text-dark/30'}`}>
                           <option value="" disabled>请选择</option>
                           {titleOptions.map((t) => <option key={t} value={t}>{t}</option>)}
                         </select>
@@ -362,7 +362,7 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                   <div>
                     <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">年龄段</label>
                     <div className="relative">
-                      <select value={formData.ageGroup} onChange={(e) => handleChange('ageGroup', e.target.value)} className={`w-full bg-[#F0EEE9] rounded-lg px-4 py-3 border border-[#d9d9d9] hover:border-brand/50 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-colors duration-200 appearance-none cursor-pointer ${formData.ageGroup ? 'text-dark' : 'text-dark/30'}`}>
+                      <select value={formData.ageGroup} onChange={(e) => handleChange('ageGroup', e.target.value)} className={`w-full bg-[#FFF9E8] rounded-lg px-4 py-3 border border-[#d9d9d9] hover:border-brand/50 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-colors duration-200 appearance-none cursor-pointer ${formData.ageGroup ? 'text-dark' : 'text-dark/30'}`}>
                         <option value="" disabled>请选择</option>
                         {ageOptions.map((age) => <option key={age} value={age}>{age}</option>)}
                       </select>
@@ -374,7 +374,7 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                     <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">所在行业</label>
                     <div className="relative">
                       <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-dark/30" size={16} />
-                      <select value={formData.industry} onChange={(e) => handleChange('industry', e.target.value)} className={`w-full bg-[#F0EEE9] rounded-lg pl-10 pr-10 py-3 border border-[#d9d9d9] hover:border-brand/50 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-colors duration-200 appearance-none cursor-pointer ${formData.industry ? 'text-dark' : 'text-dark/30'}`}>
+                      <select value={formData.industry} onChange={(e) => handleChange('industry', e.target.value)} className={`w-full bg-[#FFF9E8] rounded-lg pl-10 pr-10 py-3 border border-[#d9d9d9] hover:border-brand/50 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-colors duration-200 appearance-none cursor-pointer ${formData.industry ? 'text-dark' : 'text-dark/30'}`}>
                         <option value="" disabled>请选择行业</option>
                         {industryOptions.map((ind) => <option key={ind} value={ind}>{ind}</option>)}
                       </select>
@@ -391,12 +391,12 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                   <h1 className="text-2xl font-sans text-dark mb-2">取得联系</h1>
                   <p className="text-sm text-sub">留下联系方式，我们会为你创建「种子用户档案」；</p>
                 </div>
-                <div className="bg-[#FDFBF7] p-6 md:p-10 rounded-[24px] shadow-sm border border-white space-y-6 md:space-y-8">
+                <div className="bg-[#FFFDF3] p-6 md:p-10 rounded-[24px] shadow-sm border border-white space-y-6 md:space-y-8">
                   <div>
                     <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">所在城市</label>
                     <div className="relative">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-dark/30" size={16} />
-                      <input type="text" value={formData.city} onChange={(e) => handleChange('city', e.target.value)} placeholder="例：上海 / 杭州" className="w-full bg-[#F0EEE9] rounded-xl pl-10 pr-36 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
+                      <input type="text" value={formData.city} onChange={(e) => handleChange('city', e.target.value)} placeholder="例：上海 / 杭州" className="w-full bg-[#FFF9E8] rounded-xl pl-10 pr-36 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
                       <button onClick={handleCopyProjectLocation} className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-brand hover:text-brand-hover font-medium flex items-center gap-1 transition-colors bg-white px-3 py-1.5 rounded-lg shadow-sm border border-brand/10 hover:border-brand/30 active:scale-95 z-10">
                         <Copy size={12} /> 与项目城市一致
                       </button>
@@ -407,7 +407,7 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                     <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">手机号（用于发送结果与确认细节）</label>
                     <div className="relative">
                       <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-dark/30" size={16} />
-                      <input type="tel" value={formData.phone} onChange={(e) => handleChange('phone', e.target.value)} placeholder="11位手机号码" className="w-full bg-[#F0EEE9] rounded-xl pl-10 pr-4 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
+                      <input type="tel" value={formData.phone} onChange={(e) => handleChange('phone', e.target.value)} placeholder="11位手机号码" className="w-full bg-[#FFF9E8] rounded-xl pl-10 pr-4 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
                     </div>
                     {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                   </div>
@@ -418,10 +418,10 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 w-full bg-[#fffdf3]/90 backdrop-blur-md border-t border-dark/5 p-4 z-50">
+      <div className="fixed bottom-0 left-0 w-full bg-[#FFFDF3]/90 backdrop-blur-md border-t border-dark/5 p-4 z-50">
         <div className="max-w-2xl md:max-w-4xl mx-auto">
           {submitError && <p className="text-red-500 text-sm mb-2 text-center">{submitError}</p>}
-          <button onClick={handleNext} disabled={isSubmitting} className="w-full bg-[#2C2825] text-[#F4F1EA] py-4 rounded-xl shadow-xl hover:bg-black transition-all active:scale-95 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:pointer-events-none">
+          <button onClick={handleNext} disabled={isSubmitting} className="w-full bg-[#FF9C3E] text-white py-4 rounded-xl shadow-xl hover:bg-[#EF6B00] transition-all active:scale-95 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:pointer-events-none">
             {isSubmitting ? (
               <span className="flex items-center gap-2">
                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" />
@@ -440,14 +440,14 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
       <AnimatePresence>
         {showSuccess && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} className="bg-[#FDFBF7] rounded-[24px] p-8 max-w-sm w-full text-center shadow-2xl relative overflow-hidden">
+            <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} className="bg-[#FFFDF3] rounded-[24px] p-8 max-w-sm w-full text-center shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-2 bg-brand" />
               <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6 text-green-600">
                 <CheckCircle2 size={32} />
               </div>
               <h3 className="text-2xl font-sans text-dark mb-2">已建档 ✅</h3>
               <p className="text-sub text-sm mb-8 leading-relaxed">你的喜好会在产品上线后自动带入，直接登录就能继续。</p>
-              <button type="button" onClick={handleCloseSuccess} className="w-full bg-black text-white py-3 rounded-xl font-bold tracking-wider hover:bg-[#EF6B00] active:bg-[#CC5B00] transition-colors">
+              <button type="button" onClick={handleCloseSuccess} className="w-full bg-[#EF6B00] text-white py-3 rounded-xl font-bold tracking-wider hover:bg-[#D85F00] active:bg-[#CC5A00] transition-colors">
                 返回首页
               </button>
             </motion.div>

@@ -144,7 +144,7 @@ export default function App() {
 
   if (mode === 'login') {
     return (
-      <div className="min-h-screen bg-[#FDFCF8] text-gray-900 font-sans flex flex-col">
+      <div className="min-h-screen bg-[#FFFDF3] text-gray-900 font-sans flex flex-col">
         <header className="w-full pt-8 pb-4 px-6 flex justify-center">
           <h1 className="text-2xl font-medium text-gray-900">登录</h1>
         </header>
@@ -160,7 +160,7 @@ export default function App() {
 
   if (mode === 'projects') {
     return (
-      <div className="min-h-screen bg-[#FDFCF8] text-gray-900 font-sans flex flex-col">
+      <div className="min-h-screen bg-[#FFFDF3] text-gray-900 font-sans flex flex-col">
         <header className="w-full pt-8 pb-4 px-6 flex justify-center">
           <h1 className="text-2xl font-medium text-gray-900">我的项目</h1>
         </header>
@@ -264,7 +264,7 @@ export default function App() {
 
   return (
     <DeepEvalFormProvider>
-    <div className="min-h-screen bg-[#FDFCF8] text-gray-900 font-sans flex flex-col relative">
+    <div className="min-h-screen bg-[#FFFDF3] text-gray-900 font-sans flex flex-col relative">
       {/* Header（欢迎页/风格测评/设计反馈隐藏；注册页、DE 页面均显示目录） */}
       {!isWelcomeStep && !isHomeStyleEvalStep && !isDesignFeedbackStep && (
         <header className="w-full pt-8 pb-4 px-6 flex flex-col items-center relative z-50">
@@ -286,7 +286,7 @@ export default function App() {
               >
                 <List size={14} className="text-gray-400" />
                 <span className="text-sm font-medium text-gray-500">
-                  <span className="text-[#D84936]">{currentVisibleIndex}</span> / {visibleStepsCount}
+                  <span className="text-[#EF6B00]">{currentVisibleIndex}</span> / {visibleStepsCount}
                 </span>
               </button>
             )}
@@ -326,7 +326,7 @@ export default function App() {
                         key={step.id}
                         className={`flex items-center justify-between p-4 rounded-xl transition-all border ${
                           currentStepIndex === index
-                            ? 'bg-[#D84936]/5 border-[#D84936]/20'
+                            ? 'bg-[#EF6B00]/5 border-[#EF6B00]/20'
                             : visible ? 'hover:bg-gray-50 border-transparent' : 'bg-gray-50/80 border-gray-100 opacity-80'
                         }`}
                       >
@@ -339,22 +339,22 @@ export default function App() {
                           className="flex items-center gap-3 flex-1 min-w-0 text-left"
                         >
                           <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                            currentStepIndex === index ? 'bg-[#D84936] text-white' : 'bg-gray-100 text-gray-400'
+                            currentStepIndex === index ? 'bg-[#EF6B00] text-white' : 'bg-gray-100 text-gray-400'
                           }`}>
                             {index}
                           </span>
                           <div className="flex flex-col items-start min-w-0">
                             {step.qId && (
-                              <span className="text-[10px] font-bold text-[#D84936] uppercase tracking-wider mb-0.5">
+                              <span className="text-[10px] font-bold text-[#EF6B00] uppercase tracking-wider mb-0.5">
                                 {step.qId}
                               </span>
                             )}
-                            <span className={`font-medium truncate ${currentStepIndex === index ? 'text-[#D84936]' : visible ? 'text-gray-700' : 'text-gray-500'}`}>
+                            <span className={`font-medium truncate ${currentStepIndex === index ? 'text-[#EF6B00]' : visible ? 'text-gray-700' : 'text-gray-500'}`}>
                               {step.title}
                             </span>
                           </div>
                           {currentStepIndex === index && (
-                            <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#D84936]" />
+                            <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EF6B00]" />
                           )}
                         </button>
                         <div className="flex items-center gap-1 flex-shrink-0">
@@ -424,7 +424,7 @@ export default function App() {
                     value={editingTitle}
                     onChange={(e) => setEditingTitle(e.target.value)}
                     placeholder="例如：房屋现状"
-                    className="w-full py-3.5 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none px-4 text-gray-800 placeholder-gray-400"
+                    className="w-full py-3.5 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#EF6B00]/20 outline-none px-4 text-gray-800 placeholder-gray-400"
                   />
                 </div>
                 <div className="space-y-2">
@@ -433,7 +433,7 @@ export default function App() {
                     value={editingQId}
                     onChange={(e) => setEditingQId(e.target.value)}
                     placeholder="例如：Q2-5（留空则不显示）"
-                    className="w-full py-3.5 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none px-4 text-gray-800 placeholder-gray-400"
+                    className="w-full py-3.5 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#EF6B00]/20 outline-none px-4 text-gray-800 placeholder-gray-400"
                   />
                   <p className="text-[11px] text-gray-500">
                     仅影响目录展示，不改变步骤跳转 id。
@@ -466,7 +466,7 @@ export default function App() {
                     setEditingStepId(null);
                   }}
                   disabled={!editingTitle.trim()}
-                  className="px-4 py-2.5 rounded-xl bg-[#302E2B] text-sm font-medium text-white hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.99]"
+                  className="px-4 py-2.5 rounded-xl bg-[#EF6B00] text-sm font-medium text-white hover:bg-[#D85F00] disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.99]"
                 >
                   保存
                 </button>
@@ -504,7 +504,7 @@ export default function App() {
           <div className="max-w-[800px] mx-auto">
             <button
               onClick={nextStep}
-              className="w-full bg-[#302E2B] text-white py-4 rounded-xl font-medium text-lg flex items-center justify-center gap-2 hover:bg-black transition-colors active:scale-[0.99]"
+              className="w-full bg-[#FF9C3E] text-white py-4 rounded-xl font-medium text-lg flex items-center justify-center gap-2 hover:bg-[#EF6B00] transition-colors active:scale-[0.99]"
             >
               {steps[currentStepIndex].id === 'payment'
                 ? '完成支付并开始项目深度需求测评'

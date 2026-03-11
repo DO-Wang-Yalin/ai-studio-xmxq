@@ -52,9 +52,9 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
         {/* 家居风格测评卡片（左上） */}
         <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 flex flex-col">
           <div className="space-y-4 flex-1">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#D84936]/5 px-3 py-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D84936]" />
-              <span className="text-xs font-semibold text-[#D84936] tracking-wide">家居风格</span>
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#EF6B00]/5 px-3 py-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#EF6B00]" />
+              <span className="text-xs font-semibold text-[#EF6B00] tracking-wide">家居风格</span>
             </div>
             <div className="space-y-1.5">
               <h2 className="text-base font-semibold text-gray-900">家居风格测评</h2>
@@ -66,7 +66,7 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
           <button
             type="button"
             onClick={() => goToStep?.('home-style-eval')}
-            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#FF9C3E] px-4 py-3 text-sm font-medium text-white hover:bg-[#EF6B00] transition-colors active:scale-[0.99]"
           >
             开始风格测评
           </button>
@@ -75,9 +75,9 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
         {/* 注册卡片（右上） */}
         <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 flex flex-col">
           <div className="space-y-4 flex-1">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#D84936]/5 px-3 py-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D84936]" />
-              <span className="text-xs font-semibold text-[#D84936] tracking-wide">用户注册</span>
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#EF6B00]/5 px-3 py-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#EF6B00]" />
+              <span className="text-xs font-semibold text-[#EF6B00] tracking-wide">用户注册</span>
             </div>
             <div className="space-y-1.5">
               <h2 className="text-base font-semibold text-gray-900">注册 / 登录</h2>
@@ -89,7 +89,7 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
           <button
             type="button"
             onClick={nextStep}
-            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#FF9C3E] px-4 py-3 text-sm font-medium text-white hover:bg-[#EF6B00] transition-colors active:scale-[0.99]"
           >
             去注册并填写信息
           </button>
@@ -98,9 +98,9 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
         {/* 深度定制之旅卡片（左下） */}
         <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 flex flex-col">
           <div className="space-y-4 flex-1">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#302E2B]/5 px-3 py-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#302E2B]" />
-              <span className="text-xs font-semibold text-[#302E2B] tracking-wide">深度定制之旅</span>
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#EF6B00]/5 px-3 py-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#EF6B00]" />
+              <span className="text-xs font-semibold text-[#EF6B00] tracking-wide">深度定制之旅</span>
             </div>
             <div className="space-y-1.5">
               <h2 className="text-base font-semibold text-gray-900">一键开启深度定制</h2>
@@ -112,7 +112,7 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
           <button
             type="button"
             onClick={() => goToStep?.('q2-4')}
-            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#FF9C3E] px-4 py-3 text-sm font-medium text-white hover:bg-[#EF6B00] transition-colors active:scale-[0.99]"
           >
             开启深度定制之旅
           </button>
@@ -121,9 +121,9 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
         {/* 进入我的首页卡片（右下） */}
         <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 flex flex-col">
           <div className="space-y-4 flex-1">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#F39A25]/10 px-3 py-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F39A25]" />
-              <span className="text-xs font-semibold text-[#B16D12] tracking-wide">我的首页</span>
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#FFCE42]/10 px-3 py-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FFCE42]" />
+              <span className="text-xs font-semibold text-[#C87800] tracking-wide">我的首页</span>
             </div>
             <div className="space-y-1.5">
               <h2 className="text-base font-semibold text-gray-900">进入我的首页</h2>
@@ -135,7 +135,7 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
           <button
             type="button"
             onClick={() => (goToLogin ?? goToWorkbench)?.()}
-            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#FF9C3E] px-4 py-3 text-sm font-medium text-white hover:bg-[#EF6B00] transition-colors active:scale-[0.99]"
           >
             进入我的首页
           </button>
@@ -245,9 +245,9 @@ export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
     <StepWrapper noCard>
       <div className="flex flex-col items-center py-8 min-h-[60vh]">
         <div className="w-full max-w-md rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-6 space-y-5">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#D84936]/5 px-3 py-1 mb-2">
-            <Phone className="w-3.5 h-3.5 text-[#D84936]" />
-            <span className="text-xs font-semibold text-[#D84936] tracking-wide">手机号注册</span>
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#EF6B00]/5 px-3 py-1 mb-2">
+            <Phone className="w-3.5 h-3.5 text-[#EF6B00]" />
+            <span className="text-xs font-semibold text-[#EF6B00] tracking-wide">手机号注册</span>
           </div>
           <h2 className="text-lg font-semibold text-gray-900">填写手机号并完成验证</h2>
           <p className="text-sm text-gray-500">我们将向该手机号发送验证码，用于完成注册。</p>
@@ -263,7 +263,7 @@ export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                 placeholder="请输入 11 位手机号"
-                className="w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none pl-11 pr-5 text-gray-800 placeholder-gray-400"
+                className="w-full py-4 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#EF6B00]/20 outline-none pl-11 pr-5 text-gray-800 placeholder-gray-400"
               />
             </div>
           </div>
@@ -278,13 +278,13 @@ export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
                 placeholder="请输入 6 位验证码"
-                className="flex-1 py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none px-5 text-gray-800 placeholder-gray-400"
+                className="flex-1 py-4 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#EF6B00]/20 outline-none px-5 text-gray-800 placeholder-gray-400"
               />
               <button
                 type="button"
                 onClick={handleSendCode}
                 disabled={sending || countdown > 0 || !phoneValid}
-                className="shrink-0 px-4 py-4 rounded-xl bg-[#F4F3F0] text-gray-700 text-sm font-medium hover:bg-[#E8E6E0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+                className="shrink-0 px-4 py-4 rounded-xl bg-[#FFF9E8] text-gray-700 text-sm font-medium hover:bg-[#F5F0E0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
               >
                 {countdown > 0 ? `${countdown}s 后重发` : sending ? '发送中…' : '获取验证码'}
               </button>
@@ -297,7 +297,7 @@ export const StepRegister = ({ data, updateData, nextStep }: StepProps) => {
             type="button"
             onClick={handleSubmit}
             disabled={!phoneValid || (!mockRegisterEnabled && !codeValid) || submitting}
-            className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-4 text-sm font-medium text-white hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.99]"
+            className="w-full mt-2 flex items-center justify-center rounded-xl bg-[#FF9C3E] px-4 py-4 text-sm font-medium text-white hover:bg-[#EF6B00] disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.99]"
           >
             {submitting ? '验证中…' : '完成注册并继续'}
           </button>
@@ -354,7 +354,7 @@ export const StepDeepEval1 = ({ data, updateData, nextStep, prevStep }: StepProp
               value={formData.projectPosition}
               onChange={(e) => handleChange('projectPosition', e.target.value)}
               placeholder="点击右侧按钮获取定位或手动输入..."
-              className="w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none transition-all text-gray-800 pl-11 pr-12 placeholder-gray-400"
+              className="w-full py-4 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#EF6B00]/20 outline-none transition-all text-gray-800 pl-11 pr-12 placeholder-gray-400"
             />
             <button
               type="button"
@@ -386,7 +386,7 @@ export const StepDeepEval1 = ({ data, updateData, nextStep, prevStep }: StepProp
             <select
               value={formData.budget}
               onChange={(e) => handleChange('budget', e.target.value)}
-              className={`w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none transition-all text-gray-800 pl-11 pr-10 appearance-none cursor-pointer ${formData.budget ? '' : 'text-gray-400'}`}
+              className={`w-full py-4 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#EF6B00]/20 outline-none transition-all text-gray-800 pl-11 pr-10 appearance-none cursor-pointer ${formData.budget ? '' : 'text-gray-400'}`}
             >
               <option value="" disabled>请选择每平方米项目造价</option>
               {budgetOptions.map((range) => (
@@ -401,7 +401,7 @@ export const StepDeepEval1 = ({ data, updateData, nextStep, prevStep }: StepProp
         <button
           type="button"
           onClick={handleNext}
-          className="w-full bg-[#302E2B] text-white py-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-black transition-colors active:scale-[0.99] mt-2"
+          className="w-full bg-[#FF9C3E] text-white py-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-[#EF6B00] transition-colors active:scale-[0.99] mt-2"
         >
           下一步
           <ChevronRight size={18} />
@@ -436,7 +436,7 @@ export const StepDeepEval2 = ({ nextStep, prevStep }: StepProps & { prevStep?: (
           </div>
           <div className="sm:w-28 flex-shrink-0">
             <label className="text-sm font-bold text-gray-800 block mb-3">称呼</label>
-            <div className="flex rounded-xl overflow-hidden border border-gray-200 bg-[#FEFDFB] p-0.5">
+            <div className="flex rounded-xl overflow-hidden border border-gray-200 bg-[#FFFDF3] p-0.5">
               {(titleOptions.length ? titleOptions : ['先生', '女士']).map((t) => (
                 <button
                   key={t}
@@ -444,8 +444,8 @@ export const StepDeepEval2 = ({ nextStep, prevStep }: StepProps & { prevStep?: (
                   onClick={() => handleChange('salutation', t)}
                   className={`flex-1 min-w-0 py-3.5 px-2 text-sm font-medium transition-all rounded-lg ${
                     formData.salutation === t
-                      ? 'bg-[#FEFDFB] border-[#D84936] text-[#D84936] border shadow-sm'
-                      : 'text-gray-600 hover:bg-[#F4F3F0] border border-transparent'
+                      ? 'bg-[#FFFDF3] border-[#EF6B00] text-[#EF6B00] border shadow-sm'
+                      : 'text-gray-600 hover:bg-[#FFF9E8] border border-transparent'
                   }`}
                 >
                   {t}
@@ -456,7 +456,7 @@ export const StepDeepEval2 = ({ nextStep, prevStep }: StepProps & { prevStep?: (
         </div>
         <div className="space-y-3">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             年龄段
           </SubQuestion>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -481,9 +481,9 @@ export const StepDeepEval2 = ({ nextStep, prevStep }: StepProps & { prevStep?: (
               value={formData.city}
               onChange={(e) => handleChange('city', e.target.value)}
               placeholder="点击右侧按钮获取定位或手动输入"
-              className="w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none transition-all text-gray-800 pl-11 pr-12 placeholder:text-gray-400"
+              className="w-full py-4 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#EF6B00]/20 outline-none transition-all text-gray-800 pl-11 pr-12 placeholder:text-gray-400"
             />
-            <button type="button" onClick={handleGetCityLocation} disabled={isLocating} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white rounded-lg text-[#D84936] shadow-sm hover:shadow-md active:scale-95 disabled:opacity-50 border border-[#D84936]/20" title="获取当前位置">
+            <button type="button" onClick={handleGetCityLocation} disabled={isLocating} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white rounded-lg text-[#EF6B00] shadow-sm hover:shadow-md active:scale-95 disabled:opacity-50 border border-[#EF6B00]/20" title="获取当前位置">
               {isLocating ? <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}><Loader2 size={16} /></motion.div> : <LocateFixed size={16} />}
             </button>
           </div>
@@ -496,7 +496,7 @@ export const StepDeepEval2 = ({ nextStep, prevStep }: StepProps & { prevStep?: (
             <select
               value={formData.industry}
               onChange={(e) => handleChange('industry', e.target.value)}
-              className={`w-full py-4 bg-[#F4F3F0] rounded-xl border-none focus:ring-2 focus:ring-[#D84936]/20 outline-none transition-all text-gray-800 pl-11 pr-10 appearance-none cursor-pointer ${formData.industry ? '' : 'text-gray-400'}`}
+              className={`w-full py-4 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#EF6B00]/20 outline-none transition-all text-gray-800 pl-11 pr-10 appearance-none cursor-pointer ${formData.industry ? '' : 'text-gray-400'}`}
             >
               <option value="">请选择行业</option>
               {industryOptions.map((ind) => (
@@ -510,7 +510,7 @@ export const StepDeepEval2 = ({ nextStep, prevStep }: StepProps & { prevStep?: (
         <button
           type="button"
           onClick={handleNext}
-          className="w-full bg-[#302E2B] text-white py-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-black transition-colors active:scale-[0.99] mt-2"
+          className="w-full bg-[#FF9C3E] text-white py-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-[#EF6B00] transition-colors active:scale-[0.99] mt-2"
         >
           下一步
           <ChevronRight size={18} />
@@ -547,7 +547,7 @@ export const Step1 = ({ data, updateData }: StepProps) => (
       />
       <div className="space-y-3">
         <SubQuestion className="flex items-center gap-2">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+          <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
           每平方米项目造价
         </SubQuestion>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -654,9 +654,9 @@ export const Step3 = ({ data, updateData, nextStep, goToStep }: StepProps) => {
           </div>
           <div className="text-right text-sm">
             <div className="text-xs text-gray-500 mb-1">当前步骤</div>
-            <div className="inline-flex items-center gap-1 rounded-full bg-[#F39A25]/10 px-3 py-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F39A25]" />
-              <span className="text-xs font-medium text-[#B16D12]">Q2-3 预算范围</span>
+            <div className="inline-flex items-center gap-1 rounded-full bg-[#FFCE42]/10 px-3 py-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FFCE42]" />
+              <span className="text-xs font-medium text-[#C87800]">Q2-3 预算范围</span>
             </div>
           </div>
         </div>
@@ -692,7 +692,7 @@ export const Step3 = ({ data, updateData, nextStep, goToStep }: StepProps) => {
               <p className="text-xs text-gray-500 mb-3">
                 这里对应预算确认页中的「预算区间卡片」，用于概览当前选择的大致投入区间。
               </p>
-              <div className="rounded-xl bg-gradient-to-r from-[#FDF3E6] via-[#FBE7D1] to-[#F4D1A5] px-4 py-3 flex items-center justify-between gap-4">
+              <div className="rounded-xl bg-gradient-to-r from-[#FFF4E0] via-[#FFE8CC] to-[#FFE4B5] px-4 py-3 flex items-center justify-between gap-4">
                 <div>
                   <div className="text-xs text-gray-700">当前选择</div>
                   <div className="text-sm font-semibold text-gray-900 mt-1">
@@ -701,7 +701,7 @@ export const Step3 = ({ data, updateData, nextStep, goToStep }: StepProps) => {
                 </div>
                 <div className="flex-1 mx-4 h-1.5 rounded-full bg-white/60 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-[#B16D12]"
+                    className="h-full rounded-full bg-[#C87800]"
                     style={{ width: selected ? '70%' : '0%' }}
                   />
                 </div>
@@ -733,7 +733,7 @@ export const Step3 = ({ data, updateData, nextStep, goToStep }: StepProps) => {
               disabled={!data.budgetStandard}
               className={`w-full inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium transition-colors ${
                 data.budgetStandard
-                  ? 'bg-[#302E2B] text-white hover:bg-black'
+                  ? 'bg-[#FF9C3E] text-white hover:bg-[#EF6B00]'
                   : 'bg-gray-200 text-gray-500 cursor-not-allowed'
               }`}
             >
@@ -813,7 +813,7 @@ export const StepBudgetConfirmPreview = () => {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <div className="text-xs font-medium text-[#2F2D97] mb-1">预算区间</div>
+                  <div className="text-xs font-medium text-[#EF6B00] mb-1">预算区间</div>
                   <div className="text-sm text-gray-500">
                     结合过往同类项目与当前配置，为你估算的合理预算区间。
                   </div>
@@ -859,7 +859,7 @@ export const StepBudgetConfirmPreview = () => {
               </p>
               <button
                 type="button"
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#2F2D97] text-white text-sm font-medium px-4 py-2.5 hover:bg-[#252378] transition-colors"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#FF9C3E] text-white text-sm font-medium px-4 py-2.5 hover:bg-[#EF6B00] transition-colors"
               >
                 确认当前预算方案（示意）
               </button>
@@ -972,7 +972,7 @@ export const Step4 = ({ data, updateData }: StepProps) => {
 
         <div className="space-y-3">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             上传户型图
           </SubQuestion>
           <div
@@ -984,7 +984,7 @@ export const Step4 = ({ data, updateData }: StepProps) => {
             </p>
             <button
               type="button"
-              className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium"
+              className="bg-[#FF9C3E] text-white px-6 py-2 rounded-full text-sm font-medium"
             >
               选择文件
             </button>
@@ -1010,7 +1010,7 @@ export const Step4 = ({ data, updateData }: StepProps) => {
 
         <div className="space-y-3">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             上传现场视频/照片
           </SubQuestion>
           <div
@@ -1022,7 +1022,7 @@ export const Step4 = ({ data, updateData }: StepProps) => {
             </p>
             <button
               type="button"
-              className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium"
+              className="bg-[#FF9C3E] text-white px-6 py-2 rounded-full text-sm font-medium"
             >
               选择文件
             </button>
@@ -1057,7 +1057,7 @@ export const Step5 = ({ data, updateData }: StepProps) => (
     <div className="space-y-4">
       <div className="space-y-1">
         <SubQuestion className="flex items-center gap-2 mb-1">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+          <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
           采光情况
         </SubQuestion>
         <div className="grid grid-cols-4 gap-2">
@@ -1070,7 +1070,7 @@ export const Step5 = ({ data, updateData }: StepProps) => (
 
       <div className="pt-3 border-t border-gray-100 space-y-1">
         <SubQuestion className="flex items-center gap-2 mb-1">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+          <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
           层高情况
         </SubQuestion>
         <SegmentedRadio
@@ -1086,7 +1086,7 @@ export const Step5 = ({ data, updateData }: StepProps) => (
 
       <div className="pt-3 border-t border-gray-100 space-y-1">
         <SubQuestion className="flex items-center gap-2 mb-1">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+          <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
           通风情况
         </SubQuestion>
         <div className="grid grid-cols-4 gap-2">
@@ -1099,7 +1099,7 @@ export const Step5 = ({ data, updateData }: StepProps) => (
 
       <div className="pt-3 border-t border-gray-100 space-y-1">
         <SubQuestion className="flex items-center gap-2 mb-1">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+          <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
           噪音情况
         </SubQuestion>
         <div className="grid grid-cols-4 gap-2">
@@ -1161,7 +1161,7 @@ export const Step6 = ({ data, updateData }: StepProps) => {
       <div className="space-y-8">
         <div className="space-y-4">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             为了提供更符合您生活习惯的设计逻辑，请问您在未来的家中是哪类核心成员？
           </SubQuestion>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1182,7 +1182,7 @@ export const Step6 = ({ data, updateData }: StepProps) => {
         
         <div className="pt-6 border-t border-gray-100 space-y-4">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             在这个家里，哪个空间是您愿意花费最多心思（或待得最久）的？
           </SubQuestion>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1263,7 +1263,7 @@ export const Step6_1 = ({ data, updateData }: StepProps) => {
       <div className="space-y-6">
         <div className="space-y-4">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             有其他成员你想记录他们的活动空间吗？
           </SubQuestion>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -1275,17 +1275,17 @@ export const Step6_1 = ({ data, updateData }: StepProps) => {
                   onClick={() => toggleMember(m.id)}
                   className={`w-full flex flex-col items-center justify-center text-center p-4 rounded-xl transition-all duration-300 ${
                     isSelected 
-                      ? 'bg-white ring-2 ring-[#D84936] shadow-[0_2px_10px_rgba(216,73,54,0.12)] transform scale-[1.02]' 
+                      ? 'bg-white ring-2 ring-[#EF6B00] shadow-[0_2px_10px_rgba(239,107,0,0.12)] transform scale-[1.02]' 
                       : 'bg-white hover:bg-gray-50 shadow-[0_1px_5px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)]'
                   }`}
                 >
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-2 transition-colors duration-300 text-2xl ${
-                    isSelected ? 'bg-[#D84936]/10' : 'bg-[#F4F3F0]'
+                    isSelected ? 'bg-[#EF6B00]/10' : 'bg-[#FFF9E8]'
                   }`}>
                     {m.emoji}
                   </div>
                   <h3 className={`text-sm font-bold transition-colors duration-300 ${
-                    isSelected ? 'text-[#D84936]' : 'text-gray-800'
+                    isSelected ? 'text-[#EF6B00]' : 'text-gray-800'
                   }`}>
                     {m.label}
                   </h3>
@@ -1309,7 +1309,7 @@ export const Step6_1 = ({ data, updateData }: StepProps) => {
                       <span className="text-lg">{members.find(m => m.id === memberId)?.emoji}</span>
                       {config.title}
                     </h4>
-                    <p className="text-xs text-[#D84936] mt-1.5 bg-[#D84936]/5 inline-block px-2 py-1 rounded-md">
+                    <p className="text-xs text-[#EF6B00] mt-1.5 bg-[#EF6B00]/5 inline-block px-2 py-1 rounded-md">
                       {config.desc}
                     </p>
                   </div>
@@ -1345,7 +1345,7 @@ export const Step7 = ({ data, updateData }: StepProps) => {
       <div className="space-y-6">
         <div className="space-y-4">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             在未来的项目推进中，我们应如何更好地与您及家人协作？
           </SubQuestion>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1363,7 +1363,7 @@ export const Step7 = ({ data, updateData }: StepProps) => {
         
         <div className="pt-6 border-t border-gray-100 space-y-4">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             您希望的参与方式是什么样的？
           </SubQuestion>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1382,7 +1382,7 @@ export const Step8 = ({ data, updateData }: StepProps) => (
     <div className="space-y-4">
       <div className="space-y-3">
         <SubQuestion className="flex items-center gap-2">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+          <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
           期望完工时间
         </SubQuestion>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -1444,7 +1444,7 @@ export const Step9 = ({ data, updateData }: StepProps) => {
         {groups.map(group => (
           <div key={group.title} className="space-y-3">
             <SubQuestion className="flex items-center gap-2">
-              <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+              <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
               {group.title}
             </SubQuestion>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1482,7 +1482,7 @@ export const Step10 = ({ data, updateData }: StepProps) => {
       <div className="space-y-10">
         <div className="space-y-4">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             吃饭是比较喜欢做饭还是点外卖?
           </SubQuestion>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -1508,7 +1508,7 @@ export const Step10 = ({ data, updateData }: StepProps) => {
         
         <div className="pt-6 border-t border-gray-100 space-y-4">
           <SubQuestion className="flex items-center gap-2">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             是否会因为口味不同而分别烹饪?需要第二个厨房?
           </SubQuestion>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -1551,7 +1551,7 @@ export const Step12 = ({ data, updateData }: StepProps) => (
     <div className="space-y-6">
       <div className="space-y-3">
         <SubQuestion className="flex items-center gap-2">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+          <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
           平时几人就餐？
         </SubQuestion>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -1567,7 +1567,7 @@ export const Step12 = ({ data, updateData }: StepProps) => (
       </div>
       <div className="space-y-3">
         <SubQuestion className="flex items-center gap-2">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+          <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
           逢年过节最多需要容纳几人？
         </SubQuestion>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -1732,15 +1732,15 @@ export const Step16 = ({ data, updateData }: StepProps) => {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <SubQuestion className="flex items-center gap-2 mb-0!">
-            <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+            <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
             这个家的“底线”，您最不能妥协的是？
           </SubQuestion>
           <div className="flex items-center gap-2">
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${data.bottomLine.length >= 2 ? 'bg-[#D84936]/10 text-[#D84936]' : 'bg-gray-100 text-gray-500'}`}>
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${data.bottomLine.length >= 2 ? 'bg-[#EF6B00]/10 text-[#EF6B00]' : 'bg-gray-100 text-gray-500'}`}>
               已选 {data.bottomLine.length}/2
             </span>
             {showWarning && (
-              <span className="text-xs text-[#D84936] animate-pulse font-bold">
+              <span className="text-xs text-[#EF6B00] animate-pulse font-bold">
                 最多只能选择2项哦！
               </span>
             )}
@@ -1793,7 +1793,7 @@ export const Step17 = ({ data, updateData }: StepProps) => {
     <StepWrapper title="Q2-17：风水布局" subtitle="关于新家的“风水布局”，您有特殊讲究吗？">
       <div className="space-y-6">
         <SubQuestion className="flex items-center gap-2">
-          <div className="w-1 h-4 bg-[#D84936] rounded-full"></div>
+          <div className="w-1 h-4 bg-[#EF6B00] rounded-full"></div>
           关于新家的“风水布局”，您有特殊讲究吗？
         </SubQuestion>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1960,7 +1960,7 @@ export const Step21 = ({ data, updateData, goToWorkbench, goToLogin }: StepProps
             <button
               type="button"
               onClick={() => setShowModal(true)}
-              className="px-8 py-3 rounded-xl bg-[#302E2B] text-white text-base font-medium hover:bg-black transition-colors"
+              className="px-8 py-3 rounded-xl bg-[#FF9C3E] text-white text-base font-medium hover:bg-[#EF6B00] transition-colors"
             >
               完成测试并提交
             </button>
@@ -1997,7 +1997,7 @@ export const Step21 = ({ data, updateData, goToWorkbench, goToLogin }: StepProps
                   else if (goToWorkbench) goToWorkbench();
                   else window.location.assign(MY_HOME_URL);
                 }}
-                className="flex-1 px-5 py-2 rounded-xl bg-[#302E2B] text-white text-sm font-medium hover:bg-black transition-colors"
+                className="flex-1 px-5 py-2 rounded-xl bg-[#FF9C3E] text-white text-sm font-medium hover:bg-[#EF6B00] transition-colors"
               >
                 进入我的首页
               </button>
@@ -2299,7 +2299,7 @@ export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
               setShowFullscreen(true);
               setCanSign(false);
             }}
-            className="w-full mt-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+            className="w-full mt-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#FF9C3E] px-4 py-3 text-sm font-medium text-white hover:bg-[#EF6B00] transition-colors active:scale-[0.99]"
           >
             <Maximize size={14} />
             放大查看并签署合同
@@ -2367,7 +2367,7 @@ export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
                 disabled={!canSign}
                 onClick={handleOpenSignature}
                 className={`w-full rounded-xl px-4 py-3 text-sm font-medium text-white transition-colors active:scale-[0.99] ${
-                  canSign ? 'bg-[#302E2B] hover:bg-black' : 'bg-gray-300 cursor-not-allowed'
+                  canSign ? 'bg-[#FF9C3E] hover:bg-[#EF6B00]' : 'bg-gray-300 cursor-not-allowed'
                 }`}
               >
                 {data.contractSignatureData ? '重新签署并继续' : '已阅读至底部，前往签署'}
@@ -2428,7 +2428,7 @@ export const StepContract = ({ data, updateData, nextStep }: StepProps) => {
                   disabled={!hasDrawn}
                   onClick={handleSubmitSignature}
                   className={`px-4 py-2 rounded-xl text-xs font-medium text-white transition-colors ${
-                    hasDrawn ? 'bg-[#302E2B] hover:bg-black' : 'bg-gray-300 cursor-not-allowed'
+                    hasDrawn ? 'bg-[#FF9C3E] hover:bg-[#EF6B00]' : 'bg-gray-300 cursor-not-allowed'
                   }`}
                 >
                   确认签名并提交
@@ -2466,7 +2466,7 @@ export const StepPayment = () => {
       <div className="space-y-5">
         <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5 space-y-3">
           <div className="flex items-center gap-2">
-            <FileText size={18} className="text-[#D84936]" />
+            <FileText size={18} className="text-[#EF6B00]" />
             <span className="text-sm font-semibold text-gray-900">对公转账信息</span>
           </div>
           <div className="space-y-1.5 text-sm text-gray-800">
@@ -2477,7 +2477,7 @@ export const StepPayment = () => {
           <button
             type="button"
             onClick={handleCopy}
-            className="mt-2 w-full rounded-xl bg-[#302E2B] px-4 py-2.5 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
+            className="mt-2 w-full rounded-xl bg-[#FF9C3E] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#EF6B00] transition-colors active:scale-[0.99]"
           >
             {copied ? '已复制账号信息' : '一键复制全部信息'}
           </button>
