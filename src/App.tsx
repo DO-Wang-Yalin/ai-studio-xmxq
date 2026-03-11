@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ChevronLeft, ChevronRight, X, List, Eye, EyeOff, Pencil } from 'lucide-react';
 import { FormData, initialFormData } from './types';
 import { WorkbenchPage } from './pages/WorkbenchPage'
+import { LoginPage } from './pages/LoginPage'
+import { ProjectPage } from './pages/ProjectPage'
 import {
   StepWelcome,
   StepRegister,
@@ -48,7 +50,8 @@ type StepConfig = {
 export default function App() {
   const [data, setData] = useState<FormData>(initialFormData);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [mode, setMode] = useState<'form' | 'workbench'>('form')
+  const [mode, setMode] = useState<'form' | 'login' | 'projects' | 'workbench'>('form');
+  const [selectedProject, setSelectedProject] = useState<{ id: string; name: string } | null>(null);
   const [showMenu, setShowMenu] = useState(false);
   /** 步骤显示/隐藏：key 为 step.id，true=显示 false=隐藏；未设置的步骤按 hiddenByDefault 取反 */
   const [stepVisibility, setStepVisibility] = useState<Record<string, boolean>>({});
@@ -139,12 +142,48 @@ export default function App() {
   const steps = getStepsSequence();
   const designFeedbackStepIndex = steps.findIndex((s) => s.id === 'design-feedback');
 
+  if (mode === 'login') {
+    return (
+      <div className="min-h-screen bg-[#FDFCF8] text-gray-900 font-sans flex flex-col">
+        <header className="w-full pt-8 pb-4 px-6 flex justify-center">
+          <h1 className="text-2xl font-medium text-gray-900">登录</h1>
+        </header>
+        <main className="flex-1">
+          <LoginPage
+            onSuccess={() => setMode('projects')}
+            onBack={() => setMode('form')}
+          />
+        </main>
+      </div>
+    );
+  }
+
+  if (mode === 'projects') {
+    return (
+      <div className="min-h-screen bg-[#FDFCF8] text-gray-900 font-sans flex flex-col">
+        <header className="w-full pt-8 pb-4 px-6 flex justify-center">
+          <h1 className="text-2xl font-medium text-gray-900">我的项目</h1>
+        </header>
+        <main className="flex-1">
+          <ProjectPage
+            onSelectProject={(project) => {
+              setSelectedProject({ id: project.id, name: project.name });
+              setMode('workbench');
+            }}
+            onBack={() => setMode('login')}
+          />
+        </main>
+      </div>
+    );
+  }
+
   if (mode === 'workbench') {
     const userDisplayName = `${data.userName || '用户'}${data.userTitle || ''}`.trim()
+    const projectName = selectedProject?.name ?? (data.projectName || data.projectLocation || '')
     return (
       <WorkbenchPage
         userDisplayName={userDisplayName}
-        projectName={data.projectName || data.projectLocation || ''}
+        projectName={projectName}
         contractAccepted={data.contractAccepted}
         contractSignatureData={data.contractSignatureData}
         contractCustomText={data.contractCustomText}
@@ -152,6 +191,11 @@ export default function App() {
         onGoToFirstPage={() => {
           setMode('form')
           setCurrentStepIndex(0)
+          setSelectedProject(null)
+        }}
+        onBackToProjects={() => {
+          setMode('projects')
+          setSelectedProject(null)
         }}
         onGoToDesignFeedback={() => {
           setMode('form')
@@ -443,6 +487,7 @@ export default function App() {
             prevStep={prevStep}
             goToStep={goToStep}
             goToWorkbench={() => setMode('workbench')}
+            goToLogin={() => setMode('login')}
           />
         </AnimatePresence>
       </main>

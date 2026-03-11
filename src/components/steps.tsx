@@ -23,6 +23,7 @@ interface StepProps {
   nextStep: () => void;
   goToStep?: (stepId: string) => void;
   goToWorkbench?: () => void;
+  goToLogin?: () => void;
 }
 
 type HouseType = '新房' | '二手房' | '老房翻新' | string;
@@ -44,7 +45,7 @@ const updateHouseTypeWithConditionGuard = (
   updateData({ houseType: nextHouseType, houseCondition: nextCondition });
 };
 
-export const StepWelcome = ({ nextStep, goToStep, goToWorkbench }: StepProps) => (
+export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: StepProps) => (
   <StepWrapper noCard>
     <div className="flex flex-col items-center justify-center py-10 min-h-[70vh]">
       <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
@@ -133,7 +134,7 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench }: StepProps) =>
           </div>
           <button
             type="button"
-            onClick={() => goToWorkbench?.()}
+            onClick={() => (goToLogin ?? goToWorkbench)?.()}
             className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#302E2B] px-4 py-3 text-sm font-medium text-white hover:bg-black transition-colors active:scale-[0.99]"
           >
             进入我的首页
@@ -1914,7 +1915,7 @@ export const Step20 = ({ data, updateData }: StepProps) => {
   );
 };
 
-export const Step21 = ({ data, updateData, goToWorkbench }: StepProps) => {
+export const Step21 = ({ data, updateData, goToWorkbench, goToLogin }: StepProps) => {
   const [showModal, setShowModal] = React.useState(false);
   const MY_HOME_URL = import.meta.env.VITE_MY_HOME_URL || import.meta.env.VITE_APP_HOME_URL || '/';
   const options = [
@@ -1992,7 +1993,8 @@ export const Step21 = ({ data, updateData, goToWorkbench }: StepProps) => {
                 type="button"
                 onClick={() => {
                   setShowModal(false);
-                  if (goToWorkbench) goToWorkbench();
+                  if (goToLogin) goToLogin();
+                  else if (goToWorkbench) goToWorkbench();
                   else window.location.assign(MY_HOME_URL);
                 }}
                 className="flex-1 px-5 py-2 rounded-xl bg-[#302E2B] text-white text-sm font-medium hover:bg-black transition-colors"

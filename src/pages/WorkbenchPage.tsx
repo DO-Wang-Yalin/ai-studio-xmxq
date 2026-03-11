@@ -44,6 +44,8 @@ import {
   Utensils,
   Archive,
   Compass,
+  ArrowLeftRight,
+  Search,
 } from 'lucide-react'
 import { DesignFeedbackApp } from '../pages/DesignFeedbackApp'
 import BudgetSankey from '../components/BudgetSankey'
@@ -59,6 +61,8 @@ export interface WorkbenchPageProps {
   contractCustomText?: string
   onExit?: () => void
   onGoToFirstPage?: () => void
+  /** 返回项目列表（从项目页进入工作台时使用） */
+  onBackToProjects?: () => void
   onGoToDesignFeedback?: () => void
 }
 
@@ -70,6 +74,7 @@ export function WorkbenchPage({
   contractCustomText,
   onExit,
   onGoToFirstPage,
+  onBackToProjects,
   onGoToDesignFeedback,
 }: WorkbenchPageProps) {
   const [active, setActive] = React.useState<NavKey>('home')
@@ -117,15 +122,14 @@ export function WorkbenchPage({
   const hasSignedContract = !!contractAccepted && !!contractSignatureData
 
   const navItems: Array<{ key: NavKey; label: string; icon: React.ElementType }> = [
-    { key: 'home', label: '首页', icon: Home },
+    { key: 'home', label: '项目首页', icon: Home },
     { key: 'requirements', label: '项目需求书', icon: FileText },
     { key: 'budget', label: '项目预算', icon: PieChart },
     { key: 'orders', label: '项目订单', icon: ShoppingCart },
-    { key: 'designFeedback', label: '设计反馈', icon: Sparkles },
-    { key: 'contracts', label: '我的合同', icon: ScrollText },
+    { key: 'contracts', label: '项目合同', icon: ScrollText },
   ]
 
-  const activeLabel = navItems.find((n) => n.key === active)?.label || '首页'
+  const activeLabel = navItems.find((n) => n.key === active)?.label || '项目首页'
 
   const startResize = (e: React.MouseEvent) => {
     if (sidebarCollapsed) return
@@ -154,7 +158,7 @@ export function WorkbenchPage({
         <div className="px-5">
           <button
             type="button"
-            onClick={onGoToFirstPage}
+            onClick={onBackToProjects ?? onGoToFirstPage}
             className="flex items-center gap-3 px-2 text-left rounded-2xl hover:bg-black/5 transition-colors py-2 -my-2"
           >
             <img src={logoImg} alt="DSPHR Workspace" className="h-10 w-auto object-contain" />
@@ -231,22 +235,25 @@ export function WorkbenchPage({
               >
                 <Home size={18} />
               </button>
-              <div className="min-w-0">
-                <div className="text-xs text-gray-500">当前项目</div>
-                <div className="text-base font-semibold truncate">{currentProjectName}</div>
+              <div className="min-w-0 flex items-center gap-2">
+                <div className="min-w-0">
+                  <div className="text-xs text-gray-500">当前项目</div>
+                  <div className="text-base font-semibold truncate">{currentProjectName}</div>
+                </div>
+                {onBackToProjects && (
+                  <button
+                    type="button"
+                    onClick={onBackToProjects}
+                    className="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+                    title="切换项目"
+                  >
+                    <ArrowLeftRight size={18} />
+                  </button>
+                )}
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setSidebarCollapsed((v) => !v)}
-                className="hidden md:inline-flex w-10 h-10 items-center justify-center rounded-2xl bg-white border border-gray-100 shadow-sm text-gray-600 hover:bg-gray-50 transition-colors"
-                title={sidebarCollapsed ? '展开导航' : '收起导航'}
-              >
-                {sidebarCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-              </button>
-
               <button
                 type="button"
                 className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -348,6 +355,8 @@ export function WorkbenchPage({
                 ownerDisplayName={displayName}
                 onBackHome={() => setActive('home')}
               />
+            ) : active === 'orders' ? (
+              <OrderManagementSection onGoToDesignFeedback={() => setActive('designFeedback')} />
             ) : active === 'budget' ? (
               <BudgetConfirmPanel />
             ) : active === 'contracts' ? (
@@ -368,6 +377,141 @@ export function WorkbenchPage({
           </div>
         </div>
       </main>
+    </div>
+  )
+}
+
+const ORDER_MOCK_DATA = [
+    {
+      id: 'PSO-OD_LHJCF-00471',
+      projectId: 'PRJ7_X-B49-T4-LHJCF',
+      title: '瓷砖铺贴-公卫、次卫、厨房墙地铺贴',
+      status: '511-订单已交付',
+      statusColor: 'emerald' as const,
+      contains: '详细报价单、施工方案',
+      date: '2025-10-24',
+      amount: '¥57,500',
+    },
+    {
+      id: 'PSO-OD_LHJCF-00567',
+      projectId: 'PRJ7_X-B49-T4-LHJCF',
+      title: '全屋-石材安装',
+      status: '500-意向报价中',
+      statusColor: 'gray' as const,
+      contains: '意向利岩板、大金空调选型',
+      date: '2025-10-26',
+      amount: '待定',
+    },
+    {
+      id: 'PSO-OD_LHJCF-00612',
+      projectId: 'PRJ7_X-B49-T4-LHJCF',
+      title: '橱柜柜体定制',
+      status: '505-客户决策中',
+      statusColor: 'gray' as const,
+      contains: '工程进场筹备、材料下单',
+      date: '2025-10-28',
+      amount: '¥32,800',
+    },
+    {
+      id: 'PSO-OD_LHJCF-00623',
+      projectId: 'PRJ7_X-B49-T4-LHJCF',
+      title: '一层、负一层-天花吊顶',
+      status: '506-订单交付中',
+      statusColor: 'blue' as const,
+      contains: '单层泥水工程、基层处理',
+      date: '2025-10-30',
+      amount: '¥18,900',
+    },
+  ] as const
+
+function OrderManagementSection({ onGoToDesignFeedback }: { onGoToDesignFeedback?: () => void }) {
+  const [searchQuery, setSearchQuery] = React.useState('')
+
+  const filteredOrders = React.useMemo(() => {
+    const q = searchQuery.trim().toLowerCase()
+    if (!q) return [...ORDER_MOCK_DATA]
+    return ORDER_MOCK_DATA.filter(
+      (o) =>
+        o.title.toLowerCase().includes(q) || o.id.toLowerCase().includes(q)
+    )
+  }, [searchQuery])
+
+  const statusBarColors: Record<string, string> = {
+    emerald: 'bg-emerald-500',
+    gray: 'bg-gray-400',
+    blue: 'bg-blue-500',
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* 顶部：标题 */}
+      <h1 className="text-xl font-semibold text-gray-900">订单管理</h1>
+
+      {/* 搜索 */}
+      <div className="relative">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="搜索订单标题、订单编号"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+        />
+      </div>
+
+      {/* 订单列表 */}
+      <div className="space-y-0 divide-y divide-gray-100 bg-white border border-gray-100 rounded-2xl overflow-hidden">
+        {filteredOrders.map((order) => (
+          <div
+            key={order.id}
+            className="flex gap-4 py-5 px-4 hover:bg-gray-50/50 transition-colors group"
+          >
+            {/* 左侧状态色条 */}
+            <div className={`w-1 rounded-full shrink-0 self-stretch min-h-[60px] ${statusBarColors[order.statusColor]}`} />
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                <div className="min-w-0">
+                  <span
+                    className={`inline-block px-2.5 py-1 rounded-lg text-xs font-medium mb-1.5 ${
+                      order.statusColor === 'emerald'
+                        ? 'bg-emerald-50 text-emerald-700'
+                        : order.statusColor === 'blue'
+                          ? 'bg-blue-50 text-blue-700'
+                          : 'bg-gray-100 text-gray-700'
+                    }`}
+                  >
+                    {order.status}
+                  </span>
+                  <div className="text-xs text-gray-500 mb-0.5">{order.projectId}</div>
+                  <div className="font-semibold text-gray-900 truncate">
+                    {order.id} · {order.title}
+                  </div>
+                  <div className="text-sm text-gray-600 mt-1">包含: {order.contains}</div>
+                </div>
+                <div className="flex flex-col items-end shrink-0 text-right">
+                  <div className="text-sm text-gray-600">{order.date}</div>
+                  <div className="text-base font-semibold text-gray-900 mt-1">
+                    {order.amount}
+                  </div>
+                  {onGoToDesignFeedback && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onGoToDesignFeedback()
+                      }}
+                      className="mt-2 inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#F39A25] text-white hover:bg-[#E08820] transition-colors"
+                    >
+                      查看设计反馈
+                      <ChevronRight size={14} />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -541,13 +685,13 @@ function ComingSoon({ title, onBackHome }: { title: string; onBackHome: () => vo
           <Construction size={22} />
         </div>
         <h2 className="mt-5 text-xl font-semibold">{title}</h2>
-        <p className="mt-2 text-sm text-gray-600 leading-relaxed">功能开发中，敬请期待；你可以先返回首页查看工作台概览。</p>
+        <p className="mt-2 text-sm text-gray-600 leading-relaxed">功能开发中，敬请期待；你可以先返回项目首页查看工作台概览。</p>
         <button
           type="button"
           onClick={onBackHome}
           className="mt-6 inline-flex items-center justify-center rounded-2xl bg-[#F39A25] text-white font-semibold px-6 py-3 hover:brightness-95 active:scale-[0.99] transition"
         >
-          返回首页
+          返回项目首页
           <ChevronRight size={18} className="ml-1" />
         </button>
       </div>
@@ -573,7 +717,7 @@ function ContractsSection({
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <span className="w-1 h-4 rounded-full bg-[#D84936]" />
-          <h2 className="text-lg font-semibold">我的合同</h2>
+          <h2 className="text-lg font-semibold">项目合同</h2>
         </div>
       </div>
 
