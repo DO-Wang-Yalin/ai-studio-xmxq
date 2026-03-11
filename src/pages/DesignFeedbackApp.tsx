@@ -87,6 +87,7 @@ export interface OrderVersion {
 export interface DesignOrder {
   id: string;
   orderNumber: string;
+  orderName: string;
   clientName: string;
   currentVersionId?: string;
   versions: OrderVersion[];
@@ -95,7 +96,8 @@ export interface DesignOrder {
 // --- Mock Data（完整还原原项目） ---
 export const DESIGN_FEEDBACK_ORDER: DesignOrder = {
   id: 'order-101',
-  orderNumber: 'EPC-2024-001',
+  orderNumber: 'PSO-OD_LHJCF-00471',
+  orderName: '瓷砖铺贴-公卫、次卫、厨房墙地铺贴',
   clientName: '张先生',
   currentVersionId: 'v3',
   versions: [
@@ -395,7 +397,7 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
 
       {/* Left Column: Annotations */}
       <div className="w-1/5 flex flex-col gap-4 z-20 relative">
-        <div className="flex-none bg-slate-800 text-white rounded-xl p-3 text-center shadow-sm z-40 relative">
+        <div className="flex-none bg-[#4887FF] text-white rounded-xl p-3 text-center shadow-sm z-40 relative">
           <h2 className="text-xs font-bold tracking-wide">设计注释 (历史)</h2>
         </div>
         <div
@@ -413,7 +415,7 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
                 hoveredId === anno.id ? 'border-slate-400 ring-1 ring-slate-500/10' : 'border-white',
               )}
             >
-              <div className="absolute -left-2 -top-2 w-5 h-5 bg-slate-700 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md border border-white z-50">
+              <div className="absolute -left-2 -top-2 w-5 h-5 bg-[#4887FF] text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md border border-white z-50">
                 {anno.targetType === 'text_description' ? (
                   <TextQuote className="w-2.5 h-2.5" />
                 ) : (
@@ -466,7 +468,7 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
                   onMouseLeave={() => setHoveredId(null)}
                   className={cn(
                     'absolute w-4 h-4 rounded-full border border-white shadow-md -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-transform cursor-pointer z-50',
-                    hoveredId === anno.id ? 'bg-slate-800 scale-125' : 'bg-slate-700',
+                    hoveredId === anno.id ? 'bg-[#4887FF] scale-125' : 'bg-[#4887FF]/80',
                   )}
                   style={{ left: `${anno.point?.x}%`, top: `${anno.point?.y}%` }}
                 >
@@ -483,7 +485,7 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
                   onMouseLeave={() => setHoveredId(null)}
                   className={cn(
                     'absolute w-4 h-4 rounded-full border border-white shadow-md -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-transform cursor-pointer z-50',
-                    hoveredId === comment.id ? 'bg-[#EF6B00] scale-125' : 'bg-[#FFCE42]',
+                    hoveredId === comment.id ? 'bg-[#EF6B00] scale-125' : 'bg-[#FF9C3E]',
                   )}
                   style={{ left: `${comment.point?.x}%`, top: `${comment.point?.y}%` }}
                 >
@@ -496,7 +498,7 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
 
       {/* Right Column: Customer Comments */}
       <div className="w-1/5 flex flex-col gap-4 z-20 relative">
-        <div className="flex-none bg-[#FFCE42] text-white rounded-xl p-3 text-center shadow-sm flex items-center justify-between px-4 z-40 relative">
+        <div className="flex-none bg-[#FF9C3E] text-white rounded-xl p-3 text-center shadow-sm flex items-center justify-between px-4 z-40 relative">
           <span className="text-xs font-bold tracking-wide">客户反馈</span>
           {snapshot.comments.length === 0 && <span className="text-[10px] opacity-80">无反馈</span>}
         </div>
@@ -512,10 +514,10 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
               onMouseLeave={() => setHoveredId(null)}
               className={cn(
                 'bg-white border shadow-sm rounded-xl p-3 relative transition-all mx-1',
-                hoveredId === comment.id ? 'border-[#FFCE42]/60 ring-1 ring-[#FFCE42]/15' : 'border-white',
+                hoveredId === comment.id ? 'border-[#FF9C3E]/60 ring-1 ring-[#FF9C3E]/15' : 'border-white',
               )}
             >
-              <div className="absolute -right-2 -top-2 w-5 h-5 bg-[#FFCE42] text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md border border白 z-50">
+              <div className="absolute -right-2 -top-2 w-5 h-5 bg-[#FF9C3E] text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-md border border白 z-50">
                 {comment.targetType === 'text_description' ? (
                   <TextQuote className="w-2.5 h-2.5" />
                 ) : (
@@ -539,6 +541,7 @@ function HistorySnapshotViewer({ snapshot }: { snapshot: PageSnapshot }) {
 
 // 2. Page Viewer Component（完整交互版，带图纸打点）
 function PageViewer({
+  order,
   version,
   initialPageIndex,
   onBack,
@@ -548,6 +551,7 @@ function PageViewer({
   onUpdateProgress,
   initialMaxReachedIndex,
 }: {
+  order: DesignOrder;
   version: OrderVersion;
   initialPageIndex: number;
   onBack: () => void;
@@ -850,9 +854,21 @@ function PageViewer({
       ref={containerRef}
       className="h-[calc(100vh-120px)] w-full overflow-hidden bg-[#FFFDF3] font-sans flex flex-col relative rounded-3xl border border-gray-100 shadow-[0_12px_40px_rgba(15,23,42,0.08)]"
     >
+      {/* 订单标题栏 */}
+      <div className="flex-shrink-0 px-6 py-3 bg-white/60 backdrop-blur-md border-b border-gray-100 flex items-center justify-between gap-4 z-50">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-sm font-semibold text-slate-800 truncate">
+            {order.orderNumber}
+            <span className="text-slate-400 font-normal mx-2">·</span>
+            {order.orderName}
+          </span>
+        </div>
+        <span className="text-xs text-slate-500 flex-shrink-0">{version.name}</span>
+      </div>
+
       {/* 背景渐变 */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-200/40 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-200/40 blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#60DFF6]/25 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#4887FF]/20 blur-[120px] pointer-events-none" />
 
       {/* 连线层 */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none z-40">
@@ -877,7 +893,7 @@ function PageViewer({
             </button>
             <button
               onClick={onBack}
-              className="px-8 py-3.5 bg-slate-800 text-white rounded-full font-medium hover:bg-slate-900 transition-all flex items-center gap-2 shadow-md hover:shadow-lg"
+              className="px-8 py-3.5 bg-[#FF9C3E] text-white rounded-full font-medium hover:bg-[#EF6B00] transition-all flex items-center gap-2 shadow-md hover:shadow-lg"
             >
               <LayoutGrid className="w-4 h-4" /> 返回订单总览
             </button>
@@ -890,7 +906,7 @@ function PageViewer({
             <div className="flex items-center justify-start gap-2 px-1">
               <button
                 onClick={onBack}
-                className="px-3 py-1.5 bg-white/60 backdrop-blur-md border border-white/50 text-slate-700 hover:text-indigo-600 hover:bg-white rounded-full text-xs font-medium shadow-sm flex items-center gap-1.5 transition-all"
+                className="px-3 py-1.5 bg-white/60 backdrop-blur-md border border-white/50 text-slate-700 hover:text-[#4887FF] hover:bg-white rounded-full text-xs font-medium shadow-sm flex items-center gap-1.5 transition-all"
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
                 <span>返回总览</span>
@@ -919,7 +935,7 @@ function PageViewer({
                       hoveredId === anno.id ? 'border-slate-400 ring-2 ring-slate-500/10' : 'border-white',
                     )}
                   >
-                    <div className="absolute -left-3 -top-3 w-7 h-7 bg-slate-700 text-white rounded-full flex items-center justify-center text-xs font-bold shadow-md border-2 border-white">
+                    <div className="absolute -left-3 -top-3 w-7 h-7 bg-[#4887FF] text-white rounded-full flex items-center justify-center text-xs font-bold shadow-md border-2 border-white">
                       {anno.targetType === 'text_description' ? (
                         <TextQuote className="w-3.5 h-3.5" />
                       ) : (
@@ -973,7 +989,7 @@ function PageViewer({
               <div
                 className={cn(
                   'absolute inset-0 bg-white/60 backdrop-blur-2xl rounded-3xl border shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 -z-10',
-                  isAddingCommentToImage && !isPageLocked ? 'border-[#FFCE42]/70 ring-4 ring-[#FFCE42]/20' : 'border-white/80',
+                  isAddingCommentToImage && !isPageLocked ? 'border-[#FF9C3E]/70 ring-4 ring-[#FF9C3E]/20' : 'border-white/80',
                 )}
               />
 
@@ -1010,7 +1026,7 @@ function PageViewer({
                     onMouseLeave={() => setHoveredId(null)}
                     className={cn(
                       'marker-dot absolute w-5 h-5 rounded-full border-[2.5px] border-white shadow-md -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-transform cursor-pointer',
-                      hoveredId === anno.id ? 'bg-slate-800 scale-125 z-[60]' : 'bg-slate-700 z-50',
+                      hoveredId === anno.id ? 'bg-[#4887FF] scale-125 z-[60]' : 'bg-[#4887FF]/80 z-50',
                     )}
                     style={{ left: `${anno.point?.x}%`, top: `${anno.point?.y}%` }}
                   >
@@ -1028,8 +1044,8 @@ function PageViewer({
                     className={cn(
                       'marker-dot absolute w-5 h-5 rounded-full border-[2.5px] border-white shadow-md -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-transform cursor-pointer',
                       hoveredId === comment.id
-                        ? 'bg-gradient-to-br from-[#EF6B00] to-[#FFCE42] scale-125 z-[60]'
-                        : 'bg-gradient-to-br from-[#FFCE42] to-[#EF6B00] z-50',
+                        ? 'bg-gradient-to-br from-[#EF6B00] to-[#FF9C3E] scale-125 z-[60]'
+                        : 'bg-gradient-to-br from-[#FF9C3E] to-[#EF6B00] z-50',
                     )}
                     style={{ left: `${comment.point?.x}%`, top: `${comment.point?.y}%` }}
                   >
@@ -1088,7 +1104,7 @@ function PageViewer({
                       'p-2 rounded-xl transition-all text-sm font-medium flex items-center gap-1 shadow-sm',
                       isAddingCommentToImage
                         ? 'bg-slate-100 text-slate-600 border border-slate-200'
-                        : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-100',
+                        : 'bg-[#4887FF]/10 text-[#4887FF] hover:bg-[#4887FF]/20 border border-[#4887FF]/30',
                     )}
                   >
                     {isAddingCommentToImage ? '取消标注' : '图纸打点'}
@@ -1109,9 +1125,9 @@ function PageViewer({
                     className={cn(
                       'backdrop-blur-md border shadow-sm rounded-2xl p-4 relative transition-all hover:shadow-md',
                       editingCommentIds.has(comment.id)
-                        ? 'bg-white/90 border-indigo-200 ring-2 ring-indigo-500/10'
+                        ? 'bg-white/90 border-[#4887FF]/40 ring-2 ring-[#4887FF]/20'
                         : hoveredId === comment.id
-                          ? 'bg-white/90 border-indigo-300 ring-2 ring-indigo-500/10'
+                          ? 'bg-white/90 border-[#4887FF]/50 ring-2 ring-[#4887FF]/25'
                           : 'bg-white/80 border-white',
                       isPageLocked && 'opacity-90 grayscale-[20%]',
                     )}
@@ -1121,7 +1137,7 @@ function PageViewer({
                         'absolute -right-3 -top-3 w-7 h-7 text-white rounded-full flex items-center justify-center text-xs font-bold shadow-md border-2 border-white',
                         isPageLocked
                           ? 'bg-slate-400'
-                          : 'bg-gradient-to-br from-indigo-500 to-purple-500',
+                          : 'bg-[#FF9C3E]',
                       )}
                     >
                       {comment.targetType === 'text_description' ? (
@@ -1152,11 +1168,11 @@ function PageViewer({
                           value={comment.content}
                           onChange={(e) => updateComment(comment.id, e.target.value)}
                           placeholder="请输入您的修改意见..."
-                          className="w-full text-sm p-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300 resize-none h-24 transition-all"
+                          className="w-full text-sm p-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9C3E]/30 focus:border-[#FF9C3E]/50 resize-none h-24 transition-all"
                         />
                         <button
                           onClick={() => saveComment(comment.id)}
-                          className="bg-slate-800 text-white text-xs py-2 rounded-xl font-medium hover:bg-slate-900 transition-all shadow-sm"
+                          className="bg-[#FF9C3E] text-white text-xs py-2 rounded-xl font-medium hover:bg-[#EF6B00] transition-all shadow-sm"
                         >
                           确认保存
                         </button>
@@ -1213,7 +1229,7 @@ function PageViewer({
           {!readOnly && (
             <button
               onClick={goToNextPage}
-              className="px-8 py-3.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full font-medium hover:opacity-90 transition-all flex items-center gap-2 shadow-[0_8px_30px_rgba(99,102,241,0.3)] hover:shadow-[0_8px_30px_rgba(99,102,241,0.4)]"
+              className="px-8 py-3.5 bg-gradient-to-r from-[#FF9C3E] to-[#EF6B00] text-white rounded-full font-medium hover:opacity-90 transition-all flex items-center gap-2 shadow-[0_8px_30px_rgba(255,156,62,0.3)] hover:shadow-[0_8px_30px_rgba(255,156,62,0.4)]"
             >
               {currentPageIndex === version.pages.length - 1 ? '满意并提交' : '满意 😄'}
             </button>
@@ -1248,7 +1264,7 @@ function PageViewer({
               </button>
               <button
                 onClick={goToNextPage}
-                className="px-5 py-2.5 text-sm font-medium bg-slate-800 text-white hover:bg-slate-900 rounded-xl transition-all shadow-md"
+                className="px-5 py-2.5 text-sm font-medium bg-[#FF9C3E] text-white hover:bg-[#EF6B00] rounded-xl transition-all shadow-md"
               >
                 挺满意的，下一页
               </button>
@@ -1426,10 +1442,15 @@ function DesignOverview({
 
   return (
     <div className="w-full flex flex-col items-center justify-center py-8">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-slate-800 mb-2">订单总览</h1>
-        <p className="text-slate-500 text-sm">
-          {order.clientName} 的订单包含 {order.versions.length} 个版本
+      <div className="w-full max-w-4xl mb-6">
+        <div className="text-sm font-medium text-slate-600 mb-1">订单总览</div>
+        <h1 className="text-xl font-bold text-slate-800 tracking-tight">
+          {order.orderNumber}
+          <span className="text-slate-400 font-normal mx-2">·</span>
+          {order.orderName}
+        </h1>
+        <p className="text-slate-500 text-xs mt-2">
+          {order.clientName} · {order.versions.length} 个版本
         </p>
       </div>
 
@@ -1447,7 +1468,7 @@ function DesignOverview({
 
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-3">
-            <div className="bg-slate-900 text-white px-3 py-1 rounded-full text-sm font-bold">
+            <div className="bg-[#FF9C3E] text-white px-3 py-1 rounded-full text-sm font-bold">
               {activeVersion.name.split(' ')[0]}
             </div>
             <span className="text-slate-600 font-medium">进行中</span>
@@ -1487,7 +1508,7 @@ function DesignOverview({
         <div className="flex justify-center">
           <button
             onClick={() => onStartView(activeVersion.id)}
-            className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-10 py-3.5 rounded-full font-medium shadow-lg shadow-indigo-200 hover:shadow-xl hover:scale-105 transition-all flex items-center gap-2"
+            className="bg-gradient-to-r from-[#FF9C3E] to-[#EF6B00] text-white px-10 py-3.5 rounded-full font-medium shadow-lg shadow-[#FF9C3E]/30 hover:shadow-xl hover:scale-105 transition-all flex items-center gap-2"
           >
             继续查看 <ChevronRight className="w-4 h-4" />
           </button>
@@ -1600,6 +1621,7 @@ export function DesignFeedbackApp({ onGoHome }: { onGoHome?: () => void }) {
 
       {currentView === 'viewer' && activeVersionId && (
         <PageViewer
+          order={DESIGN_FEEDBACK_ORDER}
           version={ORDER_VERSIONS.find((v) => v.id === activeVersionId)!}
           initialPageIndex={0}
           onBack={handleBackToOverview}

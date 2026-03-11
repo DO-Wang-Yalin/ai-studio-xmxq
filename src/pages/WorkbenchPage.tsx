@@ -11,8 +11,7 @@ import {
   BarChart3,
   Package,
   Construction,
-  PanelLeftClose,
-  PanelLeftOpen,
+  ChevronsLeftRight,
   LayoutGrid,
   Users,
   Sparkles,
@@ -173,7 +172,7 @@ export function WorkbenchPage({
               className="w-9 h-9 inline-flex items-center justify-center rounded-xl text-gray-600 hover:bg-black/5 transition-colors"
               title={sidebarCollapsed ? '展开导航' : '收起导航'}
             >
-              {sidebarCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+              <ChevronsLeftRight size={18} />
             </button>
           </div>
         </div>
@@ -188,11 +187,11 @@ export function WorkbenchPage({
                 type="button"
                 onClick={() => setActive(item.key)}
                 className={`w-full flex items-center gap-3 px-3 py-3 rounded-2xl text-sm transition-colors ${
-                  isActive ? 'bg-[#FFCE42]/10 text-gray-900' : 'text-gray-600 hover:bg-black/5'
+                  isActive ? 'bg-[#FF9C3E]/10 text-gray-900' : 'text-gray-600 hover:bg-black/5'
                 }`}
                 title={sidebarCollapsed ? item.label : undefined}
               >
-                <Icon size={18} className={isActive ? 'text-[#FFCE42]' : 'text-gray-400'} />
+                <Icon size={18} className={isActive ? 'text-[#FF9C3E]' : 'text-gray-400'} />
                 {!sidebarCollapsed && <span className="font-medium">{item.label}</span>}
               </button>
             )
@@ -215,7 +214,7 @@ export function WorkbenchPage({
         {!sidebarCollapsed && (
           <div
             onMouseDown={startResize}
-            className="absolute top-0 right-0 h-full w-2 cursor-col-resize hover:bg-[#FFCE42]/10 transition-colors"
+            className="absolute top-0 right-0 h-full w-2 cursor-col-resize hover:bg-[#FF9C3E]/10 transition-colors"
             title="拖拽调整宽度"
           />
         )}
@@ -230,7 +229,7 @@ export function WorkbenchPage({
               <button
                 type="button"
                 onClick={onGoToFirstPage}
-                className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center shrink-0 hover:bg-[#FFCE42]/15 transition"
+                className="w-9 h-9 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center shrink-0 hover:bg-[#FF9C3E]/15 transition"
                 title="返回第一页"
               >
                 <Home size={18} />
@@ -258,7 +257,7 @@ export function WorkbenchPage({
                 type="button"
                 className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                <span className="w-8 h-8 rounded-full bg-[#FFCE42]/10 flex items-center justify-center text-[#C87800] font-semibold">
+                <span className="w-8 h-8 rounded-full bg-[#FF9C3E]/10 flex items-center justify-center text-[#C87800] font-semibold">
                   {displayName.slice(0, 1)}
                 </span>
                 <span className="font-medium">{displayName}</span>
@@ -289,12 +288,12 @@ export function WorkbenchPage({
                   <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
                       <div className="flex items-start gap-4 min-w-0">
-                        <div className="w-12 h-12 rounded-2xl bg-[#FFCE42]/10 flex items-center justify-center text-[#FFCE42] shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-[#FF9C3E]/10 flex items-center justify-center text-[#FF9C3E] shrink-0">
                           <Wrench size={20} />
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-xs font-semibold text-[#C87800] bg-[#FFCE42]/10 px-2 py-0.5 rounded-full">
+                            <span className="text-xs font-semibold text-[#C87800] bg-[#FF9C3E]/10 px-2 py-0.5 rounded-full">
                               待确认
                             </span>
                           </div>
@@ -308,7 +307,7 @@ export function WorkbenchPage({
                       <button
                         type="button"
                         onClick={() => setActive('designFeedback')}
-                        className="md:w-[220px] w-full inline-flex items-center justify-center rounded-2xl bg-[#FFCE42] text-white font-semibold py-3 hover:brightness-95 active:scale-[0.99] transition"
+                        className="md:w-[220px] w-full inline-flex items-center justify-center rounded-2xl bg-[#FF9C3E] text-white font-semibold py-3 hover:brightness-95 active:scale-[0.99] transition"
                       >
                         立即处理
                         <ChevronRight size={18} className="ml-1" />
@@ -500,7 +499,7 @@ function OrderManagementSection({ onGoToDesignFeedback }: { onGoToDesignFeedback
                         e.stopPropagation()
                         onGoToDesignFeedback()
                       }}
-                      className="mt-2 inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#FFCE42] text-white hover:bg-[#EF6B00] transition-colors"
+                      className="mt-2 inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#FF9C3E] text-white hover:bg-[#EF6B00] transition-colors"
                     >
                       查看设计反馈
                       <ChevronRight size={14} />
@@ -660,7 +659,7 @@ function FeatureCard({
 }) {
   return (
     <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 flex flex-col">
-      <div className="w-12 h-12 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
+      <div className="w-12 h-12 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center">
         {icon}
       </div>
       <h3 className="mt-4 text-base font-semibold">{title}</h3>
@@ -668,7 +667,7 @@ function FeatureCard({
       <button
         type="button"
         onClick={onClick}
-        className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#FFCE42] hover:underline underline-offset-4"
+        className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#FF9C3E] hover:underline underline-offset-4"
       >
         {action}
         <ChevronRight size={16} />
@@ -681,7 +680,7 @@ function ComingSoon({ title, onBackHome }: { title: string; onBackHome: () => vo
   return (
     <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-10 md:p-14">
       <div className="max-w-md mx-auto text-center">
-        <div className="mx-auto w-14 h-14 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
+        <div className="mx-auto w-14 h-14 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center">
           <Construction size={22} />
         </div>
         <h2 className="mt-5 text-xl font-semibold">{title}</h2>
@@ -689,7 +688,7 @@ function ComingSoon({ title, onBackHome }: { title: string; onBackHome: () => vo
         <button
           type="button"
           onClick={onBackHome}
-          className="mt-6 inline-flex items-center justify-center rounded-2xl bg-[#FFCE42] text-white font-semibold px-6 py-3 hover:brightness-95 active:scale-[0.99] transition"
+          className="mt-6 inline-flex items-center justify-center rounded-2xl bg-[#FF9C3E] text-white font-semibold px-6 py-3 hover:brightness-95 active:scale-[0.99] transition"
         >
           返回项目首页
           <ChevronRight size={18} className="ml-1" />
@@ -723,8 +722,8 @@ function ContractsSection({
 
       <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 md:p-7 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div className="min-w-0 space-y-2">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#FFCE42]/10 px-3 py-1">
-            <ScrollText size={14} className="text-[#FFCE42]" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#FF9C3E]/10 px-3 py-1">
+            <ScrollText size={14} className="text-[#FF9C3E]" />
             <span className="text-xs font-semibold text-[#C87800]">项目服务框架协议</span>
           </div>
           <div className="text-base md:text-lg font-semibold text-gray-900 truncate">
@@ -1015,12 +1014,12 @@ function RequirementsDoc({
           </div>
           {!isEditing ? (
             <div className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-gray-100 bg-white px-3 py-2 text-xs text-gray-600">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FFCE42]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF9C3E]" />
               当前为只读状态；如需修改，请点击底部「编辑」。
             </div>
           ) : (
-            <div className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-[#FFCE42]/20 bg-[#FFCE42]/10 px-3 py-2 text-xs font-semibold text-[#C87800]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FFCE42]" />
+            <div className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-[#FF9C3E]/20 bg-[#FF9C3E]/10 px-3 py-2 text-xs font-semibold text-[#C87800]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF9C3E]" />
               编辑模式已开启
             </div>
           )}
@@ -1036,7 +1035,7 @@ function RequirementsDoc({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
+              <span className="w-9 h-9 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center">
                 <FileText size={18} />
               </span>
               <div className="min-w-0">
@@ -1070,7 +1069,7 @@ function RequirementsDoc({
               {statusCards.map((c) => (
                 <div key={c.title} className="rounded-2xl border border-gray-100 bg-[#FFFDF3] p-5">
                   <div className="flex items-center gap-3">
-                    <span className="w-10 h-10 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#FFCE42]">
+                    <span className="w-10 h-10 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#FF9C3E]">
                       <c.icon size={18} />
                     </span>
                     <div className="min-w-0">
@@ -1092,7 +1091,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2 min-w-0">
-                <span className="w-10 h-10 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center shrink-0">
+                <span className="w-10 h-10 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center shrink-0">
                   <ImageIcon size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1153,7 +1152,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2 min-w-0">
-                <span className="w-10 h-10 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center shrink-0">
+                <span className="w-10 h-10 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center shrink-0">
                   <Video size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1238,7 +1237,7 @@ function RequirementsDoc({
               key={`${p.name}-${p.age}`}
               className="shrink-0 inline-flex items-center gap-2 rounded-full bg-white border border-gray-100 shadow-sm px-3 py-2 text-xs"
             >
-              <span className="w-6 h-6 rounded-full bg-[#FFCE42]/10 text-[#C87800] flex items-center justify-center font-bold">
+              <span className="w-6 h-6 rounded-full bg-[#FF9C3E]/10 text-[#C87800] flex items-center justify-center font-bold">
                 {p.name.slice(0, 1)}
               </span>
               <span className="font-semibold text-gray-800">{p.name}</span>
@@ -1268,7 +1267,7 @@ function RequirementsDoc({
                     <div className="mt-2">
                       <span
                         className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                          p.accent === 'amber' ? 'bg-[#FFCE42]/10 text-[#C87800]' : 'bg-[#EF6B00]/5 text-gray-700'
+                          p.accent === 'amber' ? 'bg-[#FF9C3E]/10 text-[#C87800]' : 'bg-[#EF6B00]/5 text-gray-700'
                         }`}
                       >
                         风格人设：{p.stylePersona}
@@ -1305,7 +1304,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center">
                   <Wrench size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1319,7 +1318,7 @@ function RequirementsDoc({
                 {systemEquipments.map((x) => (
                   <div key={x.key} className="rounded-2xl border border-gray-100 bg-[#FFFDF3] p-5">
                     <div className="flex items-center gap-3">
-                      <span className="w-10 h-10 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#FFCE42] shrink-0">
+                      <span className="w-10 h-10 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#FF9C3E] shrink-0">
                         <x.icon size={18} />
                       </span>
                       <div className="min-w-0">
@@ -1337,7 +1336,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center">
                   <Sparkles size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1357,19 +1356,19 @@ function RequirementsDoc({
                         type="button"
                         onClick={() => setSmartHomeSelected((prev) => ({ ...prev, [o.key]: !prev[o.key] }))}
                         className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors ${
-                          checked ? 'border-[#FFCE42]/30 bg-[#FFCE42]/10' : 'border-gray-100 bg-[#FFFDF3] hover:bg-white'
+                          checked ? 'border-[#FF9C3E]/30 bg-[#FF9C3E]/10' : 'border-gray-100 bg-[#FFFDF3] hover:bg-white'
                         }`}
                       >
                         <span
                           className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${
-                            checked ? 'bg-[#FFCE42] border-[#FFCE42]' : 'bg-white border-gray-200'
+                            checked ? 'bg-[#FF9C3E] border-[#FF9C3E]' : 'bg-white border-gray-200'
                           }`}
                           aria-hidden="true"
                         >
                           {checked ? <span className="w-2.5 h-2.5 rounded-sm bg-white" /> : null}
                         </span>
                         <span className="w-9 h-9 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-600 shrink-0">
-                          <o.icon size={18} className={checked ? 'text-[#FFCE42]' : 'text-gray-500'} />
+                          <o.icon size={18} className={checked ? 'text-[#FF9C3E]' : 'text-gray-500'} />
                         </span>
                         <div className="text-sm font-semibold text-gray-800">{o.label}</div>
                       </button>
@@ -1381,7 +1380,7 @@ function RequirementsDoc({
                   {selectedSmartHome.map((o) => (
                     <div key={o.key} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3">
                       <span className="w-9 h-9 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-600 shrink-0">
-                        <o.icon size={18} className="text-[#FFCE42]" />
+                        <o.icon size={18} className="text-[#FF9C3E]" />
                       </span>
                       <div className="text-sm font-semibold text-gray-800">{o.label}</div>
                     </div>
@@ -1399,7 +1398,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center">
                   <Package size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1419,19 +1418,19 @@ function RequirementsDoc({
                         type="button"
                         onClick={() => setSpecialDeviceSelected((prev) => ({ ...prev, [o.key]: !prev[o.key] }))}
                         className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors ${
-                          checked ? 'border-[#FFCE42]/30 bg-[#FFCE42]/10' : 'border-gray-100 bg-[#FFFDF3] hover:bg-white'
+                          checked ? 'border-[#FF9C3E]/30 bg-[#FF9C3E]/10' : 'border-gray-100 bg-[#FFFDF3] hover:bg-white'
                         }`}
                       >
                         <span
                           className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${
-                            checked ? 'bg-[#FFCE42] border-[#FFCE42]' : 'bg-white border-gray-200'
+                            checked ? 'bg-[#FF9C3E] border-[#FF9C3E]' : 'bg-white border-gray-200'
                           }`}
                           aria-hidden="true"
                         >
                           {checked ? <span className="w-2.5 h-2.5 rounded-sm bg-white" /> : null}
                         </span>
                         <span className="w-9 h-9 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-600 shrink-0">
-                          <o.icon size={18} className={checked ? 'text-[#FFCE42]' : 'text-gray-500'} />
+                          <o.icon size={18} className={checked ? 'text-[#FF9C3E]' : 'text-gray-500'} />
                         </span>
                         <div className="text-sm font-semibold text-gray-800">{o.label}</div>
                       </button>
@@ -1443,7 +1442,7 @@ function RequirementsDoc({
                   {selectedSpecialDevices.map((o) => (
                     <div key={o.key} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3">
                       <span className="w-9 h-9 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-600 shrink-0">
-                        <o.icon size={18} className="text-[#FFCE42]" />
+                        <o.icon size={18} className="text-[#FF9C3E]" />
                       </span>
                       <div className="text-sm font-semibold text-gray-800">{o.label}</div>
                     </div>
@@ -1461,7 +1460,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center">
                   <Compass size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1481,7 +1480,7 @@ function RequirementsDoc({
           <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-9 h-9 rounded-2xl bg-[#FFCE42]/10 text-[#FFCE42] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center">
                   <Archive size={18} />
                 </span>
                 <div className="min-w-0">
@@ -1512,7 +1511,7 @@ function RequirementsDoc({
                   value={customNeedsNote}
                   onChange={(e) => setCustomNeedsNote(e.target.value)}
                   placeholder="请输入其他补充需求..."
-                  className="w-full min-h-[140px] rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#FFCE42]/20"
+                  className="w-full min-h-[140px] rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#FF9C3E]/20"
                 />
               ) : customNeedsNote.trim() ? (
                 <div className="rounded-2xl border border-gray-100 bg-[#FFFDF3] p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -1559,7 +1558,7 @@ function RequirementsDoc({
 
           <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-1 rounded-2xl border border-gray-100 bg-[#FFFDF3] p-5">
-              <div className="w-11 h-11 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#FFCE42]">
+              <div className="w-11 h-11 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#FF9C3E]">
                 <activeSpace.icon size={18} />
               </div>
               <div className="mt-3 text-sm font-semibold text-gray-900">空间说明</div>
@@ -1570,7 +1569,7 @@ function RequirementsDoc({
             <div className="md:col-span-2 space-y-3">
               {activeSpace.items.map((it, idx) => (
                 <div key={it} className="flex items-start gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                  <span className="w-8 h-8 rounded-2xl bg-[#FFCE42]/10 text-[#C87800] flex items-center justify-center text-xs font-bold">
+                  <span className="w-8 h-8 rounded-2xl bg-[#FF9C3E]/10 text-[#C87800] flex items-center justify-center text-xs font-bold">
                     {idx + 1}
                   </span>
                   <div className="text-sm text-gray-700 leading-relaxed">{it}</div>
@@ -1586,7 +1585,7 @@ function RequirementsDoc({
                 value={spaceOtherNote}
                 onChange={(e) => setSpaceOtherNote(e.target.value)}
                 placeholder="可补充该空间的其他偏好、禁忌或设备位要求..."
-                className="mt-3 w-full min-h-[110px] rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#FFCE42]/20"
+                className="mt-3 w-full min-h-[110px] rounded-2xl border border-gray-100 bg-[#FFFDF3] px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#FF9C3E]/20"
               />
             ) : spaceOtherNote.trim() ? (
               <div className="mt-3 rounded-2xl border border-gray-100 bg-[#FFFDF3] p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -1658,7 +1657,7 @@ function RequirementsDoc({
                   setHasSubmitted(true)
                   setShowSubmitModal(true)
                 }}
-                className="flex-1 sm:flex-none inline-flex items-center justify-center rounded-2xl bg-[#FFCE42] px-5 py-3 text-sm font-semibold text-white hover:brightness-95 active:scale-[0.99] transition"
+                className="flex-1 sm:flex-none inline-flex items-center justify-center rounded-2xl bg-[#FF9C3E] px-5 py-3 text-sm font-semibold text-white hover:brightness-95 active:scale-[0.99] transition"
               >
                 确认并提交
                 <ChevronRight size={18} className="ml-1" />
