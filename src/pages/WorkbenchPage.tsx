@@ -166,14 +166,20 @@ export function WorkbenchPage({
 
         <div className="mt-6 px-5">
           <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={() => setSidebarCollapsed((v) => !v)}
-              className="w-9 h-9 inline-flex items-center justify-center rounded-xl text-gray-600 hover:bg-black/5 transition-colors"
-              title={sidebarCollapsed ? '展开导航' : '收起导航'}
-            >
-              <ChevronsLeftRight size={18} />
-            </button>
+            <div className="group/tooltip relative">
+              <button
+                type="button"
+                onClick={() => setSidebarCollapsed((v) => !v)}
+                className="w-9 h-9 inline-flex items-center justify-center rounded-xl text-gray-600 hover:bg-black/5 transition-colors"
+                title={sidebarCollapsed ? '展开导航' : '收起导航'}
+                aria-label={sidebarCollapsed ? '展开导航' : '收起导航'}
+              >
+                <ChevronsLeftRight size={18} />
+              </button>
+              <span className="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-2.5 py-1 text-xs font-medium text-white bg-slate-800 rounded-lg whitespace-nowrap opacity-0 pointer-events-none transition-opacity group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100 z-50">
+                {sidebarCollapsed ? '展开导航' : '收起导航'}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -226,28 +232,40 @@ export function WorkbenchPage({
         <div className="w-full px-5 md:px-10 py-6 bg-white border-b border-gray-100">
           <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
-              <button
-                type="button"
-                onClick={onGoToFirstPage}
-                className="w-9 h-9 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center shrink-0 hover:bg-[#FF9C3E]/15 transition"
-                title="返回第一页"
-              >
-                <Home size={18} />
-              </button>
+              <div className="group/tooltip relative">
+                <button
+                  type="button"
+                  onClick={onGoToFirstPage}
+                  className="w-9 h-9 rounded-2xl bg-[#FF9C3E]/10 text-[#FF9C3E] flex items-center justify-center shrink-0 hover:bg-[#FF9C3E]/15 transition"
+                  title="返回第一页"
+                  aria-label="返回第一页"
+                >
+                  <Home size={18} />
+                </button>
+                <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2.5 py-1 text-xs font-medium text-white bg-slate-800 rounded-lg whitespace-nowrap opacity-0 pointer-events-none transition-opacity group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100 z-50">
+                  返回第一页
+                </span>
+              </div>
               <div className="min-w-0 flex items-center gap-2">
                 <div className="min-w-0">
                   <div className="text-xs text-gray-500">当前项目</div>
                   <div className="text-base font-semibold truncate">{currentProjectName}</div>
                 </div>
                 {onBackToProjects && (
-                  <button
-                    type="button"
-                    onClick={onBackToProjects}
-                    className="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
-                    title="切换项目"
-                  >
-                    <ArrowLeftRight size={18} />
-                  </button>
+                  <div className="group/tooltip relative shrink-0">
+                    <button
+                      type="button"
+                      onClick={onBackToProjects}
+                      className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+                      title="切换项目"
+                      aria-label="切换项目"
+                    >
+                      <ArrowLeftRight size={18} />
+                    </button>
+                    <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2.5 py-1 text-xs font-medium text-white bg-slate-800 rounded-lg whitespace-nowrap opacity-0 pointer-events-none transition-opacity group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100 z-50">
+                      切换项目
+                    </span>
+                  </div>
                 )}
               </div>
             </div>
@@ -385,7 +403,7 @@ const ORDER_MOCK_DATA = [
       id: 'PSO-OD_LHJCF-00471',
       projectId: 'PRJ7_X-B49-T4-LHJCF',
       title: '瓷砖铺贴-公卫、次卫、厨房墙地铺贴',
-      status: '511-订单已交付',
+      status: 'S00-订单已交付',
       statusColor: 'emerald' as const,
       contains: '详细报价单、施工方案',
       date: '2025-10-24',
@@ -395,7 +413,7 @@ const ORDER_MOCK_DATA = [
       id: 'PSO-OD_LHJCF-00567',
       projectId: 'PRJ7_X-B49-T4-LHJCF',
       title: '全屋-石材安装',
-      status: '500-意向报价中',
+      status: 'S00-意向报价中',
       statusColor: 'gray' as const,
       contains: '意向利岩板、大金空调选型',
       date: '2025-10-26',
@@ -405,7 +423,7 @@ const ORDER_MOCK_DATA = [
       id: 'PSO-OD_LHJCF-00612',
       projectId: 'PRJ7_X-B49-T4-LHJCF',
       title: '橱柜柜体定制',
-      status: '505-客户决策中',
+      status: 'S00-客户决策中',
       statusColor: 'gray' as const,
       contains: '工程进场筹备、材料下单',
       date: '2025-10-28',
@@ -415,7 +433,7 @@ const ORDER_MOCK_DATA = [
       id: 'PSO-OD_LHJCF-00623',
       projectId: 'PRJ7_X-B49-T4-LHJCF',
       title: '一层、负一层-天花吊顶',
-      status: '506-订单交付中',
+      status: 'S00-订单交付中',
       statusColor: 'blue' as const,
       contains: '单层泥水工程、基层处理',
       date: '2025-10-30',
@@ -481,14 +499,11 @@ function OrderManagementSection({ onGoToDesignFeedback }: { onGoToDesignFeedback
                   >
                     {order.status}
                   </span>
-                  <div className="text-xs text-gray-500 mb-0.5">{order.projectId}</div>
                   <div className="font-semibold text-gray-900 truncate">
                     {order.id} · {order.title}
                   </div>
-                  <div className="text-sm text-gray-600 mt-1">包含: {order.contains}</div>
                 </div>
                 <div className="flex flex-col items-end shrink-0 text-right">
-                  <div className="text-sm text-gray-600">{order.date}</div>
                   <div className="text-base font-semibold text-gray-900 mt-1">
                     {order.amount}
                   </div>
