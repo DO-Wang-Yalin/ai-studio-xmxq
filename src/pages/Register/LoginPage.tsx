@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, ChevronLeft } from 'lucide-react';
-import { StepWrapper } from '../components/ui';
-import { sendSmsCode, loginWithCode } from '../services/auth';
+import { StepWrapper } from '../../components/ui';
+import { sendSmsCode, loginWithCode } from '../../services/auth';
 
 export interface LoginPageProps {
   onSuccess: () => void;

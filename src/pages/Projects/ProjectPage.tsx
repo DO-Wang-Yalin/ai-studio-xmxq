@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FolderOpen, ChevronLeft, ChevronRight, Wallet, Clock, PieChart } from 'lucide-react';
-import { StepWrapper } from '../components/ui';
-import { getProjects, type Project } from '../services/projects';
-import { getFundPool, type FundPool } from '../services/fundPool';
+import { StepWrapper } from '../../components/ui';
+import { getProjects, type Project } from '../../services/projects';
+import { getFundPool, type FundPool } from '../../services/fundPool';
 
 export interface ProjectPageProps {
   onSelectProject: (project: Project) => void;

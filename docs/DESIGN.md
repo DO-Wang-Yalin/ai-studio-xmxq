@@ -1,6 +1,6 @@
 # DREAM.ONE 深度定制需求采集 - 设计文档
 
-> 文档版本：v1.0 | 更新日期：2025-03-11
+> 文档版本：v1.0 | 更新日期：2026-03-11
 
 ---
 
@@ -140,7 +140,7 @@ src/
 | design-feedback | 项目设计反馈 | 设计稿反馈与批注 |
 | register | 注册 | 手机号 + 验证码 |
 | deep-eval-1/2 | 深度测评 | 项目概况、用户信息 |
-| q2-3 等 | Q2-3 ~ Q2-21 | 预算、房型、现状、成员、习惯等 |
+| （Q2-2/Q2-3 已取消） | Q2-5 ~ Q2-21 等 | 房型/现状/预算改由 DeepEval；其余为成员、习惯等 |
 | contract | 意向金合同 | 合同展示与签署 |
 | payment | 支付账号 | 完成支付 |
 | budget-confirm-preview | 预算确认页预览 | 预算可视化 |
@@ -198,9 +198,9 @@ src/
 interface FormData {
   // 用户信息 (Q2-0)
   userName, userTitle, userAgeRange, userHeight, userIndustry, userCity, userPhone
-  // 项目概况 (Q2-1, Q2-2)
+  // 项目概况 (Q2-1；Q2-2 已取消，类型/面积来自 DeepEval)
   projectLocation, projectName, projectType, projectArea, houseType, houseCondition
-  // 预算 (Q2-3)
+  // 预算 (Q2-3 已取消，来自 DeepEval)
   budgetStandard, budgetSubStandard
   // 房型 (Q2-4)
   floorPlanUploaded

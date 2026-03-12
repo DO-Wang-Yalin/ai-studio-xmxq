@@ -55,6 +55,7 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
   const [formData, setFormData] = useState({
     projectType: '',
     projectPosition: '',
+    handoverStatus: '',
     area: '',
     budget: '',
     name: '',
@@ -67,7 +68,13 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
 
   const handleChange = (field: string, value: string) => {
     const next = field === 'phone' ? normalizePhone(value) : value
-    setFormData(prev => ({ ...prev, [field]: next }))
+    setFormData(prev => {
+      const nextData = { ...prev, [field]: next }
+      if (field === 'projectType' && !value.includes('独栋别墅') && prev.handoverStatus === '土地') {
+        nextData.handoverStatus = ''
+      }
+      return nextData
+    })
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }))
   }
 
@@ -149,10 +156,11 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
   const validateStep = (): boolean => {
     const nextErrors: Record<string, string> = {}
     if (currentStep === 1) {
-      if (!formData.projectType) nextErrors.projectType = '请选择项目类型'
       if (!formData.projectPosition) nextErrors.projectPosition = '请填写项目城市'
+      if (!formData.projectType) nextErrors.projectType = '请选择项目类型'
+      if (!formData.handoverStatus) nextErrors.handoverStatus = '请选择收房状态'
       if (!formData.area) nextErrors.area = '请填写实际面积'
-      if (!formData.budget) nextErrors.budget = '请选择每平方米项目造价'
+      if (!formData.budget) nextErrors.budget = '请选择每平方造价上限'
     }
     if (currentStep === 2) {
       if (!formData.name) nextErrors.name = '请填写您的姓名'
@@ -269,6 +277,17 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                 </div>
                 <div className="bg-[#FFFDF3] p-6 md:p-10 rounded-[24px] shadow-sm border border-white space-y-6 md:space-y-8">
                   <div>
+                    <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">项目城市</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-dark/30" size={16} />
+                      <input type="text" value={formData.projectPosition} onChange={(e) => handleChange('projectPosition', e.target.value)} placeholder="点击右侧按钮获取定位或手动输入" className="w-full bg-[#FFF9E8] rounded-xl pl-10 pr-12 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
+                      <button type="button" onClick={handleGetLocation} disabled={isLocating} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white rounded-lg text-brand shadow-sm hover:shadow-md active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed" title="获取当前位置">
+                        {isLocating ? <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}><Loader2 size={16} /></motion.div> : <LocateFixed size={16} />}
+                      </button>
+                    </div>
+                    {errors.projectPosition && <p className="text-red-500 text-xs mt-1">{errors.projectPosition}</p>}
+                  </div>
+                  <div>
                     <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-3">项目类型</label>
                     <div className="grid grid-cols-3 gap-3">
                       {(projectTypeOptions.length ? projectTypeOptions : PROJECT_TYPES.map((t) => ({ value: t, label: t }))).map(({ value, label }) => (
@@ -289,15 +308,29 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                     {errors.projectType && <p className="text-red-500 text-xs mt-1">{errors.projectType}</p>}
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">项目城市</label>
-                    <div className="relative">
-                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-dark/30" size={16} />
-                      <input type="text" value={formData.projectPosition} onChange={(e) => handleChange('projectPosition', e.target.value)} placeholder="点击右侧按钮获取定位或手动输入" className="w-full bg-[#FFF9E8] rounded-xl pl-10 pr-12 py-3 text-dark focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-dark/30" />
-                      <button type="button" onClick={handleGetLocation} disabled={isLocating} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white rounded-lg text-brand shadow-sm hover:shadow-md active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed" title="获取当前位置">
-                        {isLocating ? <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}><Loader2 size={16} /></motion.div> : <LocateFixed size={16} />}
-                      </button>
+                    <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-3">收房状态</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {[
+                        '毛坯',
+                        '精装',
+                        '旧房',
+                        ...(formData.projectType && formData.projectType.includes('独栋别墅') ? ['土地'] : [])
+                      ].map((opt) => (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => handleChange('handoverStatus', opt)}
+                          className={`py-3 rounded-xl text-xs md:text-sm font-medium transition-all ${
+                            formData.handoverStatus === opt
+                              ? 'bg-[#EF6B00] text-[#F8F7FF] shadow-md shadow-[#EF6B00]/30'
+                              : 'bg-[#FFF9E8] text-dark/70 hover:bg-[#E6E2DC]'
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      ))}
                     </div>
-                    {errors.projectPosition && <p className="text-red-500 text-xs mt-1">{errors.projectPosition}</p>}
+                    {errors.handoverStatus && <p className="text-red-500 text-xs mt-1">{errors.handoverStatus}</p>}
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">实际面积</label>
@@ -314,11 +347,11 @@ export const DeepEvalForm: React.FC<DeepEvalFormProps> = ({ leadsOptions, journe
                     {errors.area && <p className="text-red-500 text-xs mt-1">{errors.area}</p>}
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">每平方米项目造价</label>
+                    <label className="block text-xs font-bold text-sub uppercase tracking-wider mb-2">每平方造价上限</label>
                     <div className="relative">
                       <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 text-dark/30" size={16} />
                       <select value={formData.budget} onChange={(e) => handleChange('budget', e.target.value)} className={`w-full bg-[#FFF9E8] rounded-lg pl-10 pr-10 py-3 border border-[#d9d9d9] hover:border-brand/50 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-colors duration-200 appearance-none cursor-pointer ${formData.budget ? 'text-dark' : 'text-dark/30'}`}>
-                        <option value="" disabled>请选择每平方米项目造价</option>
+                        <option value="" disabled>请选择每平方造价上限</option>
                         {budgetOptions.map((range) => (
                           <option key={range} value={range}>{budgetDisplayLabel(range)}</option>
                         ))}

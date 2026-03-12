@@ -9,19 +9,27 @@ import { ResultPage } from './components/ResultPage';
 type HomeStyleEvalProps = {
   onGoDeepEval?: () => void;
   onGoHome?: () => void;
+  /** 受控子页：0..questions.length-1 为题目，questions.length 为结果页；与 onPageChange 一起由目录跳转使用 */
+  controlledPageIndex?: number;
+  onPageChange?: (nextPageIndex: number) => void;
 };
 
-export function HomeStyleEval({ onGoDeepEval, onGoHome }: HomeStyleEvalProps) {
+export function HomeStyleEval({ onGoDeepEval, onGoHome, controlledPageIndex, onPageChange }: HomeStyleEvalProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
   const [quantities, setQuantities] = useState<Record<string, Record<string, number>>>({});
   const [textAnswers, setTextAnswers] = useState<Record<string, string>>({});
   const [showResult, setShowResult] = useState(false);
 
-  const currentQuestion = useMemo(() => questions[currentIndex], [currentIndex]);
+  const isControlled = controlledPageIndex !== undefined && onPageChange !== undefined;
+  const pageIndex = isControlled ? controlledPageIndex! : (showResult ? questions.length : currentIndex);
+  const showResultPage = pageIndex >= questions.length;
+  const currentQuestion = useMemo(() => questions[pageIndex] as typeof questions[0] | undefined, [pageIndex]);
 
   const handleNext = () => {
-    if (currentIndex < questions.length - 1) {
+    if (isControlled) {
+      onPageChange!(Math.min(pageIndex + 1, questions.length));
+    } else if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
       setShowResult(true);
@@ -29,10 +37,15 @@ export function HomeStyleEval({ onGoDeepEval, onGoHome }: HomeStyleEvalProps) {
   };
 
   const handlePrev = () => {
-    if (currentIndex > 0) setCurrentIndex((prev) => prev - 1);
+    if (isControlled) {
+      onPageChange!(Math.max(pageIndex - 1, 0));
+    } else if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+    }
   };
 
   const handleRestart = () => {
+    if (isControlled) onPageChange!(0);
     setCurrentIndex(0);
     setAnswers({});
     setQuantities({});
@@ -41,6 +54,7 @@ export function HomeStyleEval({ onGoDeepEval, onGoHome }: HomeStyleEvalProps) {
   };
 
   const canProceed = () => {
+    if (!currentQuestion) return true;
     const currentAns = answers[currentQuestion.id];
     if (currentQuestion.type === 'single') {
       return currentAns && currentAns.length > 0;
@@ -78,13 +92,13 @@ export function HomeStyleEval({ onGoDeepEval, onGoHome }: HomeStyleEvalProps) {
       });
     }
 
-    if (currentQuestion.type === 'single') {
+    if (currentQuestion?.type === 'single') {
       setTimeout(() => handleNext(), 400);
     }
   };
 
   const handleTextChange = (text: string) => {
-    setTextAnswers((prev) => ({ ...prev, [currentQuestion.id]: text }));
+    if (currentQuestion) setTextAnswers((prev) => ({ ...prev, [currentQuestion.id]: text }));
   };
 
   return (
@@ -103,7 +117,7 @@ export function HomeStyleEval({ onGoDeepEval, onGoHome }: HomeStyleEvalProps) {
           </div>
         )}
         <AnimatePresence mode="wait">
-          {showResult ? (
+          {showResultPage ? (
             <div key="result">
               <ResultPage
                 answers={answers}
@@ -112,9 +126,9 @@ export function HomeStyleEval({ onGoDeepEval, onGoHome }: HomeStyleEvalProps) {
                 onGoDeepEval={onGoDeepEval}
               />
             </div>
-          ) : (
+          ) : currentQuestion ? (
             <div key="question-container" className="w-full">
-              <ProgressBar current={currentIndex + 1} total={questions.length} />
+              <ProgressBar current={pageIndex + 1} total={questions.length} />
 
               <AnimatePresence mode="wait">
                 <div key={currentQuestion.id}>
@@ -133,7 +147,7 @@ export function HomeStyleEval({ onGoDeepEval, onGoHome }: HomeStyleEvalProps) {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  disabled={currentIndex === 0}
+                  disabled={pageIndex === 0}
                   className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-colors ${
                     currentIndex === 0 ? 'text-stone-300 cursor-not-allowed' : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800'
                   }`}
@@ -152,12 +166,12 @@ export function HomeStyleEval({ onGoDeepEval, onGoHome }: HomeStyleEvalProps) {
                       : 'bg-[#EF6B00] text-white hover:bg-[#D85F00] shadow-md hover:shadow-lg'
                   }`}
                 >
-                  {currentIndex === questions.length - 1 ? '查看结果' : '下一题'}
+                  {pageIndex === questions.length - 1 ? '查看结果' : '下一题'}
                   <ArrowRight size={18} />
                 </button>
               </div>
             </div>
-          )}
+          ) : null}
         </AnimatePresence>
       </div>
     </div>

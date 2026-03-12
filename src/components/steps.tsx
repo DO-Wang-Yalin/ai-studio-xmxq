@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
+import { domToPng } from 'modern-screenshot';
 import { FormData } from '../types';
 import { StepWrapper, TextInput, RadioCard, CheckboxCard, SegmentedRadio, IconRadioCard, SquareRadioCard, SquareCheckboxCard, Counter, SubQuestion } from './ui';
 import { useDeepEvalForm } from './DeepEvalFormContext';
@@ -10,12 +11,11 @@ import {
   Wind, Fan, CloudRain, VolumeX, Volume1, Volume2, VolumeX as VolumeMute,
   Wifi, Zap, Lightbulb, Music, ShieldCheck, Cpu, AirVent, Droplets, Thermometer,
   Lock, Waves, Trash2, Bath, Flame, Bot, Palette, Archive,
-  Phone, Briefcase, ChevronDown, Copy, LocateFixed, Loader2, ChevronRight, Wallet, Home,
+  Phone, Briefcase, ChevronDown, Copy, LocateFixed, Loader2, ChevronRight, Wallet, Home, Download, X,
 } from 'lucide-react';
 // @ts-ignore: static image asset import
 import contractFlowImg from '../assets/contract-flow.png';
-import { HomeStyleEval } from '../pages/HomeStyleEval/HomeStyleEval';
-import { DesignFeedbackApp } from '../pages/DesignFeedbackApp';
+import { HomeStyleEval } from '../pages/StyleEval/HomeStyleEval';
 
 interface StepProps {
   data: FormData;
@@ -72,6 +72,29 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
           </button>
         </div>
 
+        {/* 线索收集卡片：进入 DE-1 项目概况 */}
+        <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 flex flex-col">
+          <div className="space-y-4 flex-1">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#EF6B00]/5 px-3 py-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#EF6B00]" />
+              <span className="text-xs font-semibold text-[#EF6B00] tracking-wide">项目线索</span>
+            </div>
+            <div className="space-y-1.5">
+              <h2 className="text-base font-semibold text-gray-900">线索收集</h2>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                填写项目城市、类型、面积与预算等概况，快速留下线索，便于后续跟进与方案沟通。
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => goToStep?.('deep-eval-1')}
+            className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#FF9C3E] px-4 py-3 text-sm font-medium text-white hover:bg-[#EF6B00] transition-colors active:scale-[0.99]"
+          >
+            去填写项目概况
+          </button>
+        </div>
+
         {/* 注册卡片（右上） */}
         <div className="rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-100 px-6 py-5 flex flex-col">
           <div className="space-y-4 flex-1">
@@ -88,7 +111,7 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
           </div>
           <button
             type="button"
-            onClick={nextStep}
+            onClick={() => goToStep?.('register')}
             className="w-full mt-4 flex items-center justify-center rounded-xl bg-[#FF9C3E] px-4 py-3 text-sm font-medium text-white hover:bg-[#EF6B00] transition-colors active:scale-[0.99]"
           >
             去注册并填写信息
@@ -146,18 +169,18 @@ export const StepWelcome = ({ nextStep, goToStep, goToWorkbench, goToLogin }: St
   </StepWrapper>
 );
 
-export const StepHomeStyleEval = ({ goToStep }: StepProps) => (
+export const StepHomeStyleEval = ({
+  goToStep,
+  styleEvalSubPage,
+  onStyleEvalSubPageChange,
+}: StepProps & { styleEvalSubPage?: number; onStyleEvalSubPageChange?: (n: number) => void }) => (
   <StepWrapper noCard>
     <HomeStyleEval
-      onGoDeepEval={() => goToStep?.('register')}
+      onGoDeepEval={() => goToStep?.('deep-eval-1')}
       onGoHome={() => goToStep?.('welcome')}
+      controlledPageIndex={styleEvalSubPage}
+      onPageChange={onStyleEvalSubPageChange}
     />
-  </StepWrapper>
-);
-
-export const StepDesignFeedback = ({ goToStep }: StepProps) => (
-  <StepWrapper noCard>
-    <DesignFeedbackApp onGoHome={() => goToStep?.('welcome')} />
   </StepWrapper>
 );
 
@@ -323,28 +346,17 @@ export const StepDeepEval1 = ({ data, updateData, nextStep, prevStep }: StepProp
 
   const projectTypeOpts = projectTypeOptions.length ? projectTypeOptions : PROJECT_TYPES.map((t) => ({ value: t, label: t }));
 
+  const isDetachedVilla = Boolean(formData.projectType && formData.projectType.includes('独栋别墅'));
+  const handoverStatusOptions = [
+    { value: '毛坯', label: '毛坯' },
+    { value: '精装', label: '精装' },
+    { value: '旧房', label: '旧房' },
+    ...(isDetachedVilla ? [{ value: '土地', label: '土地' }] : [])
+  ];
+
   return (
     <StepWrapper title="项目概况" subtitle="作为种子用户，你的档案会被我们保存，上线后直接同步到产品里。我们不会用它打扰你；">
       <div className="space-y-6">
-        <TextInput
-          label="项目名称/小区"
-          value={data.projectName}
-          onChange={(v: string) => {
-            updateData({ projectName: v });
-            if (errors.projectName) ctx.setErrors((prev) => ({ ...prev, projectName: '' }));
-          }}
-          placeholder="例如: 汤臣一品"
-        />
-        {errors.projectName && <p className="text-red-500 text-xs mt-1 -mt-2">{errors.projectName}</p>}
-
-        <SegmentedRadio
-          label="项目类型"
-          value={formData.projectType}
-          onChange={(v: string) => handleChange('projectType', v)}
-          options={projectTypeOpts}
-        />
-        {errors.projectType && <p className="text-red-500 text-xs mt-1 -mt-2">{errors.projectType}</p>}
-
         <div className="flex flex-col gap-3">
           <label className="text-sm font-bold text-gray-800">项目城市</label>
           <div className="relative flex items-center">
@@ -370,6 +382,33 @@ export const StepDeepEval1 = ({ data, updateData, nextStep, prevStep }: StepProp
         </div>
 
         <TextInput
+          label="项目名称/小区"
+          value={data.projectName}
+          onChange={(v: string) => {
+            updateData({ projectName: v });
+            if (errors.projectName) ctx.setErrors((prev) => ({ ...prev, projectName: '' }));
+          }}
+          placeholder="例如: 汤臣一品"
+        />
+        {errors.projectName && <p className="text-red-500 text-xs mt-1 -mt-2">{errors.projectName}</p>}
+
+        <SegmentedRadio
+          label="项目类型"
+          value={formData.projectType}
+          onChange={(v: string) => handleChange('projectType', v)}
+          options={projectTypeOpts}
+        />
+        {errors.projectType && <p className="text-red-500 text-xs mt-1 -mt-2">{errors.projectType}</p>}
+
+        <SegmentedRadio
+          label="收房状态"
+          value={formData.handoverStatus}
+          onChange={(v: string) => handleChange('handoverStatus', v)}
+          options={handoverStatusOptions}
+        />
+        {errors.handoverStatus && <p className="text-red-500 text-xs mt-1 -mt-2">{errors.handoverStatus}</p>}
+
+        <TextInput
           label="实际面积"
           type="number"
           value={formData.area}
@@ -380,7 +419,7 @@ export const StepDeepEval1 = ({ data, updateData, nextStep, prevStep }: StepProp
         {errors.area && <p className="text-red-500 text-xs mt-1 -mt-2">{errors.area}</p>}
 
         <div className="flex flex-col gap-3">
-          <label className="text-sm font-bold text-gray-800">每平方米项目造价</label>
+          <label className="text-sm font-bold text-gray-800">每平方造价上限</label>
           <div className="relative flex items-center">
             <Wallet size={18} className="absolute left-4 text-gray-400" />
             <select
@@ -388,7 +427,7 @@ export const StepDeepEval1 = ({ data, updateData, nextStep, prevStep }: StepProp
               onChange={(e) => handleChange('budget', e.target.value)}
               className={`w-full py-4 bg-[#FFF9E8] rounded-xl border-none focus:ring-2 focus:ring-[#EF6B00]/20 outline-none transition-all text-gray-800 pl-11 pr-10 appearance-none cursor-pointer ${formData.budget ? '' : 'text-gray-400'}`}
             >
-              <option value="" disabled>请选择每平方米项目造价</option>
+              <option value="" disabled>请选择每平方造价上限</option>
               {budgetOptions.map((range) => (
                 <option key={range} value={range}>{budgetDisplayLabel(range)}</option>
               ))}
@@ -396,6 +435,18 @@ export const StepDeepEval1 = ({ data, updateData, nextStep, prevStep }: StepProp
             <ChevronDown size={18} className="absolute right-5 text-gray-500 pointer-events-none" />
           </div>
           {errors.budget && <p className="text-red-500 text-xs mt-1">{errors.budget}</p>}
+          {formData.area && formData.budget && (() => {
+            const areaNum = Math.max(0, parseFloat(formData.area) || 0);
+            const yuanPerSqm = Number(formData.budget) || 0;
+            const totalYuan = areaNum * yuanPerSqm;
+            if (areaNum <= 0 || yuanPerSqm <= 0) return null;
+            const totalStr = totalYuan >= 10000 ? `${(totalYuan / 10000).toFixed(1)}万元` : `${Math.round(totalYuan).toLocaleString()}元`;
+            return (
+              <p className="text-sm text-gray-700 mt-1 font-medium">
+                总造价：{areaNum}㎡ × {budgetDisplayLabel(formData.budget)} = {totalStr}
+              </p>
+            );
+          })()}
         </div>
 
         <button
@@ -520,6 +571,298 @@ export const StepDeepEval2 = ({ nextStep, prevStep }: StepProps & { prevStep?: (
   );
 };
 
+/** 将线索收集的预算选项解析为每平方米造价（元）。支持纯数字如 "5000" 或旧格式 "1_ 20,000元/平方米以上" */
+function parseBudgetRangeToYuanPerSqm(budgetRange: string): number {
+  if (/^\d+$/.test(budgetRange)) return Number(budgetRange)
+  const raw = budgetRange.replace(/,/g, '')
+  const numbers = raw.match(/\d+/g)?.map(Number) ?? []
+  if (numbers.length === 0) return 0
+  if (raw.includes('以上') && numbers.length >= 1) return numbers[0]
+  if (numbers.length >= 2) return Math.round((numbers[0] + numbers[1]) / 2)
+  return numbers[0]
+}
+
+/** E 高端设计 / P 严选精品 / C 匠心施工 占比（设计约 10%、货品约 55%，后续与数据端打通由算法产出） */
+const BUDGET_EPC_RATIOS = { E: 0.1, P: 0.55, C: 0.35 } as const
+
+/** 预算拆解 E/P/C 配色：现代奢华感 — 冷灰 / 深岩灰 / 铜橙色 */
+const EPC_THEME = {
+  E: {
+    color: '#718096', /* 冷灰色，精致中性 */
+    light: 'rgba(113,128,150,0.12)',
+    name: '高端设计',
+    desc: '专业设计方案与效果呈现',
+  },
+  P: {
+    color: '#2D3748', /* 深岩灰，沉稳厚重 */
+    light: 'rgba(45,55,72,0.12)',
+    name: '严选精品',
+    desc: '优质主材与精选软装',
+  },
+  C: {
+    color: '#C05621', /* 铜橙色，高级活力 */
+    light: 'rgba(192,86,33,0.12)',
+    name: '匠心施工',
+    desc: '专业施工与品质保障',
+  },
+} as const
+
+const isWeChat = typeof navigator !== 'undefined' && /MicroMessenger/i.test(navigator.userAgent)
+
+/** 项目预算拆解：基于线索收集的面积与预算拆解为 E/P/C，支持保存到本地 */
+export const StepBudgetBreakdown = ({ nextStep, prevStep }: StepProps & { prevStep?: () => void }) => {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [saveCardError, setSaveCardError] = useState<string | null>(null)
+  const [isSavingCard, setIsSavingCard] = useState(false)
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null)
+  const ctx = useDeepEvalForm()
+  const { formData, budgetDisplayLabel, submit, isSubmitting, submitError, setSubmitError } = ctx
+  const areaNum = Math.max(0, parseFloat(formData.area) || 0)
+  const yuanPerSqm = parseBudgetRangeToYuanPerSqm(formData.budget)
+  const totalYuan = areaNum * yuanPerSqm
+
+  const segments = (() => {
+    const E = totalYuan * BUDGET_EPC_RATIOS.E
+    const P = totalYuan * BUDGET_EPC_RATIOS.P
+    const C = totalYuan * BUDGET_EPC_RATIOS.C
+    return [
+      { id: 'E' as const, amount: E, ratio: BUDGET_EPC_RATIOS.E, ...EPC_THEME.E },
+      { id: 'P' as const, amount: P, ratio: BUDGET_EPC_RATIOS.P, ...EPC_THEME.P },
+      { id: 'C' as const, amount: C, ratio: BUDGET_EPC_RATIOS.C, ...EPC_THEME.C },
+    ]
+  })()
+
+  /** 设计参考：金额展示为 ¥xxx,xxx.00 */
+  const formatYuan = (yuan: number) =>
+    `¥${(Math.round(yuan * 100) / 100).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  const formatPerSqmYuan = (yuan: number) =>
+    areaNum > 0 ? formatYuan(yuan / areaNum) : '—'
+
+  const cx = 100
+  const cy = 100
+  const R = 88
+  const rInner = 52
+  const rLabel = (rInner + R) / 2
+  const rad = (deg: number) => (deg - 90) * (Math.PI / 180)
+  let cumulative = 0
+  const donutPaths = segments.map((s) => {
+    const startAngle = cumulative * 360
+    cumulative += s.ratio
+    const endAngle = cumulative * 360
+    const midAngle = (startAngle + endAngle) / 2
+    const labelX = cx + rLabel * Math.cos(rad(midAngle))
+    const labelY = cy + rLabel * Math.sin(rad(midAngle))
+    const x1o = cx + R * Math.cos(rad(startAngle))
+    const y1o = cy + R * Math.sin(rad(startAngle))
+    const x2o = cx + R * Math.cos(rad(endAngle))
+    const y2o = cy + R * Math.sin(rad(endAngle))
+    const x1i = cx + rInner * Math.cos(rad(startAngle))
+    const y1i = cy + rInner * Math.sin(rad(startAngle))
+    const x2i = cx + rInner * Math.cos(rad(endAngle))
+    const y2i = cy + rInner * Math.sin(rad(endAngle))
+    const large = endAngle - startAngle > 180 ? 1 : 0
+    const d = `M ${x1o} ${y1o} A ${R} ${R} 0 ${large} 1 ${x2o} ${y2o} L ${x2i} ${y2i} A ${rInner} ${rInner} 0 ${large} 0 ${x1i} ${y1i} Z`
+    return { ...s, d, labelX, labelY, pct: Math.round(s.ratio * 100) }
+  })
+
+  const hasData = areaNum > 0 && yuanPerSqm > 0
+  const cardNo = useMemo(() => `BD-${String(Math.floor(10000 + Math.random() * 90000))}`, [])
+
+  const handleSaveCard = useCallback(async () => {
+    if (!cardRef.current) return
+    setSaveCardError(null)
+    setIsSavingCard(true)
+    try {
+      const dataUrl = await domToPng(cardRef.current, { scale: 2, quality: 1 })
+      if (isWeChat) {
+        setPreviewImageUrl(dataUrl)
+      } else {
+        const link = document.createElement('a')
+        link.download = `项目预算拆解_${new Date().toISOString().slice(0, 10)}.png`
+        link.href = dataUrl
+        link.click()
+      }
+    } catch (err) {
+      console.error('保存图片失败:', err)
+      setSaveCardError('保存失败，请重试')
+    } finally {
+      setIsSavingCard(false)
+    }
+  }, [])
+
+  const closePreview = useCallback(() => setPreviewImageUrl(null), [])
+
+  return (
+    <StepWrapper noCard title="项目预算拆解" subtitle="基于您在「线索收集」中填写的面积与预算，拆解为设计、严选、施工三块。">
+      <div className="space-y-6">
+        {hasData ? (
+          <>
+            {/* 独立卡片：与风格测评结果页一致的视觉语言，顶部品牌色装饰条 */}
+            <div ref={cardRef} className="w-full max-w-md mx-auto bg-[#FDFBF7] rounded-[24px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.06)] flex flex-col">
+              <div className="h-1 w-full bg-gradient-to-r from-[#EF6B00] via-[#FF9C3E] to-[#FFCE42]" aria-hidden />
+              <div className="p-6 sm:p-8 space-y-6">
+                {/* 1. 预算分布 */}
+                <div className="space-y-4">
+                  <h3 className="text-base font-semibold text-gray-900">预算分布</h3>
+                  <div className="flex flex-col items-center gap-4">
+                    <figure className="relative flex flex-col items-center">
+                      <svg
+                        width={200}
+                        height={200}
+                        viewBox="0 0 200 200"
+                        className="w-[180px] h-[180px] sm:w-[200px] sm:h-[200px]"
+                        aria-hidden
+                      >
+                        {donutPaths.map((p) => (
+                          <path
+                            key={p.id}
+                            d={p.d}
+                            fill={p.color}
+                            stroke="#ffffff"
+                            strokeWidth={2.5}
+                          />
+                        ))}
+                        {donutPaths.map((p) => (
+                          <text
+                            key={`label-${p.id}`}
+                            x={p.labelX}
+                            y={p.labelY}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            fill="white"
+                            fontWeight="600"
+                            style={{
+                              fontSize: '11px',
+                              filter: 'drop-shadow(0 0 1px rgba(0,0,0,0.35))',
+                            }}
+                          >
+                            {p.pct}%
+                          </text>
+                        ))}
+                      </svg>
+                    </figure>
+                    <div className="flex flex-wrap justify-center gap-x-5 gap-y-2">
+                      {segments.map((s) => (
+                        <div key={s.id} className="flex items-center gap-2">
+                          <span
+                            className="w-3 h-3 rounded-full flex-shrink-0"
+                            style={{ backgroundColor: s.color }}
+                          />
+                          <span className="text-sm text-gray-700">{s.id} {s.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. 预算明细 */}
+                <div className="space-y-3">
+                  <h3 className="text-base font-semibold text-gray-900">预算明细</h3>
+                  <div className="space-y-3">
+                    {segments.map((s) => (
+                      <div
+                        key={s.id}
+                        className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden flex"
+                      >
+                        <div
+                          className="w-1.5 flex-shrink-0"
+                          style={{ backgroundColor: s.color }}
+                        />
+                        <div className="flex-1 p-4 relative">
+                          <span className="absolute top-4 right-4 text-sm font-semibold text-gray-900 tabular-nums">
+                            {Math.round(s.ratio * 100)}%
+                          </span>
+                          <h4 className="text-base font-semibold text-gray-900 pr-10">
+                            {s.id} {s.name}
+                          </h4>
+                          <p className="text-sm text-gray-500 mt-1">{s.desc}</p>
+                          <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-gray-600">
+                            {s.id !== 'P' && (
+                              <span>单平方米造价：{formatPerSqmYuan(s.amount)}</span>
+                            )}
+                            <span>总价：{formatYuan(s.amount)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3. 项目总预算 */}
+                <div className="rounded-xl bg-[#F7F5F0] border border-[#EAE5DE] px-4 py-4 flex items-center justify-between">
+                  <p className="text-base font-semibold text-gray-900">项目总预算</p>
+                  <p className="text-xl sm:text-2xl font-semibold text-gray-900 tabular-nums">
+                    {formatYuan(totalYuan)}
+                  </p>
+                </div>
+
+                {/* 卡片编号：便于后续追踪与引用 */}
+                <div className="pt-4 flex justify-end border-t border-black/5">
+                  <span className="text-[10px] font-mono text-gray-400 tracking-wider" title="卡片编号，用于追踪与引用">
+                    NO.{cardNo}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 底部操作区：保存卡片到本地 + 继续注册 */}
+            <div className="w-full max-w-md mx-auto flex flex-col gap-3">
+              {saveCardError && (
+                <p className="text-sm text-red-500 text-center">{saveCardError}</p>
+              )}
+              <button
+                type="button"
+                onClick={handleSaveCard}
+                disabled={isSavingCard}
+                className="w-full bg-[#2C2825] text-[#F4F1EA] py-3.5 px-5 rounded-xl shadow-lg hover:bg-black transition-all active:scale-[0.99] flex items-center justify-between group disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              >
+                <div className="flex flex-col items-start text-left">
+                  <span className="font-bold text-sm tracking-widest uppercase">
+                    {isSavingCard ? '保存中…' : '保存我的预算'}
+                  </span>
+                  <span className="text-[9px] text-white/50 font-light mt-0.5">可分享给家人或设计师</span>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                  <Download size={14} />
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={nextStep}
+                className="w-full bg-[#EF6B00] text-white py-4 px-5 rounded-xl shadow-lg shadow-[#EF6B00]/20 hover:bg-[#D85F00] active:scale-[0.99] transition-all flex items-center justify-center gap-2 font-bold text-sm"
+              >
+                继续注册获取更多信息
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="rounded-2xl bg-white/60 border border-gray-100 py-10 px-6 text-center shadow-sm max-w-md mx-auto">
+              <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
+                <Wallet className="w-6 h-6 text-gray-400" />
+              </div>
+              <p className="text-gray-600 text-sm leading-relaxed max-w-xs mx-auto">
+                请先在「线索收集」中填写实际面积与每平方造价上限，即可在此查看 E 高端设计、P 严选精品、C 匠心施工 的预算拆解。
+              </p>
+            </div>
+            <div className="w-full max-w-md mx-auto">
+              <button
+                type="button"
+                onClick={nextStep}
+                className="w-full bg-[#EF6B00] text-white py-4 px-5 rounded-xl shadow-lg hover:bg-[#D85F00] flex items-center justify-center gap-2 font-bold text-sm transition-colors active:scale-[0.99]"
+              >
+                继续注册获取更多信息
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </StepWrapper>
+  );
+};
+
 export const Step1 = ({ data, updateData }: StepProps) => (
   <StepWrapper title="项目概况" subtitle="作为种子用户，你的档案会被我们保存，上线后直接同步到产品里。我们不会用它打扰你；">
     <div className="space-y-6">
@@ -590,341 +933,6 @@ export const Step2 = ({ data, updateData }: StepProps) => (
     </div>
   </StepWrapper>
 );
-
-export const Step3 = ({ data, updateData, nextStep, goToStep }: StepProps) => {
-  // 若通过任何入口来到 Q2-3（预算范围），自动跳转到预算确认页预览
-  React.useEffect(() => {
-    if (goToStep) {
-      goToStep('budget-confirm-preview');
-    }
-  }, [goToStep]);
-  const options = [
-    {
-      value: 'A',
-      label: 'A. 精工全案高定',
-      desc: '深度全屋高定系统。包含高性能机电设备集成与复杂的工艺节点，呈现出极强的专业设计感。（5,000 - 8,000）',
-    },
-    {
-      value: 'B',
-      label: 'B. 豪华奢享方案',
-      desc: '极致选材标准。大面积使用进口石材、顶级涂料及设计师款家具。工艺细节经得起推敲。（8,000 -12,000）',
-    },
-    {
-      value: 'C',
-      label: 'C. 顶奢私享空间',
-      desc: '选用国际顶级一线品牌家具与主材，涉及大量非标异形定制。专为追求极致感官体验打造。（12,000 -20,000）',
-    },
-    {
-      value: 'D',
-      label: 'D. 艺术殿堂级定制',
-      desc: '不设限的极致表达。包含孤品级艺术单品集成、全球稀缺物料。具有高度收藏价值。（20,000 以上）',
-    },
-    {
-      value: 'E',
-      label: 'E. 了解更多高性价比及基础焕新方案',
-      desc: '点击跳转至实效投入标准',
-    },
-  ];
-
-  const selected = options.find((opt) => opt.value === data.budgetStandard);
-
-  const handleSelect = (value: string) => {
-    updateData({ budgetStandard: value });
-  };
-
-  const handleConfirm = () => {
-    if (!data.budgetStandard) return;
-    if (goToStep) {
-      goToStep('budget-confirm-preview');
-      return;
-    }
-    nextStep();
-  };
-
-  return (
-    <StepWrapper noCard>
-      <div className="flex flex-col gap-6">
-        {/* 顶部标题卡片，对齐预算确认页的头部信息区 */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-lg font-semibold text-gray-900">预算方案确认 · 选择建设标准</h1>
-            <p className="text-sm text-gray-500 mt-1">
-              先确定本次项目的预算建设标准，我们会在后续页面为你展示类似「预算确认页」的预算区间与流向示意。
-            </p>
-          </div>
-          <div className="text-right text-sm">
-            <div className="text-xs text-gray-500 mb-1">当前步骤</div>
-            <div className="inline-flex items-center gap-1 rounded-full bg-[#FFCE42]/10 px-3 py-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FFCE42]" />
-              <span className="text-xs font-medium text-[#C87800]">Q2-3 预算范围</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-4">
-          {/* 左侧：预算标准选择 + 区间预览，模仿预算区间与说明卡片 */}
-          <div className="md:col-span-2 space-y-4">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-              <h2 className="text-sm font-semibold text-gray-900 mb-2">选择预算建设标准</h2>
-              <p className="text-xs text-gray-500 mb-4">
-                以下为不同投入等级的示例区间，请结合项目定位与期望体验进行选择。该选择会影响后续预算确认页的区间与分配方案。
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {options.map((opt) => (
-                  <RadioCard
-                    key={opt.value}
-                    label={opt.label}
-                    description={opt.desc}
-                    selected={data.budgetStandard === opt.value}
-                    onClick={() => {
-                      handleSelect(opt.value);
-                      if (opt.value === 'E') {
-                        nextStep();
-                      }
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-              <h2 className="text-sm font-semibold text-gray-900 mb-3">预算区间预览</h2>
-              <p className="text-xs text-gray-500 mb-3">
-                这里对应预算确认页中的「预算区间卡片」，用于概览当前选择的大致投入区间。
-              </p>
-              <div className="rounded-xl bg-gradient-to-r from-[#FFF4E0] via-[#FFE8CC] to-[#FFE4B5] px-4 py-3 flex items-center justify-between gap-4">
-                <div>
-                  <div className="text-xs text-gray-700">当前选择</div>
-                  <div className="text-sm font-semibold text-gray-900 mt-1">
-                    {selected ? selected.label : '暂未选择'}
-                  </div>
-                </div>
-                <div className="flex-1 mx-4 h-1.5 rounded-full bg-white/60 overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-[#C87800]"
-                    style={{ width: selected ? '70%' : '0%' }}
-                  />
-                </div>
-                <div className="text-right">
-                  <div className="text-[11px] text-gray-700">示例区间</div>
-                  <div className="text-xs font-medium text-gray-900 mt-0.5">
-                    {selected ? selected.desc.replace(/.*（/, '（').replace('）', '）') : '—'}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 右侧：说明 + 下一步按钮，对齐预算确认页右侧信息与操作区 */}
-          <div className="space-y-4">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">接下来你会看到</h3>
-              <ul className="list-disc list-inside text-xs text-gray-500 space-y-1.5">
-                <li>预算区间卡片：展示预算上下限与推荐区间</li>
-                <li>预算流动可视化：类似桑基图的预算结构示意</li>
-                <li>版本历史：查看预算方案迭代记录</li>
-                <li>操作区：「提交反馈」「确认方案」等关键动作入口</li>
-              </ul>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleConfirm}
-              disabled={!data.budgetStandard}
-              className={`w-full inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium transition-colors ${
-                data.budgetStandard
-                  ? 'bg-[#FF9C3E] text-white hover:bg-[#EF6B00]'
-                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-              }`}
-            >
-              {data.budgetStandard ? '下一步，进入预算确认页' : '请选择预算建设标准后继续'}
-              <ChevronRight size={16} />
-            </button>
-
-            <p className="text-[11px] text-gray-400">（下一屏是完整的预算确认页预览，不会影响你当前的填写数据。）</p>
-          </div>
-        </div>
-      </div>
-    </StepWrapper>
-  );
-};
-
-export const StepBudgetConfirmPreview = () => {
-  const mockVersion = '3';
-  const mockBumMin = 45;
-  const mockBumMax = 50;
-
-  return (
-    <div className="min-h-[80vh] bg-gray-50 pb-16">
-      {/* 顶部导航 */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3 text-sm text-gray-500">
-            <span className="text-gray-400">首页</span>
-            <span className="text-gray-300">/</span>
-            <span className="text-gray-900 font-medium">预算确认</span>
-          </div>
-          <div className="text-xs text-gray-500">演示用户</div>
-        </div>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-6 pt-6 space-y-6">
-        {/* 顶部标题卡片 */}
-        <section className="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-base font-semibold text-gray-900">预算方案确认</h1>
-            <p className="text-xs text-gray-500 mt-1">
-              对预算区间与分配方案进行复核，确认无误后生成正式立项；如需调整可先提交反馈。
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-xs text-gray-500 mb-1">当前版本</div>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 rounded-full bg-blue-50 text-blue-600 px-3 py-1 text-xs font-medium border border-blue-100"
-            >
-              <span>v{mockVersion}</span>
-            </button>
-          </div>
-        </section>
-
-        {/* 预算池状态 */}
-        <section className="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
-          <div className="text-sm font-medium text-gray-900 mb-3">预算池状态</div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-            <div className="rounded-lg bg-gray-50 border border-gray-100 px-4 py-3">
-              <div className="text-xs text-gray-500 mb-1">最近确认时间</div>
-              <div className="text-sm text-gray-900">—</div>
-            </div>
-            <div className="rounded-lg bg-gray-50 border border-gray-100 px-4 py-3">
-              <div className="text-xs text-gray-500 mb-1">已确认</div>
-              <div className="text-sm text-gray-900">—</div>
-            </div>
-            <div className="rounded-lg bg-gray-50 border border-gray-100 px-4 py-3">
-              <div className="text-xs text-gray-500 mb-1">可用</div>
-              <div className="text-sm text-gray-900">—</div>
-            </div>
-          </div>
-        </section>
-
-        {/* 预算区间 + 说明 */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2 space-y-4">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <div className="text-xs font-medium text-[#EF6B00] mb-1">预算区间</div>
-                  <div className="text-sm text-gray-500">
-                    结合过往同类项目与当前配置，为你估算的合理预算区间。
-                  </div>
-                </div>
-                <div className="text-xs text-gray-400">单位：万元</div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-lg bg-blue-50 px-4 py-3">
-                  <div className="text-xs text-blue-700 mb-1">在区间内（BUM_min）</div>
-                  <div className="flex items-end gap-1">
-                    <span className="text-2xl font-semibold text-blue-700">{mockBumMin}</span>
-                    <span className="text-xs text-blue-700 mb-1">万元</span>
-                  </div>
-                </div>
-                <div className="rounded-lg bg-emerald-50 px-4 py-3">
-                  <div className="text-xs text-emerald-700 mb-1">区间上限（BUM_max）</div>
-                  <div className="flex items-end gap-1">
-                    <span className="text-2xl font-semibold text-emerald-700">{mockBumMax}</span>
-                    <span className="text-xs text-emerald-700 mb-1">万元</span>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4 rounded-lg border border-dashed border-gray-200 bg-gray-50 px-4 py-3 text-xs text-gray-600 leading-relaxed">
-                <p>
-                  BUM 区间用于平衡体验、耐用性与预算可控。若你希望进一步优化成本，我们也可以在不破坏整体体验的前提下，对部分配置进行微调。
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-              <div className="text-sm font-semibold text-gray-900 mb-2">分配方案说明</div>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                预算会在多个节点之间进行分配，例如「前期设计 / 主材设备 / 施工安装 / 软装家私」等。通过右侧的「预算流动可视化」你可以直观看到从总包预算到各子类目的流向。
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-              <div className="text-sm font-semibold text-gray-900 mb-2">当前操作</div>
-              <p className="text-xs text-gray-600 mb-3">
-                这是一个静态预览页面，用于在本项目中体验 dsphr 的预算确认页布局与信息层级，不会触发真实的预算生成或确认逻辑。
-              </p>
-              <button
-                type="button"
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#FF9C3E] text-white text-sm font-medium px-4 py-2.5 hover:bg-[#EF6B00] transition-colors"
-              >
-                确认当前预算方案（示意）
-              </button>
-              <button
-                type="button"
-                className="w-full mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-white text-sm font-medium px-4 py-2.5 border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                提交反馈，调整预算结构（示意）
-              </button>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-              <div className="text-sm font-semibold text-gray-900 mb-2">版本历史</div>
-              <div className="text-xs text-gray-600">
-                这里会展示每次预算调整后的版本记录，例如 v1 / v2 / v3，包含创建时间与操作说明，方便对比与追溯。
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 桑基图占位区 */}
-        <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <div className="text-sm font-semibold text-gray-900">预算流动可视化</div>
-            <div className="text-xs text-gray-400">示意图，仅作结构展示</div>
-          </div>
-          <div className="h-[320px] rounded-lg border border-dashed border-gray-200 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 flex items-center justify-center text-xs text-gray-400">
-            这里在正式产品中为可交互的预算桑基图组件，在本 Demo 中仅保留占位与布局。
-          </div>
-        </section>
-
-        {/* 底部确认提示 */}
-        <section className="bg-emerald-50 border border-emerald-100 rounded-lg px-6 py-3 text-xs text-emerald-800 flex items-center justify-between">
-          <span>正式环境下，这里会显示「已生效预算方案」与最近一次确认时间。</span>
-          <span className="font-medium">演示版本 · 不写入任何真实数据</span>
-        </section>
-      </main>
-    </div>
-  );
-};
-
-export const Step3Sub = ({ data, updateData }: StepProps) => {
-  const options = [
-    { value: 'A', label: 'A. 极简焕新基础', desc: '侧重于空间的功能恢复与基础环保。选用高性价比的成熟工业化标准品。（1,000 - 2,000）' },
-    { value: 'B', label: 'B. 经济实用标准', desc: '主流住宅的首选。选用国内一线大厂品牌主材，平衡功能性与基本审美。（2,000 - 3,000）' },
-    { value: 'C', label: 'C. 主流品质进阶', desc: '在满足功能的基础上追求质感提升。开始引入局部个性化材质。（3,000 - 4,000）' },
-    { value: 'D', label: 'D. 精致视觉全案', desc: '设计还原度的重要标准。包含完整的设计造型逻辑，支撑较高要求的风格落地。（4,000 - 5,000）' }
-  ];
-
-  return (
-    <StepWrapper title="Q2-3-2：实效投入标准" subtitle="根据您的居住规划，以下哪种“实效投入标准”更符合您的预期？">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {options.map(opt => (
-          <RadioCard
-            key={opt.value}
-            label={opt.label}
-            description={opt.desc}
-            selected={data.budgetSubStandard === opt.value}
-            onClick={() => updateData({ budgetSubStandard: opt.value })}
-          />
-        ))}
-      </div>
-    </StepWrapper>
-  );
-};
 
 export const Step4 = ({ data, updateData }: StepProps) => {
   const [floorPlanFiles, setFloorPlanFiles] = React.useState<File[]>([]);

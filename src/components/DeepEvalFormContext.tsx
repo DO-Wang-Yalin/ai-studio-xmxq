@@ -13,6 +13,8 @@ function projectTypeDisplayLabel(apiValue: string): string {
 }
 
 function budgetDisplayLabel(apiValue: string): string {
+  if (!apiValue) return ''
+  if (/^\d+$/.test(apiValue)) return `${apiValue}元/平方米`
   const i = apiValue.indexOf(' ')
   return i >= 0 ? apiValue.slice(i + 1).trim() : apiValue
 }
@@ -30,6 +32,7 @@ const isPhoneValid = (phone: string) => /^\d{11}$/.test(phone.replace(/-/g, ''))
 export interface DeepEvalFormData {
   projectType: string
   projectPosition: string
+  handoverStatus: string
   area: string
   budget: string
   name: string
@@ -43,6 +46,7 @@ export interface DeepEvalFormData {
 const initialFormData: DeepEvalFormData = {
   projectType: '',
   projectPosition: '',
+  handoverStatus: '',
   area: '',
   budget: '',
   name: '',
@@ -108,7 +112,13 @@ export function DeepEvalFormProvider({ children }: { children: React.ReactNode }
 
   const handleChange = useCallback((field: string, value: string) => {
     const next = field === 'phone' ? normalizePhone(value) : value
-    setFormData((prev) => ({ ...prev, [field]: next }))
+    setFormData((prev) => {
+      const nextData = { ...prev, [field]: next }
+      if (field === 'projectType' && !value.includes('独栋别墅') && prev.handoverStatus === '土地') {
+        nextData.handoverStatus = ''
+      }
+      return nextData
+    })
     setErrors((prev) => (prev[field] ? { ...prev, [field]: '' } : prev))
   }, [])
 
@@ -218,13 +228,14 @@ export function DeepEvalFormProvider({ children }: { children: React.ReactNode }
 
   const validateStep1 = useCallback((): boolean => {
     const nextErrors: Record<string, string> = {}
-    if (!formData.projectType) nextErrors.projectType = '请选择项目类型'
     if (!formData.projectPosition) nextErrors.projectPosition = '请填写项目城市'
+    if (!formData.projectType) nextErrors.projectType = '请选择项目类型'
+    if (!formData.handoverStatus) nextErrors.handoverStatus = '请选择收房状态'
     if (!formData.area) nextErrors.area = '请填写实际面积'
-    if (!formData.budget) nextErrors.budget = '请选择每平方米项目造价'
+    if (!formData.budget) nextErrors.budget = '请选择每平方造价上限'
     setErrors(nextErrors)
     return Object.keys(nextErrors).length === 0
-  }, [formData.projectType, formData.projectPosition, formData.area, formData.budget])
+  }, [formData.projectPosition, formData.projectType, formData.handoverStatus, formData.area, formData.budget])
 
   const validateStep2 = useCallback((): boolean => {
     const nextErrors: Record<string, string> = {}

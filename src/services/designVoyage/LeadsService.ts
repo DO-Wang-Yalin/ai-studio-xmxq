@@ -24,6 +24,7 @@ export const leadsApi = {
 export interface DesignVoyageFormData {
   projectType: string
   projectPosition: string
+  handoverStatus?: string
   area: string
   budget: string
   name: string
@@ -49,6 +50,9 @@ export function buildDesignVoyageLeadPayload(
   const extra: Record<string, unknown> = {}
   if (data.projectPosition) {
     extra.project_position_text = data.projectPosition
+  }
+  if (data.handoverStatus) {
+    extra.handover_status = data.handoverStatus
   }
   if (options?.journeySummary) {
     const { currentFavorite, focusSpace } = options.journeySummary

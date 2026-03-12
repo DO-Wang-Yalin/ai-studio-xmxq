@@ -11,7 +11,6 @@ import {
   BarChart3,
   Package,
   Construction,
-  ChevronsLeftRight,
   LayoutGrid,
   Users,
   Sparkles,
@@ -46,9 +45,10 @@ import {
   ArrowLeftRight,
   Search,
 } from 'lucide-react'
-import { DesignFeedbackApp } from '../pages/DesignFeedbackApp'
-import BudgetSankey from '../components/BudgetSankey'
-import logoImg from '../assets/img/logo.png'
+import { DesignFeedbackApp } from '../DesignFeedback/DesignFeedbackApp'
+import BudgetSankey from '../../components/BudgetSankey'
+import BudgetSankeyByEPE from '../../components/BudgetSankeyByEPE'
+import logoImg from '../../assets/img/logo.png'
 
 type NavKey = 'home' | 'requirements' | 'budget' | 'orders' | 'contracts' | 'designFeedback'
 
@@ -81,6 +81,7 @@ export function WorkbenchPage({
   const SIDEBAR_COLLAPSED_KEY = 'ai-studio:workbench:sidebarCollapsed:v1'
   const MIN_SIDEBAR_WIDTH = 220
   const MAX_SIDEBAR_WIDTH = 360
+  const COLLAPSE_THRESHOLD = 120
 
   const [sidebarWidth, setSidebarWidth] = React.useState<number>(() => {
     try {
@@ -137,7 +138,11 @@ export function WorkbenchPage({
     const startWidth = sidebarWidth
     const onMove = (ev: MouseEvent) => {
       const next = startWidth + (ev.clientX - startX)
-      setSidebarWidth(Math.min(MAX_SIDEBAR_WIDTH, Math.max(MIN_SIDEBAR_WIDTH, next)))
+      if (next < COLLAPSE_THRESHOLD) {
+        setSidebarCollapsed(true)
+      } else {
+        setSidebarWidth(Math.min(MAX_SIDEBAR_WIDTH, Math.max(MIN_SIDEBAR_WIDTH, next)))
+      }
     }
     const onUp = () => {
       window.removeEventListener('mousemove', onMove)
@@ -146,6 +151,7 @@ export function WorkbenchPage({
     window.addEventListener('mousemove', onMove)
     window.addEventListener('mouseup', onUp)
   }
+
 
   return (
     <div className="min-h-screen bg-[#FFFDF3] text-gray-900 font-sans flex">
@@ -164,26 +170,7 @@ export function WorkbenchPage({
           </button>
         </div>
 
-        <div className="mt-6 px-5">
-          <div className="flex justify-end">
-            <div className="group/tooltip relative">
-              <button
-                type="button"
-                onClick={() => setSidebarCollapsed((v) => !v)}
-                className="w-9 h-9 inline-flex items-center justify-center rounded-xl text-gray-600 hover:bg-black/5 transition-colors"
-                title={sidebarCollapsed ? '展开导航' : '收起导航'}
-                aria-label={sidebarCollapsed ? '展开导航' : '收起导航'}
-              >
-                <ChevronsLeftRight size={18} />
-              </button>
-              <span className="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-2.5 py-1 text-xs font-medium text-white bg-slate-800 rounded-lg whitespace-nowrap opacity-0 pointer-events-none transition-opacity group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100 z-50">
-                {sidebarCollapsed ? '展开导航' : '收起导航'}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <nav className="mt-4 space-y-1 px-5">
+        <nav className="mt-6 space-y-1 px-5">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = active === item.key
@@ -216,8 +203,26 @@ export function WorkbenchPage({
           </button>
         </div>
 
-        {/* Resize handle */}
-        {!sidebarCollapsed && (
+        {/* 展开时：拖拽调整宽度，拖到很窄即收起；收起时：右侧条悬停浮窗提示「展开导航」，点击或拖右展开 */}
+        {sidebarCollapsed ? (
+          <div
+            className="absolute top-0 right-0 h-full w-3 cursor-pointer group/expand flex items-center justify-center hover:bg-black/5 transition-colors"
+            onClick={() => setSidebarCollapsed(false)}
+            role="button"
+            tabIndex={0}
+            aria-label="展开导航"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                setSidebarCollapsed(false)
+              }
+            }}
+          >
+            <span className="absolute right-full mr-2 px-2 py-1 text-[11px] font-medium text-white bg-slate-700/90 rounded-md whitespace-nowrap opacity-0 pointer-events-none transition-opacity group-hover/expand:opacity-100 group-focus-visible/expand:opacity-100 z-50 shadow-sm">
+              展开导航
+            </span>
+          </div>
+        ) : (
           <div
             onMouseDown={startResize}
             className="absolute top-0 right-0 h-full w-2 cursor-col-resize hover:bg-[#FF9C3E]/10 transition-colors"
@@ -530,10 +535,13 @@ function OrderManagementSection({ onGoToDesignFeedback }: { onGoToDesignFeedback
   )
 }
 
+type BudgetSankeyTab = 'flow' | 'epe'
+
 function BudgetConfirmPanel() {
   const mockVersion = '3'
   const mockBumMin = 45
   const mockBumMax = 50
+  const [sankeyTab, setSankeyTab] = React.useState<BudgetSankeyTab>('flow')
 
   return (
     <div className="space-y-6">
@@ -644,11 +652,29 @@ function BudgetConfirmPanel() {
       </section>
 
       <section className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
           <div className="text-sm font-semibold text-gray-900">预算流动可视化</div>
           <div className="text-xs text-gray-400">示意图 · 与 dsphr 桑基图布局对齐</div>
         </div>
-        <BudgetSankey />
+        <div className="mb-3">
+          <div className="flex rounded-xl border border-gray-200 p-0.5 bg-gray-50 w-fit">
+            <button
+              type="button"
+              onClick={() => setSankeyTab('flow')}
+              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${sankeyTab === 'flow' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              订单预算拆解
+            </button>
+            <button
+              type="button"
+              onClick={() => setSankeyTab('epe')}
+              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${sankeyTab === 'epe' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              EPC预算拆解
+            </button>
+          </div>
+        </div>
+        {sankeyTab === 'flow' ? <BudgetSankey /> : <BudgetSankeyByEPE />}
       </section>
 
       <section className="bg-emerald-50 border border-emerald-100 rounded-3xl px-6 py-3 text-xs text-emerald-800 flex items-center justify-between">
